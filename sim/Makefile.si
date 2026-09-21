@@ -1,0 +1,1807 @@
+# This file is part of rm68000, an MC68000 core in SystemVerilog.
+# Copyright (c) 2026 Umberto Parisi (rmonic79)
+#
+# rm68000 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+# later version. It is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+# more details: LICENSE in the root of the repository, or <https://www.gnu.org/licenses/>.
+#
+# A commercial license, for use without the obligations of the GPL (for example in closed-source products), is
+# available from the author, who can also be contacted for other licensing needs.
+
+# Makefile for the Verilator simulation flow.
+#
+# It must be run in the MSYS2 mingw64 environment (where verilator + g++ live).
+# Launch it from an MSYS2 MINGW64 shell, in sim/:
+#   make -f Makefile.si <target>
+#
+# Targets:
+#   make clean   -> removes the artifacts
+#
+# Convention: every new module will have a similar target (testbench + RTL).
+
+VERILATOR ?= verilator
+BUILD     := build_si
+RTL       := ../rtl
+# DATA: raw data (transcriptions of the die and of the patent in docs/data) read at run time by the independent
+# models of the block testbenches (+data=<file>); can be overridden from the command line.
+DATA      ?= ../docs/data
+# Corrections to the raw data, one file per block in docs/data/deviations: each entry has the printed value, the one used
+# by the RTL and the source. To compare a block with the literal data, empty its variable (e.g. DEV_ROWDEC=).
+DEVDIR     ?= ../docs/data/deviations
+ADD_USTORE ?= $(DEVDIR)/ustore.tsv
+DEV_NSTORE ?= $(DEVDIR)/nstore.tsv
+DEV_BUSSEC ?= $(DEVDIR)/bussec.tsv
+DEV_ROWDEC ?= $(DEVDIR)/rowdec.tsv
+DEV_ALU    ?= $(DEVDIR)/alu.tsv
+DEV_BRANCH ?= $(DEVDIR)/branch.tsv
+DEV_A123   ?= $(DEVDIR)/a123.tsv
+# ORGLUT: configuration of the control store in the testbenches that include it (0 = as in the core, 1 = a0s override everywhere, testbenches only).
+ORGLUT    ?= 0
+# EXTCLS: 1 = row class external to the A1/A2/A3 decoder (core, m68k_a123_top with m68k_a123_cls); 0 = internal combinational form
+EXTCLS    ?= 1
+# Makefile.si - the testbenches of the core (rtl/cpu_si); the per-instruction testbenches use it inside the shim
+# m68k_seq_si.sv (m68k_seq module: the port interface of the instruction testbenches). Usage: make -f Makefile.si <target>
+SI_PKGS := $(RTL)/cpu_si/m68k_nano_pkg.sv $(RTL)/cpu_si/m68k_nano_dec_pkg.sv $(RTL)/cpu_si/m68k_alu_pkg.sv $(RTL)/cpu_si/m68k_branch_pkg.sv
+SI_SRC  := $(RTL)/cpu_si/m68k_cpu_si.sv $(RTL)/cpu_si/m68k_nstore_dec.sv $(RTL)/cpu_si/m68k_nano_dec.sv $(RTL)/cpu_si/m68k_ustore.sv \
+	  $(RTL)/cpu_si/m68k_urom.sv $(RTL)/cpu_si/m68k_useq.sv $(RTL)/cpu_si/m68k_nrom.sv $(RTL)/cpu_si/m68k_bus_sec.sv \
+	  $(RTL)/cpu_si/m68k_regs_bd.sv $(RTL)/cpu_si/m68k_au.sv $(RTL)/cpu_si/m68k_mvm_si.sv $(RTL)/cpu_si/m68k_regfile_si.sv \
+	  $(RTL)/cpu_si/m68k_alux_si.sv $(RTL)/cpu_si/m68k_alu_si.sv $(RTL)/cpu_si/m68k_alu_rowdec.sv $(RTL)/cpu_si/m68k_size_si.sv \
+	  $(RTL)/cpu_si/m68k_exc_si.sv $(RTL)/cpu_si/m68k_ftu_si.sv $(RTL)/cpu_si/m68k_psw_si.sv $(RTL)/cpu_si/m68k_ir_si.sv \
+	  $(RTL)/cpu_si/m68k_a123_si.sv $(RTL)/cpu_si/m68k_branch_si.sv $(RTL)/cpu_si/m68k_busctl_si.sv $(RTL)/cpu_si/m68k_bus_fsm.sv
+
+# Common flags: SystemVerilog, C++ build, VCD trace, useful warnings.
+# -LDFLAGS static*: on this MSYS2 installation dynamic linking of
+#   libstdc++/libgcc gives an ABI mismatch; static linking solves it.
+# -CFLAGS -std=c++17: testbench standard. -I$(RTL)/../sim: the sim/ folder of the same tree as the RTL under test.
+VFLAGS := --cc --exe --build --trace --x-assign 0 \
+          -Wall -Wno-fatal \
+          -CFLAGS "-std=c++17 -I$(abspath $(RTL)/../sim)" \
+          -LDFLAGS "-static -static-libgcc -static-libstdc++" \
+          --Mdir $(BUILD)
+
+.PHONY: cpu_si size_si alux_si a123_si branch_si rowdec alu_si regfile_si regs bussec ndec ustore nstore all busfsm cpudt eorbw seq jmpjsr jsrext addi size mem ea ea2 alumem alumem2 aluidx rmw rmwcontam exc illegal priv trapv irq irqmulti muldiv muldivmem div0 movem movemx bitops bitext dbcc lea pea peacontam idx pcrel pea2 muls extswap addx movesr srlogic mvtsr stop tst link linka7 abcd chk chkneg usp adda addai clrmem negmem sccmem addxmem abcdmem movep sopbyte sopinc sopext subq roxl rtr shiftbw shiftmem addqea sccea movepd movean moveimm movepcr movem2m moveimm2m movean2m movem2mext aluinc alurmw aluext rstvec halt berr moveaidx braw clean run
+
+all: busfsm cpudt eorbw seq jmpjsr jsrext addi size mem ea ea2 alumem alumem2 aluidx rmw rmwcontam exc illegal priv trapv irq irqmulti muldiv muldivmem div0 movem movemx bitops bitext dbcc lea pea peacontam idx pcrel pea2 muls extswap addx movesr srlogic mvtsr stop tst link linka7 abcd chk chkneg usp adda addai clrmem negmem sccmem addxmem abcdmem movep sopbyte sopinc sopext subq roxl rtr shiftbw shiftmem addqea sccea movepd movean moveimm movepcr movem2m moveimm2m movean2m movem2mext aluinc alurmw aluext rstvec halt berr moveaidx braw
+
+# run: re-runs ONLY the binaries already compiled (no recompilation).
+# Very fast: use it to re-verify the suite when you have not changed the RTL,
+# or after a 'make all'/single target that has already recompiled what is needed.
+# NB: do NOT run 'make clean' before 'make all' if you want incremental builds —
+# make by itself recompiles only the targets whose .sv/.cpp have changed.
+run:
+	@for b in Vm68k_bus_fsm \
+	          Vm68k_seq \
+	          Vm68k_jmpjsr Vm68k_addi Vm68k_size Vm68k_mem Vm68k_ea Vm68k_ea2 \
+	          Vm68k_alumem Vm68k_alumem2 Vm68k_rmw Vm68k_rmwcontam Vm68k_exc \
+	          Vm68k_illegal Vm68k_priv Vm68k_trapv Vm68k_irq Vm68k_irqmulti \
+	          Vm68k_muldiv Vm68k_div0 Vm68k_movem Vm68k_movemx Vm68k_bitops \
+	          Vm68k_dbcc Vm68k_lea Vm68k_pea Vm68k_peacontam Vm68k_idx Vm68k_pcrel \
+	          Vm68k_pea2 Vm68k_muls Vm68k_extswap Vm68k_addx Vm68k_movesr \
+	          Vm68k_srlogic Vm68k_stop Vm68k_tst Vm68k_link Vm68k_linka7 \
+	          Vm68k_abcd Vm68k_chk Vm68k_chkneg Vm68k_usp Vm68k_adda Vm68k_addai \
+	          Vm68k_clrmem Vm68k_negmem Vm68k_sccmem Vm68k_addxmem Vm68k_abcdmem \
+	          Vm68k_movep Vm68k_sopbyte Vm68k_sopinc Vm68k_sopext; do \
+	  if [ -x $(BUILD)/$$b ]; then ./$(BUILD)/$$b | grep -E "PASS|FAIL"; \
+	  else echo "(missing $$b: build it with 'make all')"; fi; \
+	done
+
+# --- 68000 bus cycle FSM ---
+busfsm: $(BUILD)/Vm68k_bus_fsm
+	@echo "=== running m68k_bus_fsm ==="
+	./$(BUILD)/Vm68k_bus_fsm
+
+$(BUILD)/Vm68k_bus_fsm: $(RTL)/cpu_si/m68k_bus_fsm.sv tb_m68k_bus_fsm.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_bus_fsm \
+	  $(RTL)/cpu_si/m68k_bus_fsm.sv \
+	  tb_m68k_bus_fsm.cpp \
+	  -o Vm68k_bus_fsm
+
+# --- EOR.B/.W/.L Dn,Dn ---
+eorbw: $(BUILD)/Vm68k_eorbw
+	@echo "=== running m68k_eorbw ==="
+	./$(BUILD)/Vm68k_eorbw
+
+$(BUILD)/Vm68k_eorbw: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_eorbw.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_eorbw.cpp \
+	  -o Vm68k_eorbw
+
+# --- 68000 microcycle sequencer (uses all CPU modules) ---
+seq: $(BUILD)/Vm68k_seq
+	@echo "=== running m68k_seq ==="
+	./$(BUILD)/Vm68k_seq
+
+$(BUILD)/Vm68k_seq: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_seq.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_seq.cpp \
+	  -o Vm68k_seq
+
+# --- JMP/JSR (An) (uses all CPU modules) ---
+jmpjsr: $(BUILD)/Vm68k_jmpjsr
+	@echo "=== running m68k_jmpjsr ==="
+	./$(BUILD)/Vm68k_jmpjsr
+
+$(BUILD)/Vm68k_jmpjsr: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_jmpjsr.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_jmpjsr.cpp \
+	  -o Vm68k_jmpjsr
+
+# --- JMP/JSR with extended EA (abs.L, d16(PC)) (uses all CPU modules) ---
+jsrext: $(BUILD)/Vm68k_jsrext
+	@echo "=== running m68k_jsrext ==="
+	./$(BUILD)/Vm68k_jsrext
+
+$(BUILD)/Vm68k_jsrext: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_jsrext.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_jsrext.cpp \
+	  -o Vm68k_jsrext
+
+# --- ADDI.L #imm32,Dn (extension word, uses all CPU modules) ---
+addi: $(BUILD)/Vm68k_addi
+	@echo "=== running m68k_addi ==="
+	./$(BUILD)/Vm68k_addi
+
+$(BUILD)/Vm68k_addi: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_addi.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_addi.cpp \
+	  -o Vm68k_addi
+
+# --- byte/word sizes (uses all CPU modules) ---
+size: $(BUILD)/Vm68k_size
+	@echo "=== running m68k_size ==="
+	./$(BUILD)/Vm68k_size
+
+$(BUILD)/Vm68k_size: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_size.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_size.cpp \
+	  -o Vm68k_size
+
+mem: $(BUILD)/Vm68k_mem
+	@echo "=== running m68k_mem ==="
+	./$(BUILD)/Vm68k_mem
+
+$(BUILD)/Vm68k_mem: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_mem.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_mem.cpp \
+	  -o Vm68k_mem
+
+ea: $(BUILD)/Vm68k_ea
+	@echo "=== running m68k_ea ==="
+	./$(BUILD)/Vm68k_ea
+
+$(BUILD)/Vm68k_ea: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_ea.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_ea.cpp \
+	  -o Vm68k_ea
+
+ea2: $(BUILD)/Vm68k_ea2
+	@echo "=== running m68k_ea2 ==="
+	./$(BUILD)/Vm68k_ea2
+
+$(BUILD)/Vm68k_ea2: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_ea2.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_ea2.cpp \
+	  -o Vm68k_ea2
+
+alumem: $(BUILD)/Vm68k_alumem
+	@echo "=== running m68k_alumem ==="
+	./$(BUILD)/Vm68k_alumem
+
+$(BUILD)/Vm68k_alumem: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_alumem.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_alumem.cpp \
+	  -o Vm68k_alumem
+
+alumem2: $(BUILD)/Vm68k_alumem2
+	@echo "=== running m68k_alumem2 ==="
+	./$(BUILD)/Vm68k_alumem2
+
+$(BUILD)/Vm68k_alumem2: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_alumem2.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_alumem2.cpp \
+	  -o Vm68k_alumem2
+
+# --- ALU-op <ea>,Dn with indexed/PC-relative EA (d8(An,Xn)/d16(PC)/d8(PC,Xn)) ---
+aluidx: $(BUILD)/Vm68k_aluidx
+	@echo "=== running m68k_aluidx ==="
+	./$(BUILD)/Vm68k_aluidx
+
+$(BUILD)/Vm68k_aluidx: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_aluidx.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_aluidx.cpp \
+	  -o Vm68k_aluidx
+
+rmw: $(BUILD)/Vm68k_rmw
+	@echo "=== running m68k_rmw ==="
+	./$(BUILD)/Vm68k_rmw
+
+$(BUILD)/Vm68k_rmw: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_rmw.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_rmw.cpp \
+	  -o Vm68k_rmw
+
+# --- RMW anti-contamination (state does not survive the instruction) ---
+rmwcontam: $(BUILD)/Vm68k_rmwcontam
+	@echo "=== running m68k_rmw_contam ==="
+	./$(BUILD)/Vm68k_rmwcontam
+
+$(BUILD)/Vm68k_rmwcontam: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_rmw_contam.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_rmw_contam.cpp \
+	  -o Vm68k_rmwcontam
+
+exc: $(BUILD)/Vm68k_exc
+	@echo "=== running m68k_exc ==="
+	./$(BUILD)/Vm68k_exc
+
+$(BUILD)/Vm68k_exc: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_exc.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_exc.cpp \
+	  -o Vm68k_exc
+
+illegal: $(BUILD)/Vm68k_illegal
+	@echo "=== running m68k_illegal ==="
+	./$(BUILD)/Vm68k_illegal
+
+$(BUILD)/Vm68k_illegal: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_illegal.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_illegal.cpp \
+	  -o Vm68k_illegal
+
+priv: $(BUILD)/Vm68k_priv
+	@echo "=== running m68k_priv ==="
+	./$(BUILD)/Vm68k_priv
+
+$(BUILD)/Vm68k_priv: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_priv.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_priv.cpp \
+	  -o Vm68k_priv
+
+trapv: $(BUILD)/Vm68k_trapv
+	@echo "=== running m68k_trapv ==="
+	./$(BUILD)/Vm68k_trapv
+
+$(BUILD)/Vm68k_trapv: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_trapv.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_trapv.cpp \
+	  -o Vm68k_trapv
+
+irq: $(BUILD)/Vm68k_irq
+	@echo "=== running m68k_irq ==="
+	./$(BUILD)/Vm68k_irq
+
+irqmulti: $(BUILD)/Vm68k_irqmulti
+	@echo "=== running m68k_irq_multi ==="
+	./$(BUILD)/Vm68k_irqmulti
+
+$(BUILD)/Vm68k_irqmulti: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_irq_multi.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_irq_multi.cpp \
+	  -o Vm68k_irqmulti
+
+$(BUILD)/Vm68k_irq: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_irq.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_irq.cpp \
+	  -o Vm68k_irq
+
+muldiv: $(BUILD)/Vm68k_muldiv
+	@echo "=== running m68k_muldiv ==="
+	./$(BUILD)/Vm68k_muldiv
+
+$(BUILD)/Vm68k_muldiv: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_muldiv.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_muldiv.cpp \
+	  -o Vm68k_muldiv
+
+# --- MULU/MULS/DIVU/DIVS with #imm and memory (An) source ---
+muldivmem: $(BUILD)/Vm68k_muldivmem
+	@echo "=== running m68k_muldivmem ==="
+	./$(BUILD)/Vm68k_muldivmem
+
+$(BUILD)/Vm68k_muldivmem: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_muldivmem.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_muldivmem.cpp \
+	  -o Vm68k_muldivmem
+
+div0: $(BUILD)/Vm68k_div0
+	@echo "=== running m68k_div0 ==="
+	./$(BUILD)/Vm68k_div0
+
+$(BUILD)/Vm68k_div0: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_div0.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_div0.cpp \
+	  -o Vm68k_div0
+
+movem: $(BUILD)/Vm68k_movem
+	@echo "=== running m68k_movem ==="
+	./$(BUILD)/Vm68k_movem
+
+$(BUILD)/Vm68k_movem: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_movem.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_movem.cpp \
+	  -o Vm68k_movem
+
+movemx: $(BUILD)/Vm68k_movemx
+	@echo "=== running m68k_movemx (probe: An in the list, non-contiguous mask) ==="
+	./$(BUILD)/Vm68k_movemx
+
+$(BUILD)/Vm68k_movemx: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_movem_probe.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_movem_probe.cpp \
+	  -o Vm68k_movemx
+
+bitops: $(BUILD)/Vm68k_bitops
+	@echo "=== running m68k_bitops ==="
+	./$(BUILD)/Vm68k_bitops
+
+$(BUILD)/Vm68k_bitops: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_bitops.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_bitops.cpp \
+	  -o Vm68k_bitops
+
+bitext: $(BUILD)/Vm68k_bitext
+	@echo "=== running m68k_bitext ==="
+	./$(BUILD)/Vm68k_bitext
+
+$(BUILD)/Vm68k_bitext: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_bitext.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_bitext.cpp \
+	  -o Vm68k_bitext
+
+dbcc: $(BUILD)/Vm68k_dbcc
+	@echo "=== running m68k_dbcc ==="
+	./$(BUILD)/Vm68k_dbcc
+
+$(BUILD)/Vm68k_dbcc: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_dbcc.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_dbcc.cpp \
+	  -o Vm68k_dbcc
+
+lea: $(BUILD)/Vm68k_lea
+	@echo "=== running m68k_lea ==="
+	./$(BUILD)/Vm68k_lea
+
+$(BUILD)/Vm68k_lea: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_lea.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_lea.cpp \
+	  -o Vm68k_lea
+
+pea: $(BUILD)/Vm68k_pea
+	@echo "=== running m68k_pea ==="
+	./$(BUILD)/Vm68k_pea
+
+$(BUILD)/Vm68k_pea: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_pea.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_pea.cpp \
+	  -o Vm68k_pea
+
+# --- PEA anti-contamination (pea_push/ea_for_pea do not leak) ---
+peacontam: $(BUILD)/Vm68k_peacontam
+	@echo "=== running m68k_pea_contam ==="
+	./$(BUILD)/Vm68k_peacontam
+
+$(BUILD)/Vm68k_peacontam: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_pea_contam.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_pea_contam.cpp \
+	  -o Vm68k_peacontam
+
+# --- indexed mode d8(An,Xn) (via LEA) ---
+idx: $(BUILD)/Vm68k_idx
+	@echo "=== running m68k_idx ==="
+	./$(BUILD)/Vm68k_idx
+
+$(BUILD)/Vm68k_idx: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_idx.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_idx.cpp \
+	  -o Vm68k_idx
+
+# --- PC-relative modes d16(PC)/d8(PC,Xn) (via LEA) ---
+pcrel: $(BUILD)/Vm68k_pcrel
+	@echo "=== running m68k_pcrel ==="
+	./$(BUILD)/Vm68k_pcrel
+
+$(BUILD)/Vm68k_pcrel: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_pcrel.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_pcrel.cpp \
+	  -o Vm68k_pcrel
+
+# --- PEA with indexed/PC-relative EA modes ---
+pea2: $(BUILD)/Vm68k_pea2
+	@echo "=== running m68k_pea2 ==="
+	./$(BUILD)/Vm68k_pea2
+
+$(BUILD)/Vm68k_pea2: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_pea2.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_pea2.cpp \
+	  -o Vm68k_pea2
+
+# --- MULS.W / DIVS.W (signed) ---
+muls: $(BUILD)/Vm68k_muls
+	@echo "=== running m68k_muls ==="
+	./$(BUILD)/Vm68k_muls
+
+$(BUILD)/Vm68k_muls: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_muls.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_muls.cpp \
+	  -o Vm68k_muls
+
+# --- EXT.W/.L, SWAP, EXG (register manipulation) ---
+extswap: $(BUILD)/Vm68k_extswap
+	@echo "=== running m68k_extswap ==="
+	./$(BUILD)/Vm68k_extswap
+
+$(BUILD)/Vm68k_extswap: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_extswap.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_extswap.cpp \
+	  -o Vm68k_extswap
+
+# --- ADDX/SUBX/NEGX (extended arithmetic with the X flag) ---
+addx: $(BUILD)/Vm68k_addx
+	@echo "=== running m68k_addx ==="
+	./$(BUILD)/Vm68k_addx
+
+$(BUILD)/Vm68k_addx: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_addx.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_addx.cpp \
+	  -o Vm68k_addx
+
+# --- MOVE from SR / to CCR / to SR (privilege) ---
+movesr: $(BUILD)/Vm68k_movesr
+	@echo "=== running m68k_movesr ==="
+	./$(BUILD)/Vm68k_movesr
+
+$(BUILD)/Vm68k_movesr: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_movesr.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_movesr.cpp \
+	  -o Vm68k_movesr
+
+# --- MOVE #imm/(An)/(An)+,SR|CCR (immediate and memory source) ---
+mvtsr: $(BUILD)/Vm68k_mvtsr
+	@echo "=== running m68k_mvtsr ==="
+	./$(BUILD)/Vm68k_mvtsr
+
+$(BUILD)/Vm68k_mvtsr: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_mvtsr.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_mvtsr.cpp \
+	  -o Vm68k_mvtsr
+
+# --- ANDI/ORI/EORI to CCR/SR (immediate logic operations on the status register) ---
+srlogic: $(BUILD)/Vm68k_srlogic
+	@echo "=== running m68k_srlogic ==="
+	./$(BUILD)/Vm68k_srlogic
+
+$(BUILD)/Vm68k_srlogic: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_srlogic.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_srlogic.cpp \
+	  -o Vm68k_srlogic
+
+# --- STOP #imm (loads SR, stops until IRQ) ---
+stop: $(BUILD)/Vm68k_stop
+	@echo "=== running m68k_stop ==="
+	./$(BUILD)/Vm68k_stop
+
+$(BUILD)/Vm68k_stop: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_stop.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_stop.cpp \
+	  -o Vm68k_stop
+
+# --- TST/TAS/CLR (single operand) ---
+tst: $(BUILD)/Vm68k_tst
+	@echo "=== running m68k_tst ==="
+	./$(BUILD)/Vm68k_tst
+
+$(BUILD)/Vm68k_tst: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_tst.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_tst.cpp \
+	  -o Vm68k_tst
+
+# --- LINK/UNLK (stack frame) ---
+link: $(BUILD)/Vm68k_link
+	@echo "=== running m68k_link ==="
+	./$(BUILD)/Vm68k_link
+
+$(BUILD)/Vm68k_link: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_link.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_link.cpp \
+	  -o Vm68k_link
+
+# --- LINK A7 / UNLK A7 (degenerate cases An=SP) ---
+linka7: $(BUILD)/Vm68k_linka7
+	@echo "=== running m68k_linka7 ==="
+	./$(BUILD)/Vm68k_linka7
+
+$(BUILD)/Vm68k_linka7: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_link_a7.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_link_a7.cpp \
+	  -o Vm68k_linka7
+
+# --- ABCD/SBCD (BCD arithmetic) ---
+abcd: $(BUILD)/Vm68k_abcd
+	@echo "=== running m68k_abcd ==="
+	./$(BUILD)/Vm68k_abcd
+
+$(BUILD)/Vm68k_abcd: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_abcd.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_abcd.cpp \
+	  -o Vm68k_abcd
+
+# --- CHK <ea>,Dn (bounds check -> trap vector 6) ---
+chk: $(BUILD)/Vm68k_chk
+	@echo "=== running m68k_chk ==="
+	./$(BUILD)/Vm68k_chk
+
+$(BUILD)/Vm68k_chk: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_chk.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_chk.cpp \
+	  -o Vm68k_chk
+
+# --- CHK with Dn<0 (N=1 in the stacked SR) ---
+chkneg: $(BUILD)/Vm68k_chkneg
+	@echo "=== running m68k_chk_neg ==="
+	./$(BUILD)/Vm68k_chkneg
+
+$(BUILD)/Vm68k_chkneg: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_chk_neg.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_chk_neg.cpp \
+	  -o Vm68k_chkneg
+
+# --- MOVE USP (privileged) + ILLEGAL (0x4AFC) ---
+usp: $(BUILD)/Vm68k_usp
+	@echo "=== running m68k_usp ==="
+	./$(BUILD)/Vm68k_usp
+
+$(BUILD)/Vm68k_usp: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_usp.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_usp.cpp \
+	  -o Vm68k_usp
+
+# --- ADDA/SUBA/CMPA <ea>,An (address register arithmetic) ---
+adda: $(BUILD)/Vm68k_adda
+	@echo "=== running m68k_adda ==="
+	./$(BUILD)/Vm68k_adda
+
+$(BUILD)/Vm68k_adda: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_adda.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_adda.cpp \
+	  -o Vm68k_adda
+
+# --- ADDA/SUBA/CMPA #imm,An (immediate source) ---
+addai: $(BUILD)/Vm68k_addai
+	@echo "=== running m68k_addai ==="
+	./$(BUILD)/Vm68k_addai
+
+$(BUILD)/Vm68k_addai: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_addai.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_addai.cpp \
+	  -o Vm68k_addai
+
+# --- CLR.W (An) on memory ---
+clrmem: $(BUILD)/Vm68k_clrmem
+	@echo "=== running m68k_clrmem ==="
+	./$(BUILD)/Vm68k_clrmem
+
+$(BUILD)/Vm68k_clrmem: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_clrmem.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_clrmem.cpp \
+	  -o Vm68k_clrmem
+
+# --- NEG.W/NOT.W (An) on memory (RMW) ---
+negmem: $(BUILD)/Vm68k_negmem
+	@echo "=== running m68k_negmem ==="
+	./$(BUILD)/Vm68k_negmem
+
+$(BUILD)/Vm68k_negmem: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_negmem.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_negmem.cpp \
+	  -o Vm68k_negmem
+
+# --- Scc (An) on memory (conditional byte set) ---
+sccmem: $(BUILD)/Vm68k_sccmem
+	@echo "=== running m68k_sccmem ==="
+	./$(BUILD)/Vm68k_sccmem
+
+$(BUILD)/Vm68k_sccmem: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_sccmem.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_sccmem.cpp \
+	  -o Vm68k_sccmem
+
+# --- ADDX/SUBX -(Ay),-(Ax) (multi-precision on memory) ---
+addxmem: $(BUILD)/Vm68k_addxmem
+	@echo "=== running m68k_addxmem ==="
+	./$(BUILD)/Vm68k_addxmem
+
+$(BUILD)/Vm68k_addxmem: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_addxmem.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_addxmem.cpp \
+	  -o Vm68k_addxmem
+
+# --- ABCD/SBCD -(Ay),-(Ax) (BCD on memory) ---
+abcdmem: $(BUILD)/Vm68k_abcdmem
+	@echo "=== running m68k_abcdmem ==="
+	./$(BUILD)/Vm68k_abcdmem
+
+$(BUILD)/Vm68k_abcdmem: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_abcdmem.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_abcdmem.cpp \
+	  -o Vm68k_abcdmem
+
+# --- MOVEP Dx<->d16(Ay) (alternate bytes) ---
+movep: $(BUILD)/Vm68k_movep
+	@echo "=== running m68k_movep ==="
+	./$(BUILD)/Vm68k_movep
+
+$(BUILD)/Vm68k_movep: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_movep.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_movep.cpp \
+	  -o Vm68k_movep
+
+# --- CLR/TST/NEG/NOT.B (An) on memory (byte size) ---
+sopbyte: $(BUILD)/Vm68k_sopbyte
+	@echo "=== running m68k_sopbyte ==="
+	./$(BUILD)/Vm68k_sopbyte
+
+$(BUILD)/Vm68k_sopbyte: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_sopbyte.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_sopbyte.cpp \
+	  -o Vm68k_sopbyte
+
+# --- CLR/TST/NEG/NOT on (An)+ and -(An) (post-inc / pre-dec) ---
+sopinc: $(BUILD)/Vm68k_sopinc
+	@echo "=== running m68k_sopinc ==="
+	./$(BUILD)/Vm68k_sopinc
+
+$(BUILD)/Vm68k_sopinc: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_sopinc.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_sopinc.cpp \
+	  -o Vm68k_sopinc
+
+# --- CLR/TST/NEG/NOT on d16(An) and abs.W/abs.L ---
+sopext: $(BUILD)/Vm68k_sopext
+	@echo "=== running m68k_sopext ==="
+	./$(BUILD)/Vm68k_sopext
+
+$(BUILD)/Vm68k_sopext: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_sopext.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_sopext.cpp \
+	  -o Vm68k_sopext
+
+# --- SUBQ #data,Dn ---
+subq: $(BUILD)/Vm68k_subq
+	@echo "=== running m68k_subq ==="
+	./$(BUILD)/Vm68k_subq
+
+$(BUILD)/Vm68k_subq: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_subq.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_subq.cpp \
+	  -o Vm68k_subq
+
+# --- ROXL/ROXR #cnt,Dn (rotate through eXtend) ---
+roxl: $(BUILD)/Vm68k_roxl
+	@echo "=== running m68k_roxl ==="
+	./$(BUILD)/Vm68k_roxl
+
+$(BUILD)/Vm68k_roxl: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_roxl.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_roxl.cpp \
+	  -o Vm68k_roxl
+
+# --- RTR (return and restore CCR) ---
+rtr: $(BUILD)/Vm68k_rtr
+	@echo "=== running m68k_rtr ==="
+	./$(BUILD)/Vm68k_rtr
+
+$(BUILD)/Vm68k_rtr: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_rtr.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_rtr.cpp \
+	  -o Vm68k_rtr
+
+# --- shift/rotate byte/word + count from register ---
+shiftbw: $(BUILD)/Vm68k_shiftbw
+	@echo "=== running m68k_shiftbw ==="
+	./$(BUILD)/Vm68k_shiftbw
+
+$(BUILD)/Vm68k_shiftbw: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_shiftbw.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_shiftbw.cpp \
+	  -o Vm68k_shiftbw
+
+# --- shift/rotate on memory (An), word, RMW ---
+shiftmem: $(BUILD)/Vm68k_shiftmem
+	@echo "=== running m68k_shiftmem ==="
+	./$(BUILD)/Vm68k_shiftmem
+
+$(BUILD)/Vm68k_shiftmem: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_shiftmem.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_shiftmem.cpp \
+	  -o Vm68k_shiftmem
+
+# --- ADDQ/SUBQ on An and memory ---
+addqea: $(BUILD)/Vm68k_addqea
+	@echo "=== running m68k_addqea ==="
+	./$(BUILD)/Vm68k_addqea
+
+$(BUILD)/Vm68k_addqea: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_addqea.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_addqea.cpp \
+	  -o Vm68k_addqea
+
+# --- Scc on extended EAs (-(An), d16, abs) ---
+sccea: $(BUILD)/Vm68k_sccea
+	@echo "=== running m68k_sccea ==="
+	./$(BUILD)/Vm68k_sccea
+
+$(BUILD)/Vm68k_sccea: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_sccea.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_sccea.cpp \
+	  -o Vm68k_sccea
+
+# --- MOVE -(An),Dn (pre-decrement source) ---
+movepd: $(BUILD)/Vm68k_movepd
+	@echo "=== running m68k_movepd ==="
+	./$(BUILD)/Vm68k_movepd
+
+$(BUILD)/Vm68k_movepd: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_movepd.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_movepd.cpp \
+	  -o Vm68k_movepd
+
+# --- MOVE An,Dn (direct An source) ---
+movean: $(BUILD)/Vm68k_movean
+	@echo "=== running m68k_movean ==="
+	./$(BUILD)/Vm68k_movean
+
+$(BUILD)/Vm68k_movean: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_movean.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_movean.cpp \
+	  -o Vm68k_movean
+
+# --- MOVE #imm,Dn (immediate source) ---
+moveimm: $(BUILD)/Vm68k_moveimm
+	@echo "=== running m68k_moveimm ==="
+	./$(BUILD)/Vm68k_moveimm
+
+$(BUILD)/Vm68k_moveimm: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_moveimm.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_moveimm.cpp \
+	  -o Vm68k_moveimm
+
+# --- MOVE d16(PC),Dn (PC-relative source) ---
+movepcr: $(BUILD)/Vm68k_movepcr
+	@echo "=== running m68k_movepcr ==="
+	./$(BUILD)/Vm68k_movepcr
+
+$(BUILD)/Vm68k_movepcr: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_movepcr.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_movepcr.cpp \
+	  -o Vm68k_movepcr
+
+# --- MOVE memory->memory ---
+movem2m: $(BUILD)/Vm68k_movem2m
+	@echo "=== running m68k_movem2m ==="
+	./$(BUILD)/Vm68k_movem2m
+
+$(BUILD)/Vm68k_movem2m: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_movem2m.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_movem2m.cpp \
+	  -o Vm68k_movem2m
+
+# --- MOVE #imm,<mem> (immediate -> memory) ---
+moveimm2m: $(BUILD)/Vm68k_moveimm2m
+	@echo "=== running m68k_moveimm2m ==="
+	./$(BUILD)/Vm68k_moveimm2m
+
+$(BUILD)/Vm68k_moveimm2m: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_moveimm2m.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_moveimm2m.cpp \
+	  -o Vm68k_moveimm2m
+
+# --- (a) MOVE An,<mem> and (b) MOVE #imm,d16(An) ---
+movean2m: $(BUILD)/Vm68k_movean2m
+	@echo "=== running m68k_movean2m ==="
+	./$(BUILD)/Vm68k_movean2m
+
+$(BUILD)/Vm68k_movean2m: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_movean2m.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_movean2m.cpp \
+	  -o Vm68k_movean2m
+
+# --- (c) MOVE <extended-ea>,<mem> (extended EA on the source) ---
+movem2mext: $(BUILD)/Vm68k_movem2mext
+	@echo "=== running m68k_movem2mext ==="
+	./$(BUILD)/Vm68k_movem2mext
+
+$(BUILD)/Vm68k_movem2mext: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_movem2mext.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_movem2mext.cpp \
+	  -o Vm68k_movem2mext
+
+# --- ALU-op <ea>,Dn with src (An)+ / -(An) ---
+aluinc: $(BUILD)/Vm68k_aluinc
+	@echo "=== running m68k_aluinc ==="
+	./$(BUILD)/Vm68k_aluinc
+
+$(BUILD)/Vm68k_aluinc: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_aluinc.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_aluinc.cpp \
+	  -o Vm68k_aluinc
+
+# --- ALU Dn,<ea> RMW with dst (An)+ / -(An) ---
+alurmw: $(BUILD)/Vm68k_alurmw
+	@echo "=== running m68k_alurmw ==="
+	./$(BUILD)/Vm68k_alurmw
+
+$(BUILD)/Vm68k_alurmw: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_alurmw.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_alurmw.cpp \
+	  -o Vm68k_alurmw
+
+# --- ALU <ea>,Dn from d16/abs, byte and word (high bits preserved) ---
+aluext: $(BUILD)/Vm68k_aluext
+	@echo "=== running m68k_aluext ==="
+	./$(BUILD)/Vm68k_aluext
+
+$(BUILD)/Vm68k_aluext: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_aluext.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_aluext.cpp \
+	  -o Vm68k_aluext
+
+# --- 68000 RESET-FETCH (rst_vector): SSP/PC from the vector, A7=SSP, exec from PC ---
+rstvec: $(BUILD)/Vm68k_rstvec
+	@echo "=== running m68k_rstvec ==="
+	./$(BUILD)/Vm68k_rstvec
+
+$(BUILD)/Vm68k_rstvec: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_rstvec.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_rstvec.cpp \
+	  -o Vm68k_rstvec
+
+# --- HALT + bus arbitration (BR/BG/BGACK) ---
+halt: $(BUILD)/Vm68k_halt
+	@echo "=== running m68k_halt ==="
+	./$(BUILD)/Vm68k_halt
+
+$(BUILD)/Vm68k_halt: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_halt.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_halt.cpp \
+	  -o Vm68k_halt
+
+# --- BUS ERROR (BERRn) -> vector 2 exception ---
+berr: $(BUILD)/Vm68k_berr
+	@echo "=== running m68k_berr ==="
+	./$(BUILD)/Vm68k_berr
+
+# --- the processor with its clock-enable and DTACK generator (m68k_cpu_dt_si, the module the cores instantiate) ---
+$(BUILD)/Vm68k_cpu_dt_si: $(SI_PKGS) $(SI_SRC) $(RTL)/cpu_si/m68k_cpu_dt_si.sv $(RTL)/integration/m68k_cen_dtack.sv tb_m68k_cpu_dt.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_cpu_dt_si -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' \
+	  $(SI_PKGS) $(SI_SRC) $(RTL)/cpu_si/m68k_cpu_dt_si.sv $(RTL)/integration/m68k_cen_dtack.sv \
+	  tb_m68k_cpu_dt.cpp \
+	  -o Vm68k_cpu_dt_si
+cpudt: $(BUILD)/Vm68k_cpu_dt_si
+	@echo "=== running m68k_cpu_dt ==="
+	./$(BUILD)/Vm68k_cpu_dt_si
+
+$(BUILD)/Vm68k_berr: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_berr.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_berr.cpp \
+	  -o Vm68k_berr
+
+# --- branch .W form (BRA.W / BSR.W / Bcc.W, disp16) ---
+braw: $(BUILD)/Vm68k_braw
+	@echo "=== running m68k_braw ==="
+	./$(BUILD)/Vm68k_braw
+
+$(BUILD)/Vm68k_braw: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_braw.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_braw.cpp \
+	  -o Vm68k_braw
+
+# --- MOVEA indexed d8(An,Xn) (isolated test) ---
+moveaidx: $(BUILD)/Vm68k_moveaidx
+	@echo "=== running m68k_moveaidx ==="
+	./$(BUILD)/Vm68k_moveaidx
+
+$(BUILD)/Vm68k_moveaidx: m68k_seq_si.sv $(SI_PKGS) $(SI_SRC)  \
+                      \
+                       tb_m68k_moveaidx.cpp
+	$(VERILATOR) $(VFLAGS) \
+	  --top-module m68k_seq -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' -GSINGLE_CEN=1 \
+	  m68k_seq_si.sv $(SI_PKGS) $(SI_SRC) \
+	   \
+	   \
+	   \
+	   \
+	    \
+	  tb_m68k_moveaidx.cpp \
+	  -o Vm68k_moveaidx
+
+clean:
+	rm -rf $(BUILD)
+
+# --- Silicon core: micro control store (rtl/cpu_si) ---
+ustore: $(BUILD)/Vm68k_ustore
+	@echo "=== running m68k_ustore ==="
+	./$(BUILD)/Vm68k_ustore +data=$(DATA)/mc68000_micro_decoded.csv $(if $(ADD_USTORE),+add=$(ADD_USTORE))
+
+$(BUILD)/Vm68k_ustore: $(RTL)/cpu_si/m68k_ustore.sv $(RTL)/cpu_si/m68k_urom.sv $(RTL)/cpu_si/m68k_useq.sv $(RTL)/cpu_si/m68k_nrom.sv $(RTL)/cpu_si/m68k_nano_pkg.sv $(RTL)/cpu_si/m68k_urom.mem $(RTL)/cpu_si/m68k_nrom.mem $(RTL)/cpu_si/m68k_norigin.mem tb_m68k_ustore.cpp $(DATA)/mc68000_micro_decoded.csv
+	$(VERILATOR) $(VFLAGS) +incdir+$(RTL)/cpu_si \
+	  --top-module m68k_ustore -GORG_OVR_LUT=0 -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' \
+	  $(SI_PKGS) $(RTL)/cpu_si/m68k_ustore.sv $(RTL)/cpu_si/m68k_urom.sv $(RTL)/cpu_si/m68k_useq.sv $(RTL)/cpu_si/m68k_nrom.sv \
+	  tb_m68k_ustore.cpp \
+	  -o Vm68k_ustore
+
+# --- Silicon core: nano ROM with our own encoding + ORIGIN (rtl/cpu_si) ---
+nstore: $(BUILD)/Vm68k_nstore
+	@echo "=== running m68k_nstore ==="
+	./$(BUILD)/Vm68k_nstore +apph=$(DATA)/us4325121_appH.tsv +diemap=$(DATA)/us4325121_appH_die_map.tsv $(if $(DEV_NSTORE),+dev=$(DEV_NSTORE)) +lut=$(ORGLUT)
+
+$(BUILD)/Vm68k_nstore: $(RTL)/cpu_si/m68k_ustore.sv $(RTL)/cpu_si/m68k_urom.sv $(RTL)/cpu_si/m68k_useq.sv $(RTL)/cpu_si/m68k_nrom.sv $(RTL)/cpu_si/m68k_nano_pkg.sv $(RTL)/cpu_si/m68k_urom.mem $(RTL)/cpu_si/m68k_nrom.mem $(RTL)/cpu_si/m68k_norigin.mem tb_m68k_nstore.cpp m68k_apph_model.h
+	$(VERILATOR) $(VFLAGS) +incdir+$(RTL)/cpu_si --prefix Vm68k_ustore \
+	  --top-module m68k_ustore -GORG_OVR_LUT=$(ORGLUT) -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' \
+	  $(SI_PKGS) $(RTL)/cpu_si/m68k_ustore.sv $(RTL)/cpu_si/m68k_urom.sv $(RTL)/cpu_si/m68k_useq.sv $(RTL)/cpu_si/m68k_nrom.sv \
+	  tb_m68k_nstore.cpp \
+	  -o Vm68k_nstore
+
+# --- Silicon core: per-resource nano decoder (rtl/cpu_si) ---
+ndec: $(BUILD)/Vm68k_nstore_dec
+	@echo "=== running m68k_nstore_dec ==="
+	./$(BUILD)/Vm68k_nstore_dec +pkg=$(RTL)/cpu_si/m68k_nano_dec_pkg.sv +apph=$(DATA)/us4325121_appH.tsv +diemap=$(DATA)/us4325121_appH_die_map.tsv $(if $(DEV_NSTORE),+dev=$(DEV_NSTORE)) +lut=$(ORGLUT)
+
+$(BUILD)/Vm68k_nstore_dec: $(RTL)/cpu_si/m68k_nstore_dec.sv $(RTL)/cpu_si/m68k_nano_dec.sv $(RTL)/cpu_si/m68k_ustore.sv $(RTL)/cpu_si/m68k_urom.sv $(RTL)/cpu_si/m68k_useq.sv $(RTL)/cpu_si/m68k_nrom.sv $(RTL)/cpu_si/m68k_nano_pkg.sv $(RTL)/cpu_si/m68k_nano_dec_pkg.sv $(RTL)/cpu_si/m68k_urom.mem $(RTL)/cpu_si/m68k_nrom.mem $(RTL)/cpu_si/m68k_norigin.mem tb_m68k_ndec.cpp m68k_ndec_fields.h m68k_apph_model.h
+	$(VERILATOR) $(VFLAGS) +incdir+$(RTL)/cpu_si \
+	  --top-module m68k_nstore_dec -GORG_OVR_LUT=$(ORGLUT) -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' \
+	  $(SI_PKGS) $(RTL)/cpu_si/m68k_nstore_dec.sv $(RTL)/cpu_si/m68k_nano_dec.sv $(RTL)/cpu_si/m68k_ustore.sv $(RTL)/cpu_si/m68k_urom.sv $(RTL)/cpu_si/m68k_useq.sv $(RTL)/cpu_si/m68k_nrom.sv \
+	  tb_m68k_ndec.cpp \
+	  -o Vm68k_nstore_dec
+
+# --- Silicon core: AB/DB bus sections (rtl/cpu_si) ---
+bussec: $(BUILD)/Vm68k_bus_top
+	@echo "=== running m68k_bus_top ==="
+	./$(BUILD)/Vm68k_bus_top +pkg=$(RTL)/cpu_si/m68k_nano_dec_pkg.sv +lut=$(ORGLUT) $(if $(DEV_BUSSEC),+dev=$(DEV_BUSSEC))
+
+$(BUILD)/Vm68k_bus_top: m68k_bus_top.sv $(RTL)/cpu_si/m68k_bus_sec.sv $(RTL)/cpu_si/m68k_nstore_dec.sv $(RTL)/cpu_si/m68k_nano_dec.sv $(RTL)/cpu_si/m68k_ustore.sv $(RTL)/cpu_si/m68k_urom.sv $(RTL)/cpu_si/m68k_useq.sv $(RTL)/cpu_si/m68k_nrom.sv $(RTL)/cpu_si/m68k_nano_pkg.sv $(RTL)/cpu_si/m68k_nano_dec_pkg.sv $(RTL)/cpu_si/m68k_urom.mem $(RTL)/cpu_si/m68k_nrom.mem $(RTL)/cpu_si/m68k_norigin.mem tb_m68k_bus_sec.cpp m68k_ndec_fields.h
+	$(VERILATOR) $(VFLAGS) +incdir+$(RTL)/cpu_si \
+	  --top-module m68k_bus_top -GORG_OVR_LUT=$(ORGLUT) -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' \
+	  $(SI_PKGS) m68k_bus_top.sv $(RTL)/cpu_si/m68k_bus_sec.sv $(RTL)/cpu_si/m68k_nstore_dec.sv $(RTL)/cpu_si/m68k_nano_dec.sv $(RTL)/cpu_si/m68k_ustore.sv $(RTL)/cpu_si/m68k_urom.sv $(RTL)/cpu_si/m68k_useq.sv $(RTL)/cpu_si/m68k_nrom.sv \
+	  tb_m68k_bus_sec.cpp \
+	  -o Vm68k_bus_top
+
+# --- Silicon core: AT/AOB/DOB/DBIN registers (rtl/cpu_si) ---
+regs: $(BUILD)/Vm68k_regs_top
+	@echo "=== running m68k_regs_top ==="
+	./$(BUILD)/Vm68k_regs_top +pkg=$(RTL)/cpu_si/m68k_nano_dec_pkg.sv +lut=$(ORGLUT)
+
+$(BUILD)/Vm68k_regs_top: m68k_regs_top.sv $(RTL)/cpu_si/m68k_regs_bd.sv m68k_bus_top.sv $(RTL)/cpu_si/m68k_bus_sec.sv $(RTL)/cpu_si/m68k_nstore_dec.sv $(RTL)/cpu_si/m68k_nano_dec.sv $(RTL)/cpu_si/m68k_ustore.sv $(RTL)/cpu_si/m68k_urom.sv $(RTL)/cpu_si/m68k_useq.sv $(RTL)/cpu_si/m68k_nrom.sv $(RTL)/cpu_si/m68k_nano_pkg.sv $(RTL)/cpu_si/m68k_nano_dec_pkg.sv $(RTL)/cpu_si/m68k_urom.mem $(RTL)/cpu_si/m68k_nrom.mem $(RTL)/cpu_si/m68k_norigin.mem tb_m68k_regs.cpp m68k_ndec_fields.h
+	$(VERILATOR) $(VFLAGS) +incdir+$(RTL)/cpu_si \
+	  --top-module m68k_regs_top -GORG_OVR_LUT=$(ORGLUT) -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' \
+	  $(SI_PKGS) m68k_regs_top.sv $(RTL)/cpu_si/m68k_regs_bd.sv m68k_bus_top.sv $(RTL)/cpu_si/m68k_bus_sec.sv $(RTL)/cpu_si/m68k_nstore_dec.sv $(RTL)/cpu_si/m68k_nano_dec.sv $(RTL)/cpu_si/m68k_ustore.sv $(RTL)/cpu_si/m68k_urom.sv $(RTL)/cpu_si/m68k_useq.sv $(RTL)/cpu_si/m68k_nrom.sv \
+	  tb_m68k_regs.cpp \
+	  -o Vm68k_regs_top
+
+# --- Silicon core: register file (rtl/cpu_si) ---
+regfile_si: $(BUILD)/Vm68k_regfile_top
+	@echo "=== running m68k_regfile_top ==="
+	./$(BUILD)/Vm68k_regfile_top +pkg=$(RTL)/cpu_si/m68k_nano_dec_pkg.sv +lut=$(ORGLUT)
+
+$(BUILD)/Vm68k_regfile_top: m68k_regfile_top.sv $(RTL)/cpu_si/m68k_regfile_si.sv $(RTL)/cpu_si/m68k_mvm_si.sv $(RTL)/cpu_si/m68k_regs_bd.sv $(RTL)/cpu_si/m68k_bus_sec.sv $(RTL)/cpu_si/m68k_nstore_dec.sv $(RTL)/cpu_si/m68k_nano_dec.sv $(RTL)/cpu_si/m68k_ustore.sv $(RTL)/cpu_si/m68k_urom.sv $(RTL)/cpu_si/m68k_useq.sv $(RTL)/cpu_si/m68k_nrom.sv $(RTL)/cpu_si/m68k_nano_pkg.sv $(RTL)/cpu_si/m68k_nano_dec_pkg.sv $(RTL)/cpu_si/m68k_urom.mem $(RTL)/cpu_si/m68k_nrom.mem $(RTL)/cpu_si/m68k_norigin.mem tb_m68k_regfile_si.cpp m68k_ndec_fields.h
+	$(VERILATOR) $(VFLAGS) +incdir+$(RTL)/cpu_si \
+	  --top-module m68k_regfile_top -GORG_OVR_LUT=$(ORGLUT) -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' \
+	  $(SI_PKGS) m68k_regfile_top.sv $(RTL)/cpu_si/m68k_regfile_si.sv $(RTL)/cpu_si/m68k_mvm_si.sv $(RTL)/cpu_si/m68k_regs_bd.sv $(RTL)/cpu_si/m68k_bus_sec.sv $(RTL)/cpu_si/m68k_nstore_dec.sv $(RTL)/cpu_si/m68k_nano_dec.sv $(RTL)/cpu_si/m68k_ustore.sv $(RTL)/cpu_si/m68k_urom.sv $(RTL)/cpu_si/m68k_useq.sv $(RTL)/cpu_si/m68k_nrom.sv \
+	  tb_m68k_regfile_si.cpp \
+	  -o Vm68k_regfile_top
+
+# --- Silicon core: row decoder (FIG. 18) and ALU/CC (FIG. 16/17) (rtl/cpu_si) ---
+rowdec: $(BUILD)/Vm68k_alu_rowdec
+	@echo "=== running m68k_alu_rowdec ==="
+	./$(BUILD)/Vm68k_alu_rowdec +data=$(DATA)/mc68000_alu_rows_fig18.tsv $(if $(DEV_ROWDEC),+dev=$(DEV_ROWDEC))
+
+$(BUILD)/Vm68k_alu_rowdec: $(RTL)/cpu_si/m68k_alu_rowdec.sv tb_m68k_rowdec.cpp m68k_rowdec_model.h $(DATA)/mc68000_alu_rows_fig18.tsv
+	$(VERILATOR) $(VFLAGS) --top-module m68k_alu_rowdec $(RTL)/cpu_si/m68k_alu_rowdec.sv tb_m68k_rowdec.cpp -o Vm68k_alu_rowdec
+
+alu_si: $(BUILD)/Vm68k_alu_si
+	@echo "=== running m68k_alu_si ==="
+	./$(BUILD)/Vm68k_alu_si +data=$(DATA)/mc68000_alu_matrix_fig17.tsv $(if $(DEV_ALU),+dev=$(DEV_ALU))
+
+$(BUILD)/Vm68k_alu_si: $(RTL)/cpu_si/m68k_alu_si.sv $(RTL)/cpu_si/m68k_alu_pkg.sv tb_m68k_alu_si.cpp m68k_alu_cells.h $(DATA)/mc68000_alu_matrix_fig17.tsv
+	$(VERILATOR) $(VFLAGS) +incdir+$(RTL)/cpu_si --top-module m68k_alu_si $(SI_PKGS) $(RTL)/cpu_si/m68k_alu_si.sv tb_m68k_alu_si.cpp -o Vm68k_alu_si
+
+# --- Silicon core: conditional branch unit (rtl/cpu_si) ---
+branch_si: $(BUILD)/Vm68k_branch_si
+	@echo "=== running m68k_branch_si ==="
+	./$(BUILD)/Vm68k_branch_si +data=$(DATA)/us4325121_appC.tsv $(if $(DEV_BRANCH),+dev=$(DEV_BRANCH))
+
+$(BUILD)/Vm68k_branch_si: $(RTL)/cpu_si/m68k_branch_si.sv $(RTL)/cpu_si/m68k_branch_pkg.sv tb_m68k_branch_si.cpp $(DATA)/us4325121_appC.tsv
+	$(VERILATOR) $(VFLAGS) --public-flat-rw +incdir+$(RTL)/cpu_si --top-module m68k_branch_si $(SI_PKGS) $(RTL)/cpu_si/m68k_branch_si.sv tb_m68k_branch_si.cpp -o Vm68k_branch_si
+
+# --- Silicon core: A1/A2/A3 decoder (rtl/cpu_si) ---
+a123_si: $(BUILD)/Vm68k_a123_si
+	@echo "=== running m68k_a123_si ==="
+	./$(BUILD)/Vm68k_a123_si +die=$(DATA)/mc68000_a123_die.tsv +need=$(DATA)/mc68000_a123_need.tsv $(if $(DEV_A123),+dev=$(DEV_A123))
+
+$(BUILD)/Vm68k_a123_si: m68k_a123_top.sv $(RTL)/cpu_si/m68k_a123_si.sv tb_m68k_a123_si.cpp
+	$(VERILATOR) $(VFLAGS) --prefix Vm68k_a123_si --top-module m68k_a123_top -GEXT_CLS=$(EXTCLS) m68k_a123_top.sv $(RTL)/cpu_si/m68k_a123_si.sv tb_m68k_a123_si.cpp -o Vm68k_a123_si
+
+# --- Silicon core: ALU with its surrounding registers (rtl/cpu_si) ---
+alux_si: $(BUILD)/Vm68k_alux_top
+	@echo "=== running m68k_alux_top ==="
+	./$(BUILD)/Vm68k_alux_top +fig17=$(DATA)/mc68000_alu_matrix_fig17.tsv +fig18=$(DATA)/mc68000_alu_rows_fig18.tsv +pkg=$(RTL)/cpu_si/m68k_nano_dec_pkg.sv +lut=$(ORGLUT) $(if $(DEV_ALU),+devalu=$(DEV_ALU)) $(if $(DEV_ROWDEC),+devrow=$(DEV_ROWDEC))
+
+$(BUILD)/Vm68k_alux_top: m68k_alux_top.sv $(RTL)/cpu_si/m68k_alux_si.sv $(RTL)/cpu_si/m68k_alu_si.sv $(RTL)/cpu_si/m68k_alu_rowdec.sv $(RTL)/cpu_si/m68k_nstore_dec.sv $(RTL)/cpu_si/m68k_nano_dec.sv $(RTL)/cpu_si/m68k_ustore.sv $(RTL)/cpu_si/m68k_urom.sv $(RTL)/cpu_si/m68k_useq.sv $(RTL)/cpu_si/m68k_nrom.sv $(RTL)/cpu_si/m68k_nano_pkg.sv $(RTL)/cpu_si/m68k_nano_dec_pkg.sv $(RTL)/cpu_si/m68k_alu_pkg.sv $(RTL)/cpu_si/m68k_urom.mem $(RTL)/cpu_si/m68k_nrom.mem $(RTL)/cpu_si/m68k_norigin.mem tb_m68k_alux_si.cpp m68k_alu_cells.h m68k_rowdec_model.h $(DATA)/mc68000_alu_matrix_fig17.tsv $(DATA)/mc68000_alu_rows_fig18.tsv
+	$(VERILATOR) $(VFLAGS) +incdir+$(RTL)/cpu_si \
+	  --top-module m68k_alux_top -GORG_OVR_LUT=$(ORGLUT) -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' \
+	  $(SI_PKGS) m68k_alux_top.sv $(RTL)/cpu_si/m68k_alux_si.sv $(RTL)/cpu_si/m68k_alu_si.sv $(RTL)/cpu_si/m68k_alu_rowdec.sv $(RTL)/cpu_si/m68k_nstore_dec.sv $(RTL)/cpu_si/m68k_nano_dec.sv $(RTL)/cpu_si/m68k_ustore.sv $(RTL)/cpu_si/m68k_urom.sv $(RTL)/cpu_si/m68k_useq.sv $(RTL)/cpu_si/m68k_nrom.sv \
+	  tb_m68k_alux_si.cpp \
+	  -o Vm68k_alux_top
+
+# --- Silicon core: operand size from IRD (rtl/cpu_si) ---
+size_si: $(BUILD)/Vm68k_size_si
+	@echo "=== running m68k_size_si ==="
+	./$(BUILD)/Vm68k_size_si
+
+$(BUILD)/Vm68k_size_si: $(RTL)/cpu_si/m68k_size_si.sv tb_m68k_size_si.cpp
+	$(VERILATOR) $(VFLAGS) --top-module m68k_size_si $(RTL)/cpu_si/m68k_size_si.sv tb_m68k_size_si.cpp -o Vm68k_size_si
+
+# --- Silicon core: complete processor, startup testbench (rtl/cpu_si) ---
+cpu_si: $(BUILD)/Vm68k_cpu_si
+	@echo "=== running m68k_cpu_si (first phase cen, then cen2) ==="
+	PHASE_FIRST=0 ./$(BUILD)/Vm68k_cpu_si
+	PHASE_FIRST=1 ./$(BUILD)/Vm68k_cpu_si
+
+$(BUILD)/Vm68k_cpu_si: $(RTL)/cpu_si/m68k_cpu_si.sv $(RTL)/cpu_si/m68k_nstore_dec.sv $(RTL)/cpu_si/m68k_nano_dec.sv $(RTL)/cpu_si/m68k_ustore.sv $(RTL)/cpu_si/m68k_urom.sv $(RTL)/cpu_si/m68k_useq.sv $(RTL)/cpu_si/m68k_nrom.sv $(RTL)/cpu_si/m68k_bus_sec.sv $(RTL)/cpu_si/m68k_regs_bd.sv $(RTL)/cpu_si/m68k_au.sv $(RTL)/cpu_si/m68k_mvm_si.sv $(RTL)/cpu_si/m68k_regfile_si.sv $(RTL)/cpu_si/m68k_alux_si.sv $(RTL)/cpu_si/m68k_alu_si.sv $(RTL)/cpu_si/m68k_alu_rowdec.sv $(RTL)/cpu_si/m68k_size_si.sv $(RTL)/cpu_si/m68k_exc_si.sv $(RTL)/cpu_si/m68k_ftu_si.sv $(RTL)/cpu_si/m68k_psw_si.sv $(RTL)/cpu_si/m68k_ir_si.sv $(RTL)/cpu_si/m68k_a123_si.sv $(RTL)/cpu_si/m68k_branch_si.sv $(RTL)/cpu_si/m68k_busctl_si.sv $(RTL)/cpu_si/m68k_bus_fsm.sv $(RTL)/cpu_si/m68k_nano_pkg.sv $(RTL)/cpu_si/m68k_nano_dec_pkg.sv $(RTL)/cpu_si/m68k_alu_pkg.sv $(RTL)/cpu_si/m68k_branch_pkg.sv $(RTL)/cpu_si/m68k_urom.mem $(RTL)/cpu_si/m68k_nrom.mem $(RTL)/cpu_si/m68k_norigin.mem tb_m68k_cpu_si.cpp
+	$(VERILATOR) $(VFLAGS) +incdir+$(RTL)/cpu_si \
+	  --top-module m68k_cpu_si -GDBG=1 -GMEM_FILE='"$(RTL)/cpu_si/m68k_urom.mem"' -GORIGIN_FILE='"$(RTL)/cpu_si/m68k_norigin.mem"' -GNANO_FILE='"$(RTL)/cpu_si/m68k_nrom.mem"' -GNANO_M_FILE='"$(RTL)/cpu_si/m68k_nrom_m.mem"' \
+	  $(SI_PKGS) $(RTL)/cpu_si/m68k_cpu_si.sv $(RTL)/cpu_si/m68k_nstore_dec.sv $(RTL)/cpu_si/m68k_nano_dec.sv $(RTL)/cpu_si/m68k_ustore.sv $(RTL)/cpu_si/m68k_urom.sv $(RTL)/cpu_si/m68k_useq.sv $(RTL)/cpu_si/m68k_nrom.sv $(RTL)/cpu_si/m68k_bus_sec.sv $(RTL)/cpu_si/m68k_regs_bd.sv $(RTL)/cpu_si/m68k_au.sv $(RTL)/cpu_si/m68k_mvm_si.sv $(RTL)/cpu_si/m68k_regfile_si.sv $(RTL)/cpu_si/m68k_alux_si.sv $(RTL)/cpu_si/m68k_alu_si.sv $(RTL)/cpu_si/m68k_alu_rowdec.sv $(RTL)/cpu_si/m68k_size_si.sv $(RTL)/cpu_si/m68k_exc_si.sv $(RTL)/cpu_si/m68k_ftu_si.sv $(RTL)/cpu_si/m68k_psw_si.sv $(RTL)/cpu_si/m68k_ir_si.sv $(RTL)/cpu_si/m68k_a123_si.sv $(RTL)/cpu_si/m68k_branch_si.sv $(RTL)/cpu_si/m68k_busctl_si.sv $(RTL)/cpu_si/m68k_bus_fsm.sv \
+	  tb_m68k_cpu_si.cpp \
+	  -o Vm68k_cpu_si
+
+# ---------------------------------------------------------------------------
+# make -f Makefile.si test
+#   Runs the block benches: each block of the core is compared against an
+#   independently written model, exhaustively wherever the input space allows
+#   it. Prints a summary. Needs nothing but Verilator.
+# ---------------------------------------------------------------------------
+BLOCKS := ustore nstore ndec bussec regs regfile_si rowdec alu_si alux_si branch_si a123_si size_si cpu_si
+
+.PHONY: test
+test:
+	@ok=0; ko=0; \
+	for t in $(BLOCKS); do \
+	  if out=$$($(MAKE) -s -f Makefile.si $$t 2>&1) && echo "$$out" | grep -q 'RESULT: PASS' \
+	     && ! echo "$$out" | grep -q 'RESULT: FAIL'; then \
+	    echo "  PASS  $$t"; ok=$$((ok+1)); \
+	  else echo "  FAIL  $$t"; ko=$$((ko+1)); fi; \
+	done; \
+	echo ""; echo "$$ok PASS, $$ko FAIL"; \
+	[ $$ko -eq 0 ]

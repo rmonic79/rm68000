@@ -1,0 +1,24 @@
+# Deviations from the rule of docs/silicon-datapath.md §5 read literally: atom<TAB>section H<TAB>section L<TAB>section D<TAB>source
+# section value: "-" = not driven; "<source>:H" / ":L" = high/low half of the source; ":L6" = bits 5:0 of the low half; "sext:L" = 16 copies of bit 15 of the L section of the same atom
+# CONFIRMED = source independent of the RTL and of the generators (patent, manual, measurements against the reference core with comparison benches made during development, not part of this repository (available from the author on request: diff-fuzz-si per instruction family, lockstep-si, reset)). IMPLEMENTATION CHOICE = no external source, because not observable from the behaviour:
+# the 16-bit register half is replicated on the twin section; the only App. H destinations for these transfers are consumers that read with fallback
+# D->L->H or H->L->D (alu, alub, dob, ftu, dcr, ath), and no microcode word drives two different sources on the same section (bussec testbench: 0 conflicts over 522 words).
+ab<-(rxh)	rf_ab:H	rf_ab:H	-	CONFIRMED: App. H p113 dvs05 and dvs04, p114 dvum3: "(rxh) -> ab -> alu,atl": atl loads from the L section (docs/silicon-datapath.md §6: atl<-X from X_l, fallback X_d), so the high half of RX must also be on L; measurement: diff-fuzz-si families DIVU and DIVS (divisions equal to the reference)
+db<-(rxh)	rf_db:H	rf_db:H	-	IMPLEMENTATION CHOICE: App. H has (rxh) on the DB only towards alu/dob (consumers with fallback): H+L not observable; same rule as ab<-(rxh), for symmetry
+ab<-(ryh)	rf_ab:H	rf_ab:H	-	IMPLEMENTATION CHOICE: App. H destinations alu/alub/dob (fallback): not observable
+db<-(ryh)	rf_db:H	rf_db:H	-	IMPLEMENTATION CHOICE: destinations alu/dob: not observable
+ab<-(pch)	rf_ab:H	rf_ab:H	-	IMPLEMENTATION CHOICE: destinations alu/dob: not observable
+ab<-(pcl)	rf_ab:L	rf_ab:L	-	IMPLEMENTATION CHOICE: destinations alu/dob: not observable
+ab<-(rxl)	rf_ab:L	rf_ab:L	-	IMPLEMENTATION CHOICE: destinations alu/dob: not observable
+db<-(rxl)	rf_db:L	rf_db:L	-	IMPLEMENTATION CHOICE: destinations alu/dob: not observable
+ab<-(ryl)	rf_ab:L	rf_ab:L	-	IMPLEMENTATION CHOICE: App. H p133 swap1 "(ryl) -> ab -> alub,ath" is consistent with a low half on H too, but ath<-ab falls back to L (§6): not observable
+db<-(ryl)	rf_db:L	rf_db:L	-	IMPLEMENTATION CHOICE: destinations alu/alub/dob: not observable
+ab<-(ryd)	rf_ab:L	rf_ab:L	-	IMPLEMENTATION CHOICE: a single transfer, towards ftu: not observable
+ab<-(rydl)	rf_ab:L	rf_ab:L	-	IMPLEMENTATION CHOICE: destinations alu/alub/ath (App. H p114 dvur1, 'ath' added by hand in the transcription): ath falls back to L: not observable
+ab*<-(rxd)	rf_ab:L	rf_ab:L	rf_ab:L	IMPLEMENTATION CHOICE: 10 transfers towards dcr (it reads with fallback D->L->H): H+L+D not observable
+ab*<-(rxdl)	rf_ab:L	rf_ab:L	rf_ab:L	IMPLEMENTATION CHOICE: destinations alu/dobh/dobl: not observable
+ab*<-(rxl)	rf_ab:L	rf_ab:L	rf_ab:L	IMPLEMENTATION CHOICE: destinations alu/dob: not observable
+ab*<-(rydl)	rf_ab:L	rf_ab:L	rf_ab:L	IMPLEMENTATION CHOICE: destinations alu/alub: not observable
+ab*<-(ryl)	rf_ab:L	rf_ab:L	rf_ab:L	IMPLEMENTATION CHOICE: destinations alu/alub/dob: not observable
+db*<-(rxdl)	rf_db:L	rf_db:L	rf_db:L	IMPLEMENTATION CHOICE: destinations alu/dobh/dobl: not observable
+dbe<-(rxdl)	sext:L	rf_db:L6	-	CONFIRMED: App. H p150 srrw1 and srrl1 "(rxdl) -> dbe -> au" load into the AU the shift count taken from the register; M68000PRM par. 4 (ASd/LSd/ROd/ROXd, form Dx,Dy): "the shift count is the value in the register modulo 64" -> on L only bits 5:0; measurement: lockstep-si in opcode sweep mode (comparison bench, SLOTBASE/SLOTSIZE), block E000-EFFF (line 1110: shift and rotate with the count in a register), 0 divergences

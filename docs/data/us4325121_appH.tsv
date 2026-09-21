@@ -1,0 +1,502 @@
+# Transcription of App. H of US4325121 (Google pages p85-p174, plus p175 from the USPTO PDF). Fields: page addr label origin access type alu regptr marker next transfers note
+# marker: D=diamond, L='<', G='>', S=small square ; next = arrow label (- if absent); transfers separated by ' ; '
+p85	004	adrw1	adrw1	irop	db	in	ukry	L S	adrw2	(dbin) -> abe -> alu ; (rya) -> * -> aob,at ; -1 -> alu	
+p85	367	adrw2	adrw2	fruk	a3	x	-	G S	-	edb -> dbin ; (rxd) -> ab* -> dcr	
+p85	271	abww1	abww1	trix	db	x	ukdy	D	ablw3	au -> aob,pc ; (dbin) -> dbe -> at,au ; edb -> dbin,irc ; (rxd) -> ab* -> dcr ; 0 -> au	
+p85	1e2	ablw1	ablw1	trim	db	x	ukdy	D	ablw2	au -> db -> aob,au ; (dbin) -> ab -> ath ; edb -> dbin ; +2 -> au	
+p85	233	ablw2	ablw2	trix	db	x	-	D	ablw3	(ath) -> dbh -> au ; au -> aob,pc ; (dbin) -> dbl -> atl,au ; edb -> dbin,irc ; (rxd) -> ab* -> dcr ; 0 -> au	
+p85	36b	ablw3	ablw3	trop	a3	in	-	D S	-	(at) -> ab -> aob ; (dbin) -> abd -> alu ; edb -> dbin ; (pc) -> db -> au ; -1 -> alu ; +2 -> au	
+p85	1c2	adsw1	adsw1	trix	db	x	ukpy	D	adsw2	au -> aob ; (dbin) -> dbe -> au ; edb -> dbin,irc ; (rya) -> ab -> au	
+p85	273	adsw2	adsw2	iruk	db	in	-	L S	adrw2	au -> ab -> aob,at ; (dbin) -> abd -> alu ; (pc) -> db -> au ; -1 -> alu ; +4 -> au	
+p86	120	aixw2	aixw2	frix	db	x	-	G	adsw2	au -> * -> au ; edb -> dbin,irc ; (rxl) -> *e -> au ; reset pren	
+p86	270	e#w1	e#w1	trix	a2	x	ukdt	D	-	au -> db -> aob,au,pc ; (dbin) -> ab -> rydl,ath ; edb -> dbin,irc ; +2 -> au	label with '#': e/o deduced from the content (rydl)
+p86	3aa	o#w1	o#w1	trix	a2	x	dtuk	D	-	au -> db -> aob,au,pc ; (dbin) -> ab -> rxl ; edb -> dbin,irc ; +2 -> au	label with '#': e/o deduced from the content (rxl)
+p86	21f	pinw1	pinw1	irop	db	x	ukry	L S	pinw2	(dbin) -> dbd -> alub ; (rxd) -> ab* -> dcr ; (rya) -> db -> aob,at,au ; +1,+2 -> au	
+p86	173	pinw2	pinw2	frop	a3	in	-	G S	-	(alub) -> alu ; au -> ab -> rya ; edb -> dbin ; (pc) -> db -> au ; -1 -> alu ; +2 -> au	
+p86	3c0	pdcw1	pdcw1	np	db	x	ukry	-	pdcw2	au -> pc ; (dbin) -> dbd -> alub ; (rxd) -> ab* -> dcr ; (rya) -> db -> au ; -1,-2 -> au	
+p86	361	pdcw2	pdcw2	trop	a3	in	-	D S	-	(alub) -> alu ; au -> ab -> aob,at,rya ; edb -> dbin ; (pc) -> db -> au ; -1 -> alu ; 0 -> au	
+p86	1e0	aixw4	aixw4	frix	db	x	-	G	adsw2	au -> * -> au ; edb -> dbin,irc ; (rx) -> * -> au ; reset pren	
+p87	1e3	aixw0	aixw0	np	db	5n	ukpy	-	aixw1	(dbin) -> ab* -> alu ; 0 -> alu	
+p87	122	aixw1	aixw1	irix	bc	x	-	L	aixw4 if irc[11]=1 ; aixw2 if irc[11]=0	alu -> *e -> au ; au -> aob ; (rya) -> * -> au	
+p87	3e0	o#l1	o#l1	trim	db	x	dtuk	D	o#w1	au -> db -> aob,au ; (dbin) -> ab -> rxh ; edb -> dbin ; +2 -> au	
+p87	1e6	abll1	ablw1	trim	db	x	ukdy	D	abll2	au -> db -> aob,au ; (dbin) -> ab -> ath ; edb -> dbin ; +2 -> au	
+p87	237	abll2	ablw2	trix	db	x	-	D	abll3	(ath) -> dbh -> au ; au -> aob,pc ; (dbin) -> dbl -> atl,au ; edb -> dbin,irc ; (rxd) -> ab* -> dcr ; 0 -> au	
+p87	231	abll3	abll3	trop	db	in	-	D	adrl2	au -> db -> aob,au ; (dbin) -> ab* -> alu ; edb -> dbin ; -1 -> alu ; +2 -> au	
+p88	275	abwl1	abww1	trix	db	x	ukdy	D	abll3	au -> aob,pc ; (dbin) -> dbe -> at,au ; edb -> dbin,irc ; (rxd) -> ab* -> dcr ; 0 -> au	
+p88	179	adrl1	adrl1	trop	db	in	ukry	D	adrl2	(dbin) -> abe -> alu ; edb -> dbin ; (rya) -> db -> aob,au ; -1 -> alu ; +2 -> au	
+p88	348	adrl2	adrl2	trop	a3	x	-	D	-	au -> ab -> aob,at ; (dbin) -> dbd -> alub ; edb -> dbin ; (pc) -> db -> au ; +2 -> au	'alub,' with a trailing comma in the block
+p88	1c6	adsl1	adsw1	trix	db	x	ukpy	D	adsl2	au -> aob ; (dbin) -> dbe -> au ; edb -> dbin,irc ; (rya) -> ab -> au	
+p88	235	adsl2	abll3	truk	db	in	-	D	adsl3	au -> db -> aob,au ; (dbin) -> ab* -> alu ; edb -> dbin ; -1 -> alu ; +2 -> au	
+p88	005	adsl3	adsl3	truk	a3	x	-	D	-	au -> ab -> aob,at ; (dbin) -> dbd -> alub ; edb -> dbin ; (pc) -> db -> au ; +4 -> au	'alub,' with a trailing comma
+p89	299	e#l1	e#l1	trim	db	x	ukdt	D	o#w1	au -> db -> aob,au ; (dbin) -> ab -> ryh ; edb -> dbin ; +2 -> au	label with '#': e/o deduced from the content (ryh)
+p89	1e7	aixl0	aixw0	np	db	5n	ukpy	-	aixl1	(dbin) -> ab* -> alu ; 0 -> alu	
+p89	126	aixl1	aixw1	irix	bc	x	-	L	aixl5 if irc[11]=1 ; aixl2 if irc[11]=0	alu -> *e -> au ; au -> aob ; (rya) -> * -> au	
+p89	17d	pinl1	adrl1	trop	db	in	ukry	D	pinl2	(dbin) -> ab* -> alu ; edb -> dbin ; (rya) -> db -> aob,au ; -1 -> alu ; +2 -> au	
+p89	27f	pinl2	pinl2	irop	db	x	-	L	pinl3	au -> db -> aob,at,au ; (dbin) -> dbd -> alub,alue ; +2 -> au	'alue' added by hand in the patent
+p89	21b	pinl3	pinl3	frop	a3	x	-	G	-	au -> ab -> rya ; edb -> dbin ; (pc) -> db -> au ; +2 -> au	
+p90	0ee	pdcl1	pdcl1	np	db	in	ukry	-	pdcl2	(dbin) -> ab* -> alu ; (rya) -> db -> au ; -1 -> alu ; -4 -> au	
+p90	0ef	pdcl2	pdcl2	trop	db	x	-	D	adrl2	au -> db -> aob,au,rya ; edb -> dbin ; +2 -> au	
+p91	124	aixl2	aixw2	frix	db	x	-	G	adsl2	au -> * -> au ; edb -> dbin,irc ; (rxl) -> *e -> au ; reset pren	
+p91	1e4	aixl5	aixw4	frix	db	x	-	G	adsl2	au -> * -> au ; edb -> dbin,irc ; (rx) -> * -> au ; reset pren	
+p92	0a2	mrgw1	mrgw1	irix	dbi	1if	rxuk	L	mmrw3	au -> db -> aob,au,pc ; (dbin) -> ab -> alu,rxl ; -1 -> alu ; +2 -> au	
+p92	068	mrgm1	mrgm1	irix	dbi	x	rxuk	L	mmrw3	au -> db -> aob,au,pc ; (dbin) -> abe -> rx ; +2 -> au	
+p92	0cf	malw1	malw1	trim	db	1i	dxuk	D	malw2	alu -> db -> ath ; au -> aob,pc ; (dbin) -> ab* -> alu ; edb -> dbin ; -1 -> alu	
+p92	020	malw2	malw2	twop	dbi	x	-	D S	malw3	alu -> dob ; (ath) -> abh -> aob ; (dbin) -> abl -> aob ; (pc) -> db -> au ; +2 -> au	
+p92	1e1	malw3	malw3	trin	db	x	-	D	b	au -> db -> aob,au,pc ; (dbin) -> ab -> ftu ; edb -> dbin,irc ; +2 -> au	next = connector 'b'
+p93	383	maww1	maww1	trin	db	1i	dxuk	D	maww2	alu -> dbe -> au ; au -> aob,pc ; (dbin) -> ab* -> alu ; edb -> irc ; -1 -> alu ; 0 -> au	
+p93	38b	maww2	maww2	twop	db	x	-	D S	b	alu -> dob ; au -> aob ; (ir) -> ird ; (pc) -> db -> au ; +2 -> au	next = connector 'b'
+p93	388	mmrw1	mmrw1	twop	db	1i	rxuk	D S	mmrw2	au -> pc ; (dbin) -> ab* -> alu,dob ; (rxa) -> db -> aob,au ; -1 -> alu ; +1,+2 -> au	arrow towards block 328
+p93	328	mmrw2?	-	irix	dbi	x	-	L	mmrw3	(pc) -> db -> aob,au ; +2 -> au	block without printed label/origin; label deduced from App A (mmrw2)
+p93	026	mmrw3	mmrw3	frix	a1	x	-	G	-	edb -> dbin,irc ; (ir) -> ird	
+p93	080	mmdw1	mmdw1	trin	db	1i	rxuk	D	maww2	alu -> dbe -> au ; au -> aob,pc ; (dbin) -> abd -> alu ; edb -> irc ; (rxa) -> ab -> au ; -1 -> alu	
+p94	389	mmxw0	mmxw0	np	db	5n	rxuk	-	mmxw1	alu -> ab* -> alu ; 0 -> alu	
+p94	111	mmxw1	mmxw1	irin	bc	x	-	L	mmxw3 if irc[11]=1 ; mmxw2 if irc[11]=0	alu -> *e -> au ; au -> aob,pc ; (rxa) -> * -> au	
+p94	210	mmxw2	mmxw2	frin	db	1i	-	G	maww2	au -> ab -> au ; (dbin) -> abd -> alu ; edb -> irc ; (rxl) -> dbe -> au ; -1 -> alu	
+p94	2d0	mmxw3	mmxw3	frin	db	1i	-	G	maww2	au -> ab -> au ; (dbin) -> abd -> alu ; edb -> irc ; (rx) -> db -> au ; -1 -> alu	
+p94	38c	mmiw1	mmrw1	twop	dbi	1i	rxuk	D S	mmiw2	au -> pc ; (dbin) -> ab* -> alu,dob ; (rxa) -> db -> aob,au ; -1 -> alu ; +1,+2 -> au	
+p94	023	mmiw2	mmiw2	trix	a1	x	-	D	-	au -> ab -> rxa ; edb -> dbin,irc ; (ir) -> ird ; (pc) -> db -> aob,au ; +2 -> au	
+p95	081	mmmw1	mmmw1	trix	dbi	1i	rxuk	D	mmmw2	au -> aob,pc ; (dbin) -> ab* -> alu ; edb -> dbin,irc ; (rxa) -> db -> au ; -1 -> alu ; -1,-2 -> au	
+p95	025	mmmw2	mmmw2	twop	a1	x	-	D S	-	alu -> dob ; au -> ab -> aob,rxa ; (ir) -> ird ; (pc) -> db -> au ; +2 -> au	
+p96	3c4	asxw1	pdcw1	np	db	x	rxry	-	asxw2	au -> pc ; (dbin) -> dbd -> alub ; (rxd) -> ab* -> dcr ; (rya) -> db -> au ; -1,-2 -> au	
+p96	100	asxw2	asxw2	irop	db	in	-	L S	asxw3	au -> * -> aob,rya ; (dbin) -> ab* -> alu ; -1 -> alu	
+p96	102	asxw3	asxw3	frop	db	x	-	G S	asxw4	edb -> dbin ; (rxa) -> db -> au ; -1,-2 -> au	
+p96	212	asxw4	asxw4	trop	dbi	x	-	D S	asxw5	au -> * -> aob,at,rxa ; (dbin) -> db* -> alub ; edb -> dbin	
+p96	0a6	mrgl1	mrgw1	irix	dbi	1if	rxuk	L	mrgl2	au -> db -> aob,au,pc ; (dbin) -> ab -> alu,rxl ; -1 -> alu ; +2 -> au	
+p96	066	mrgl2	mrgl2	frix	a1	1f	-	G	-	(alub) -> alu ; (alue) -> db -> rxh ; edb -> dbin,irc ; (ir) -> ird ; -1 -> alu	
+p96	2b5	mall1	mall1	trim	db	in	dxuk	D	mall2	alu -> db -> ath ; (alub) -> alu ; au -> aob,pc ; (dbin) -> ab -> atl ; edb -> dbin ; -1 -> alu	
+p96	2b6	mall2	mall2	twop	db	1i	-	D	mall3	alu -> dob ; (ath) -> dbh -> aob,au ; (atl) -> ab -> alu ; (dbin) -> dbl -> aob,au ; -1 -> alu ; +2 -> au	
+p96	2b7	mall3	mall3	twop	dbi	1f	-	D	malw3	alu -> dob ; (alub) -> alu ; au -> aob ; (pc) -> db -> au ; -1 -> alu ; +2 -> au	
+p97	387	mawl1	maww1	trin	db	1i	dxuk	D	mawl2	alu -> dbe -> au ; au -> aob,pc ; (dbin) -> ab* -> alu ; edb -> irc ; -1 -> alu ; 0 -> au	
+p97	369	mawl2	mawl2	twop	db	1f	-	D	mawl3	alu -> ab -> atl ; (alub) -> alu ; (alue) -> dbd -> dob ; au -> db -> aob,au ; -1 -> alu ; +2 -> au	
+p97	155	mawl3	mawl3	twop	db	x	-	D	b	(atl) -> ab -> dob ; au -> aob ; (ir) -> ird ; (pc) -> db -> au ; +2 -> au	next = connector 'b'
+p97	082	mmrl1	mmrl1	twop	db	1i	rxuk	D	mmrl2	(alue) -> dbd -> dob ; au -> pc ; (dbin) -> ab* -> alu ; (rxa) -> db -> aob,au ; -1 -> alu ; +2 -> au	
+p97	2fb	mmrl2	mmrl2	twop	dbi	1f	-	D	mmrw2	alu -> dob ; (alub) -> alu ; au -> db -> aob,au ; -1 -> alu ; +2 -> au	
+p97	084	mmdl1	mmdw1	trin	db	1i	rxuk	D	mawl2	alu -> dbe -> au ; au -> aob,pc ; (dbin) -> abd -> alu ; edb -> irc ; (rxa) -> ab -> au ; -1 -> alu	
+p98	38d	mmxl0	mmxw0	np	db	5n	rxuk	-	mmxl1	alu -> ab* -> alu ; 0 -> alu	
+p98	115	mmxl1	mmxw1	irin	bc	x	-	L	mmxl3 if irc[11]=1 ; mmxl2 if irc[11]=0	alu -> *e -> au ; au -> aob,pc ; (rxa) -> * -> au	
+p98	214	mmxl2	mmxw2	frin	db	1i	-	G	mawl2	au -> ab -> au ; (dbin) -> abd -> alu ; edb -> irc ; (rxl) -> dbe -> au ; -1 -> alu	
+p98	2d4	mmxl3	mmxw3	frin	db	1i	-	G	mawl2	au -> ab -> au ; (dbin) -> abd -> alu ; edb -> irc ; (rx) -> db -> au ; -1 -> alu	
+p98	086	mmil1	mmrl1	twop	db	1i	rxuk	D	mmil2	(alue) -> dbd -> dob ; au -> pc ; (dbin) -> ab* -> alu ; (rxa) -> db -> aob,au ; -1 -> alu ; +2 -> au	
+p98	2ff	mmil2	mmrl2	twop	dbi	1f	-	D	mmiw2	alu -> dob ; (alub) -> alu ; au -> db -> aob,au ; -1 -> alu ; +2 -> au	
+p99	085	mmml1	mmmw1	trix	dbi	1i	rxuk	D	mmml2	au -> aob,pc ; (dbin) -> ab* -> alu ; edb -> dbin,irc ; (rxa) -> db -> au ; -1 -> alu ; -1,-2 -> au	
+p99	024	mmml2	mmml2	twop	db	1f	-	D	mmmw2	alu -> dob ; (alub) -> alu ; au -> db -> aob,au ; -1 -> alu ; -2 -> au	
+p100	0c3	asxw5	asxw5	trix	db	2i	-	D	morw2	(alub) -> alu ; (at) -> db -> au ; (dbin) -> dbd -> alu ; edb -> dbin,irc ; (pc) -> ab -> aob ; 0 -> au	
+p100	3c1	rrgw1	rrgw1	irix	dbi	1i	rxuk	L	rrgw2	au -> db -> aob,au,pc ; (ry) -> ab -> alu,at ; -1 -> alu ; +2 -> au	
+p100	23a	rrgw2	rrgw2	frix	a1	xnf	-	G	-	alu -> ab -> rxl ; edb -> dbin,irc ; (ir) -> ird ; (pc) -> db -> au ; +2 -> au	
+p100	3c8	asxl1	pdcw1	np	db	x	rxry	-	asxl2	au -> pc ; (dbin) -> dbd -> alub ; (rxd) -> ab* -> dcr ; (rya) -> db -> au ; -1,-2 -> au	
+p100	239	rrgm1	rrgm1	irix	dbi	x	rxuk	L	rrgl2	au -> db -> aob,au,pc ; (ryl) -> abe -> at ; +2 -> au	
+p100	1ea	ralw1	ablw1	trim	db	x	dxuk	D	ralw2	au -> db -> aob,au ; (dbin) -> ab -> ath ; edb -> dbin ; +2 -> au	
+p100	2ba	ralw2	ralw2	trin	db	1i	-	D	maww2	(ath) -> dbh -> au ; au -> aob,pc ; (dbin) -> dbl -> au ; edb -> irc ; (ryl) -> ab -> alu,atl ; -1 -> alu ; 0 -> au	
+p101	3a2	raww1	raww1	trin	db	1i	dxuk	D	maww2	au -> aob,pc ; (dbin) -> dbe -> au ; edb -> irc ; (ryl) -> ab -> alu,atl ; -1 -> alu ; 0 -> au	
+p101	2d2	rmrw1	rmrw1	twop	dbi	1i	rxuk	D S	mmrw2	au -> pc ; (rxa) -> db -> aob,au ; (ryl) -> ab -> alu,dob ; -1 -> alu ; +1,+2 -> au	
+p101	3a3	rmdw1	rmdw1	trin	db	x	rxuk	D	rmdw2	au -> aob,pc ; (dbin) -> *e -> au ; edb -> irc ; (rxa) -> * -> au	
+p101	132	rmdw2	rmdw2	twop	dbi	1i	-	D S	b	au -> aob ; (pc) -> db -> au ; (ryl) -> ab -> alu,dob ; -1 -> alu ; +2 -> au	next = connector 'b'
+p102	1eb	rmxw0	aixw0	np	db	5n	rxuk	-	rmxw1	(dbin) -> ab* -> alu ; 0 -> alu	
+p102	119	rmxw1	mmxw1	irin	bc	x	-	L	rmxw3 if irc[11]=1 ; rmxw2 if irc[11]=0	alu -> *e -> au ; au -> aob,pc ; (rxa) -> * -> au	
+p102	128	rmxw2	aixw2	frin	db	x	-	G	rmdw2	au -> * -> au ; edb -> dbin,irc ; (rxl) -> *e -> au ; reset pren	
+p102	1e8	rmxw3	aixw4	frin	db	x	-	G	rmdw2	au -> * -> au ; edb -> dbin,irc ; (rx) -> * -> au ; reset pren	
+p102	2d6	rmiw1	rmrw1	twop	dbi	1i	rxuk	D S	mmiw2	au -> pc ; (rxa) -> db -> aob,au ; (ryl) -> ab -> alu,dob ; -1 -> alu ; +1,+2 -> au	
+p103	232	rmmw1	rmmw1	trix	dbi	1i	rxuk	D	mmmw2	au -> aob,pc ; edb -> dbin,irc ; (rxa) -> db -> au ; (ryl) -> ab -> alu ; -1 -> alu ; -1,-2 -> au	
+p104	300	asxl2	asxl2	trop	db	x	-	D	asxl3	au -> db -> aob,au ; (dbin) -> * -> alub ; edb -> dbin ; -2 -> au	
+p104	104	asxl3	asxw2	irop	db	in	-	L S	asxl4	au -> * -> aob,rya ; (dbin) -> ab* -> alu ; -1 -> alu	
+p104	106	asxl4	asxw3	frop	db	x	-	G S	asxl5	edb -> dbin ; (rxa) -> db -> au ; -1,-2 -> au	
+p104	304	asxl5	asxl2	trop	db	x	-	D	asxl6	au -> db -> aob,au ; (dbin) -> * -> alub ; edb -> dbin ; -2 -> au	arrow printed 'axsl6' (misprint for asxl6)
+p104	3c9	rrgl1	rrgw1	irix	dbi	1i	rxuk	L	rrgl2	au -> db -> aob,au,pc ; (ry) -> ab -> alu,at ; -1 -> alu ; +2 -> au	
+p104	238	rrgl2	rrgl2	frix	a1	1f	-	G	-	(at) -> db -> rx ; edb -> dbin,irc ; (ir) -> ird ; (ryh) -> ab -> alu ; -1 -> alu	
+p104	1ee	rall1	ablw1	trim	db	x	dxuk	D	rall2	au -> db -> aob,au ; (dbin) -> ab -> ath ; edb -> dbin ; +2 -> au	
+p104	2be	rall2	ralw2	trin	db	1i	-	D	rall3	(ath) -> dbh -> au ; au -> aob,pc ; (dbin) -> dbl -> au ; edb -> irc ; (ryl) -> ab -> alu,atl ; -1 -> alu ; 0 -> au	
+p104	2b9	rall3	rall3	twop	db	1f	-	D	mawl3	au -> db -> aob,au ; (ryh) -> ab -> alu,alub,dob ; -1 -> alu ; +2 -> au	'dob' added by hand
+p105	3a6	rawl1	raww1	trin	db	1i	dxuk	D	rall3	au -> aob,pc ; (dbin) -> dbe -> au ; edb -> irc ; (ryl) -> ab -> alu,atl ; -1 -> alu ; 0 -> au	
+p105	2f0	rmrl1	rmrl1	twop	db	x	rxuk	D	rmrl2	au -> pc ; (rxa) -> db -> aob,au ; (ryh) -> ab -> alub,dob ; +2 -> au	
+p105	00f	rmrl2	rmrl2	twop	dbi	1i	-	D	rmrl3	au -> aob ; (pc) -> db -> au ; (ryl) -> ab -> alu,dob ; -1 -> alu ; 0 -> au	
+p105	308	rmrl3	rmrl3	trix	a1	1f	-	D	-	(alub) -> alu ; au -> db -> aob,au,pc ; edb -> dbin,irc ; (ir) -> ird ; -1 -> alu ; +2 -> au	'pc' added by hand
+p105	3a7	rmdl1	rmdw1	trin	db	x	rxuk	D	rmdl2	au -> aob,pc ; (dbin) -> *e -> au ; edb -> irc ; (rxa) -> * -> au	
+p105	2bd	rmdl2	rall3	twop	db	1f	-	D	rmdl3	au -> db -> aob,au ; (ryh) -> ab -> alu,alub ; -1 -> alu ; +2 -> au	'alu,alub,' with a trailing comma (origin rall3 also has dob)
+p105	136	rmdl3	rmdw2	twop	dbi	1i	-	D	rmrl3	au -> aob ; (pc) -> db -> au ; (ryl) -> ab -> alu,dob ; -1 -> alu ; +2 -> au	
+p106	1ef	rmxl0	aixw0	np	db	5n	rxuk	-	rmxl1	(dbin) -> ab* -> alu ; 0 -> alu	
+p106	11d	rmxl1	mmxw1	irin	bc	x	-	L	rmxl3 if irc[11]=1 ; rmxl2 if irc[11]=0	alu -> *e -> au ; au -> aob,pc ; (rxa) -> * -> au	
+p106	12c	rmxl2	aixw2	frin	db	x	-	G	rmdl2	au -> * -> au ; edb -> dbin,irc ; (rxl) -> *e -> au ; reset pren	
+p106	1ec	rmxl3	aixw4	frin	db	x	-	G	rmdl2	au -> * -> au ; edb -> dbin,irc ; (rx) -> * -> au ; reset pren	
+p106	2f4	rmil1	rmrl1	twop	db	x	rxuk	D	rmil2	au -> pc ; (rxa) -> db -> aob,au ; (ryh) -> ab -> alub,dob ; +2 -> au	
+p106	00c	rmil2	rmil2	twop	dbi	1i	-	D	rmil3	au -> db -> aob,au ; (ryl) -> ab -> alu,dob ; -1 -> alu ; +2 -> au	
+p106	00d	rmil3	rmil3	trix	a1	1f	-	D	-	(alub) -> alu ; au -> ab -> rxa ; edb -> dbin,irc ; (ir) -> ird ; (pc) -> db -> aob,au ; -1 -> alu ; +2 -> au	
+p107	236	rmml1	rmmw1	trix	dbi	1i	rxuk	D	rmml2	au -> aob,pc ; edb -> dbin,irc ; (rxa) -> db -> au ; (ryl) -> ab -> alu ; -1 -> alu ; -1,-2 -> au	
+p107	00e	rmml2	rmml2	twop	db	1f	-	D	mmmw2	alu -> dob ; au -> db -> aob,au ; (ryh) -> ab -> alu ; -1 -> alu ; -2 -> au	
+p108	0c0	asxl6	asxl6	trop	db	2i	-	D	asxl7	alu -> ab* -> alu ; au -> db -> aob,at,au,rxa ; (dbin) -> dbd -> alu ; edb -> dbin ; +2 -> au	
+p108	0c1	asxl7	asxl7	twop	dbi	x	-	D S	asxl8	alu -> dob ; au -> aob ; (dbin) -> dbe -> au ; 0 -> au	
+p108	0c2	asxl8	asxl8	trix	db	3f	-	D	morw2	(alub) -> alu ; (at) -> db -> au ; (dbin) -> dbd -> alu ; edb -> dbin,irc ; (pc) -> ab -> aob ; 0 -> au	
+p108	38a	morw1	morw1	trix	dbi	2i	ukuk	D	morw2	(at) -> db -> au ; au -> aob,pc ; (dbin) -> dbd -> alu ; edb -> dbin,irc ; (rxl) -> ab -> alu ; 0 -> au	
+p108	38f	morw2	maww2	twop	a1	x	-	D	-	alu -> dob ; au -> aob ; (ir) -> ird ; (pc) -> db -> au ; +2 -> au	
+p108	38e	morl1	morw1	trix	dbi	2i	ukuk	D	morl2	(at) -> db -> au ; au -> aob,pc ; (dbin) -> dbd -> alu ; edb -> dbin,irc ; (rxl) -> ab -> alu ; 0 -> au	
+p108	349	morl2	morl2	twop	db	3f	-	D	morw2	alu -> dob ; (alue) -> dbd -> alu ; au -> db -> aob,au ; (rxh) -> ab -> alu ; -2 -> au	
+p109	1c3	romw1	romw1	irix	dbi	2i	rxuk	L	rrgw2	au -> aob,pc ; (dbin) -> abe -> alu,at ; (rxl) -> db -> alu	
+p109	1cb	roml1	romw1	irix	dbi	2i	rxuk	L	roml2	au -> aob,pc ; (dbin) -> abe -> alu,at ; (rxl) -> db -> alu	
+p109	30c	roml2	roml2	frix	db	3f	-	G	roml3	alu -> ab -> rxl ; (alub) -> alu ; edb -> dbin,irc ; (rxh) -> db -> alu	
+p109	1c7	romm1	romw1	irix	dbi	2i	rxuk	L	rorm2	au -> aob,pc ; (dbin) -> abe -> alu,at ; (rxl) -> db -> alu	
+p109	30d	roml3	roml3	np	a1	x	-	-	-	alu -> ab -> rxh ; (ir) -> ird ; (pc) -> db -> au ; +2 -> au	
+p109	1c1	rorw1	rorw1	irix	dbi	2i	rxuk	L	rrgw2	au -> aob,pc ; (rxl) -> db -> alu ; (ryl) -> abe -> alu,at	
+p110	1c5	rorl1	rorw1	irix	dbi	2i	rxuk	L	rorl2	au -> aob,pc ; (rxl) -> db -> alu ; (ryl) -> abe -> alu,at	
+p110	3e3	rorl2	rorl2	frix	db	x	-	G	rorl3	alu -> * -> rxl ; edb -> dbin,irc	
+p110	30e	rorl3	rorl3	np	db	3f	-	-	roml3	(rxh) -> db -> alu ; (ryh) -> ab -> alu	
+p110	101	roaw1	roaw1	irix	dbi	2i	ukry	L	roaw2	au -> aob,pc ; (rxl) -> ab -> alu ; (ryl) -> db -> alu	
+p110	297	roaw2	roaw2	frix	a1	xnf	-	G	-	alu -> ab -> ryl ; edb -> dbin,irc ; (ir) -> ird ; (pc) -> db -> au ; +2 -> au	
+p110	105	roal1	roaw1	irix	dbi	2i	ukry	L	roal2	au -> aob,pc ; (rxl) -> ab -> alu ; (ryl) -> db -> alu	
+p110	309	roal2	roal2	frix	db	x	-	G	roal3	alu -> * -> ryl ; edb -> dbin,irc	
+p110	30a	roal3	roal3	np	db	3f	-	-	roal4	(rxh) -> ab -> alu ; (ryh) -> db -> alu	
+p111	1c9	rorm1	rorw1	irix	dbi	2i	rxuk	-	rorm2	au -> aob,pc ; (rxl) -> db -> alu ; (ryl) -> abe -> alu,at	
+p111	3eb	rorm2	rorl2	frix	db	x	-	-	rorm3	alu -> * -> rxl ; edb -> dbin,irc	
+p111	30f	rorm3	rorm3	np	db	3f	-	-	roml3	(ath) -> ab -> alu ; (rxh) -> db -> alu	
+p112	30b	roal4	roal4	np	a1	x	-	-	-	alu -> ab -> ryh ; (ir) -> ird ; (pc) -> db -> au ; +2 -> au	
+p113	2d9	dvumb	dvumb	np	bc	x	-	-	dvume if c ; dvum6 if /c	'idle wait'	
+p113	17e	dvs01	dvur1	np	db	1i	rxuk	-	dvs03	au -> pc ; (rxdl) -> dbd -> alue ; (rydl) -> ab -> alu,alub ; -1 -> alu	
+p113	298	dvume	dvume	np	db	1i	-	-	dvum5	(atl) -> ab -> alu ; -1 -> alu	
+p113	06d	dvs05	dvs05	np	db	1i	-	-	dvs06	alu -> dbd -> alub ; ftu -> db -> au ; (rxh) -> ab -> alu,atl ; -1 -> alu ; +1 -> au	
+p113	17c	dvs02	dvum1	np	db	1i	rxuk	-	dvs03	au -> pc ; (dbin) -> ab -> alu,alub ; (rxdl) -> dbd -> alue ; -1 -> alu	
+p113	2f2	dvs03	dvs03	np	bc	2i	-	-	trap0 if z ; dvs05 if /z*n ; dvs04 if /z*/n	(alub) -> alu ; 0 -> alu	
+p113	0ad	dvs04	dvum3	np	db	1i	-	-	dvs06	ftu -> db -> au ; (rxh) -> ab -> alu,atl ; -1 -> alu ; +1 -> au	
+p114	17a	dvur1	dvur1	np	db	1i	rxuk	-	dvum2	au -> pc ; (rxdl) -> dbd -> alue ; (rydl) -> ab -> alu,alub,ath ; -1 -> alu	'ath' added by hand
+p114	178	dvum1	dvum1	np	db	1i	rxuk	-	dvum2	au -> pc ; (dbin) -> ab -> ath,alu,alub ; (rxdl) -> dbd -> alue ; -1 -> alu	'ath' added by hand
+p114	21e	dvum2	dvum2	np	bc	2i	-	-	dvum3 if /z ; trap0 if z	(alub) -> alu ; (rxh) -> db -> alu	
+p114	0ed	dvur2	trac1	np	db	x	-	-	dvur3	(psw) -> ftu ; (pc) -> db -> au ; -2 -> au	
+p114	02d	dvum3	dvum3	np	bc	1i	-	S	dvum5 if c ; dvum4 if /c	ftu -> db -> au ; (rxh) -> ab -> alu,atl ; -1 -> alu ; +1 -> au	
+p115	276	dvs17	dvs17	irix	bci	1i	-	L	dvuma if n ; leaa2 if /n	alu -> ab -> atl ; (alub) -> alu ; (pc) -> db -> aob,au ; -1 -> alu ; +2 -> au	
+p115	003	bser1	bser1	np	dbc	x	ukuk	-	bser2	aob -> ab -> at ; (pc) -> db -> au ; (psw) -> ftu ; 0 -> au	
+p115	3a4	bser2	trac2	np	db	in	-	-	bser3	au -> ab -> alu,pc ; (sp) -> db -> au ; 0 -> tpend ; -1 -> alu ; -2 -> au	
+p115	117	bser3	trap3	twop	db	in	-	D	bser4	alu -> dob ; au -> db -> aob,au ; ftu -> ab -> alu ; -1 -> alu ; -4 -> au	
+p115	32a	bser4	bser4	twop	db	in	-	D	bser5	alu -> dob ; au -> db -> aob,au ; (pch) -> ab -> alu ; (ird) -> ftu ; -1 -> alu ; +2 -> au	
+p115	1c4	itlx1	trac1	np	db	x	ukuk	-	itlx2	(psw) -> ftu ; (pc) -> db -> au ; -2 -> au	
+p115	344	itlx2	itlx2	np	db	in	-	-	itlx3	au -> ab -> alu,pc ; ftu -> db -> alub ; (inl) -> psw ; -1 -> alu	
+p115	345	itlx3	itlx3	np	db	x	-	-	itlx4	(sp) -> db -> au ; (inl) -> ftu ; -2 -> au	
+p115	29b	itlx4	itlx4	twop	db	in	-	D	itlx5	alu -> dob ; (alub) -> alu ; au -> db -> aob,au ; ftu -> abe -> at ; -1 -> alu ; -4 -> au	
+p116	151	dvur3	dvur3	np	db	in	-	-	trap3	au -> ab -> alu,pc ; (sp) -> db -> au ; +1 -> psws ; -1 -> alu ; -2 -> au	
+p116	2de	dvum4	mmrw2	irix	dbi	x	-	L	dvuma	(pc) -> db -> aob,au ; +2 -> au	
+p116	0e4	dvuma	dvuma	frix	a1	5i	-	G	-	edb -> dbin,irc ; (ir) -> ird	
+p116	2da	dvumz	mmrw2	irix	dbi	x	-	L	dvuma	(pc) -> db -> aob,au ; +2 -> au	
+p116	29a	dvum5	dvum5	np	bc	4n	-	-	dvum7 if n ; dvum8 if /n	alu -> ab* -> alu ; au -> db -> au ; -1 -> alu ; -1 -> au	
+p116	2db	dvum7	dvum7	np	bc	2i	-	-	dvum6 if au/=0 ; dvum9 if au=0	alu -> db -> alu,atl ; (alub) -> alu	
+p117	2d8	dvum6	dvum6	np	bc	6n	-	-	dvum8 if /n ; dvum7 if n	alu -> ab* -> alu ; au -> db -> au ; -1 -> alu ; -1 -> au	
+p117	2b0	dvs06	dvs06	np	bc	2n	-	-	dvs07 if /n ; dvs10 if n	(rxl) -> ab* -> alu ; 0 -> alu	
+p117	25b	dvum8	dvum7	np	bc	2i	-	-	dvumb if au/=0 ; dvumc if au=0	alu -> db -> alu,atl ; (alub) -> alu	
+p117	06c	dvs07	dvs07	np	db	2i	-	-	dvs08	(alub) -> alu ; (atl) -> db -> alu	
+p117	219	dvs08	dvume	np	bc	1i	-	-	dvs09 if c ; dvumz if /c	(atl) -> ab -> alu ; -1 -> alu	
+p117	0ec	dvs10	dvs10	np	db	3n	-	-	dvs11	alu -> db* -> alue ; (rxh) -> ab -> alu ; 0 -> alu	
+p117	21a	dvs11	dvs11	np	db	2i	-	-	dvs08	alu -> db* -> alu,atl ; (alub) -> alu	
+p118	11b	bser5	trap3	twop	db	in	-	D	bser6	alu -> dob ; au -> db -> aob,au ; ftu -> ab -> alu ; -1 -> alu ; -4 -> au	
+p118	32b	bser6	bser6	twop	db	in	-	D	trap3	alu -> dob ; (at) -> ab -> alu,pc ; au -> db -> aob,au ; (ssw) -> ftu ; -1 -> alu ; -2 -> au	
+p118	2dd	dvs0d	dvumb	np	bc	x	-	-	dvs0f if c ; dvs0a if /c	'idle wait'	
+p118	346	itlx5	itlx5	trak	db	x	-	D	itlx6	(at) -> * -> aob ; edb -> irc	
+p118	118	itlx6	dvumb	np	dbl	x	-	-	itlx7	'idle wait'	
+p118	347	itlx7	itlx7	np	db	x	-	-	trap4	(ir) -> ird	
+p119	113	trap3	trap3	twop	db	in	-	D	trap4	alu -> dob ; au -> db -> aob,au ; ftu -> ab -> alu ; -1 -> alu ; -4 -> au	
+p119	08a	trap4	trap4	twop	db	in	-	D	trap5	alu -> dob ; au -> db -> aob,au,sp ; (pch) -> ab -> alu ; (trap) -> ftu ; -1 -> alu ; +2 -> au	
+p119	1d0	trap1	trac1	np	db	x	dxdy	-	trap2	(psw) -> ftu ; (pc) -> db -> au ; -2 -> au	
+p119	089	trap2	trap2	np	db	in	-	-	trap3	(pcl) -> ab -> alu ; (sp) -> db -> au ; -1 -> alu ; -2 -> au ; +1 -> psws	
+p120	258	dvum9	dvum9	np	db	1n	-	-	dvumd	alu -> ab -> alu,rxh ; 0 -> alu	
+p120	0e8	dvumd	dvumd	irix	dbi	6n	-	L	dvum0	alu -> ab -> alu,alub ; (pc) -> db -> aob,au ; -1 -> alu ; +2 -> au	
+p120	063	dvs16	dvs16	np	bc	1i	-	-	dvs17 if /n ; dvs1a if n	(alub) -> alu ; (atl) -> * -> ath ; -1 -> alu	
+p120	25e	dvum0	dvum0	frix	a1	2i	-	G	-	(alub) -> alu ; (alue) -> dbe -> alu,rxl ; edb -> dbin,irc ; (ir) -> ird	
+p120	259	dvumc	dvum9	np	bc	1n	-	-	dvumd if /c ; dvumf if c	alu -> ab -> alu,rxh ; 0 -> alu	
+p120	0e3	dvs1d	dvs16	np	bc	1i	-	-	dvs1e if n ; dvs1f if /n	(alub) -> alu ; (atl) -> * -> ath ; -1 -> alu	
+p121	0a8	dvumf	dvumf	irix	dbi	4n	-	L	dvum0	alu -> abd -> alu,alub ; (atl) -> ab -> rxh ; (pc) -> db -> aob,au ; -1 -> alu ; +2 -> au	
+p121	29e	dvs09	dvum5	np	db	4n	-	-	dvs0c	alu -> ab* -> alu ; au -> db -> au ; -1 -> alu ; -1 -> au	
+p121	2df	dvs0c	dvum7	np	bc	2i	-	-	dvs0e if au=0 ; dvs0d if au/=0	alu -> db -> alu,atl ; (alub) -> alu	
+p121	2dc	dvs0a	dvum6	np	db	6n	-	-	dvs0c	alu -> ab* -> alu ; au -> db -> au ; -1 -> alu ; -1 -> au	
+p122	29c	dvs0f	dvume	np	db	1i	-	-	dvs09	(atl) -> ab -> alu ; -1 -> alu	
+p122	25c	dvs13	dvs13	np	db	6n	-	-	dvs14	alu -> ab -> alu,atl ; -1 -> alu	bottom arrow outside the crop: next to be verified (p126?)
+p122	1d2	mpiw1	adsw1	trin	db	x	rxry	D	mpiw2	au -> aob ; (dbin) -> dbe -> au ; edb -> dbin,irc ; (rya) -> ab -> au	
+p122	158	mpiw2	mpiw2	trop	db	x	-	D S	mpiw3	au -> db -> aob,au ; edb -> dbinh ; +2 -> au	
+p122	02c	mpiw3	mpiw3	trop	dbi	x	-	D S	mpiw4	au -> aob ; edb -> dbinl ; (pc) -> db -> au ; +4 -> au	
+p122	042	mpiw4	mpiw4	trix	a1	x	-	D	-	au -> db -> aob,au,pc ; (dbin) -> abe -> rxdl ; edb -> dbin,irc ; (ir) -> ird ; +2 -> au	
+p122	1ca	mpow1	adsw1	trin	db	in	rxry	D	mpow2	au -> aob ; (dbin) -> dbe -> au ; edb -> dbin,irc ; (rya) -> ab -> au	
+p122	061	mpow2	mpow2	twop	dbi	x	-	D S	mpow3	au -> db -> aob,au ; (rxdl) -> * -> dobh ; +2 -> au	
+p122	062	mpow3	mpow3	twop	db	x	-	D S	b	au -> aob ; (pc) -> db -> au ; (rxdl) -> ab* -> dobl ; +4 -> au	next = connector 'b'
+p123	29f	trap5	itlx4	twop	db	x	-	D	-	alu -> dob ; (alub) -> alu ; au -> db -> aob,au ; ftu -> abe -> at ; -1 -> alu ; -4 -> au	
+p123	2fe	trap6	ldmd4	trix	db	x	-	D	jmal1	(at) -> db -> aob,au ; au -> pc ; edb -> dbin ; +2 -> au ; reset pren	
+p123	1d6	mpil1	adsw1	trin	db	x	rxry	D	mpil2	au -> aob ; (dbin) -> dbe -> au ; edb -> dbin,irc ; (rya) -> ab -> au	
+p124	25a	dvs1c	dvs1c	irix	dbi	1i	-	L	leaa2	alu -> ab -> ath ; (alub) -> alu ; (pc) -> db -> aob,au ; -1 -> alu ; +2 -> au	
+p124	2f6	dvs1a	dvs03	np	db	2i	-	-	dvs1b	(alub) -> alu ; 0 -> alu	
+p124	2f7	dvs1b	dvs1b	np	bc	2n	-	-	dvs1c if n+z ; dvum4 if /n /z	alu -> db -> atl,alub ; (ath) -> ab -> alu ; 0 -> alu	
+p124	2f3	dvs1e	dvs1b	np	bc	2n	-	-	dvum4 if n ; dvs1c if /n	alu -> db -> atl,alub ; (ath) -> ab -> alu ; 0 -> alu	
+p125	322	cmmw1	cmmw1	irop	db	x	rxry	L S	cmmw2	au -> pc ; (rya) -> db -> aob,au ; +1,+2 -> au	
+p125	250	cmmw2	cmmw2	frop	db	x	-	G S	cmmw3	au -> db -> at,au,rya ; edb -> dbin ; +2 -> au	
+p125	3c3	cmmw3	cmmw3	trop	dbi	in	-	D S	cmmw4	(dbin) -> ab* -> alu ; edb -> dbin ; (rxa) -> db -> aob,au ; -1 -> alu ; +1,+2 -> au	
+p125	0c7	cmmw4	cmmw4	trix	a1	2i	-	D	-	alu -> abd -> alu ; au -> ab -> rxa ; (dbin) -> dbd -> alu ; edb -> dbin,irc ; (ir) -> ird ; (pc) -> db -> aob,au ; +2 -> au	
+p125	3cc	asbb1	pdcw1	np	db	x	rxry	-	asbb2	au -> pc ; (dbin) -> dbd -> alub ; (rxd) -> ab* -> dcr ; (rya) -> db -> au ; -1,-2 -> au	
+p125	108	asbb2	asxw2	irop	db	in	-	L S	asbb3	au -> * -> aob,rya ; (dbin) -> ab* -> alu ; -1 -> alu	
+p125	10a	asbb3	asxw3	frop	db	x	-	G S	asbb4	edb -> dbin ; (rxa) -> db -> au ; -1,-2 -> au	
+p125	216	asbb4	asxw4	trop	dbi	x	-	D S	asbb5	au -> * -> aob,at,rxa ; (dbin) -> db* -> alub ; edb -> dbin	
+p125	213	b	b	irix	dbi	x	dxdy	L	mmrw3	au -> db -> aob,au,pc ; +2 -> au	microword with label 'b' (target of the 'b' connectors)
+p125	251	cpdw1	cpdw1	irix	dbi	2i	ukuk	L	mmrw3	au -> db -> aob,au,pc ; (dbin) -> dbd -> alu ; (rxl) -> ab* -> alu ; +2 -> au	
+p126	25d	dvs14	dvs14	np	db	1i	-	-	dvs15	(ath) -> ab -> alu ; -1 -> alu	
+p126	2b4	dvs15	dvs15	np	bc	1i	-	-	dvs1d if n ; dvs16 if /n	(alue) -> db* -> alub ; (rxh) -> ab -> alu ; -1 -> alu	
+p126	1ce	mpol1	adsw1	trin	db	in	rxry	D	mpol2	au -> aob ; (dbin) -> dbe -> au ; edb -> dbin,irc ; (rya) -> ab -> au	
+p126	02e	mpol2	mpol2	twop	db	x	-	D S	mpol3	au -> db -> aob,au ; (rxh) -> ab -> dobh ; +2 -> au	
+p126	02f	mpol3	mpol3	twop	db	x	-	D S	mpow2	au -> db -> aob,au ; (rxh) -> ab -> dobl ; +2 -> au	
+p127	15c	mpil2	mpiw2	trop	db	x	-	D S	mpil3	au -> db -> aob,au ; edb -> dbinh ; +2 -> au	
+p127	028	mpil3	mpil3	trop	db	x	-	D S	mpil4	au -> db -> aob,au ; edb -> dbinl ; +2 -> au	
+p127	02a	mpil4	mpil4	trop	db	x	-	D S	mpiw3	au -> db -> aob,au ; (dbin) -> ab -> rxh ; edb -> dbinh ; +2 -> au	
+p129	391	maqw1	maqw1	trix	dbi	2i	dtuk	D	morw2	(at) -> db -> au ; au -> aob,pc ; (dbin) -> db* -> alu ; edb -> dbin,irc ; ftu -> abe -> alu,rx ; 0 -> au	
+p129	385	maql1	maqw1	trix	dbi	2i	dtuk	D	morl2	(at) -> db -> au ; au -> aob,pc ; (dbin) -> db* -> alu ; edb -> dbin,irc ; ftu -> abe -> alu,rx ; 0 -> au	
+p129	255	cpdl1	cpdw1	irix	dbi	2i	ukuk	L	cpdl2	au -> db -> aob,au,pc ; (dbin) -> dbd -> alu ; (rxl) -> ab* -> alu ; +2 -> au	
+p129	0c8	cpdl2	cpdl2	frix	a1	3f	-	G	-	(alue) -> db* -> alu ; edb -> dbin,irc ; (ir) -> ird ; (rxh) -> ab -> alu	
+p129	109	rcaw1	roaw1	irix	dbi	2i	ukry	L	rcaw2	au -> aob,pc ; (rxl) -> ab -> alu ; (ryl) -> db -> alu	
+p129	323	rcaw2	rcaw2	frix	a1	x	-	G	-	edb -> dbin,irc ; (ir) -> ird ; (pc) -> db -> au ; +2 -> au	
+p129	2bb	raqw1	raqw1	irix	dbi	2i	dtry	L	roaw2	au -> aob,pc ; ftu -> abe -> alu,rx ; (ryl) -> db -> alu	
+p129	10d	rcal1	roaw1	irix	dbi	2i	ukry	L	rcal2	au -> aob,pc ; (rxl) -> ab -> alu ; (ryl) -> db -> alu	
+p129	00a	rcal2	rcal2	frix	db	3f	-	G	rcal3	edb -> dbin,irc ; (rxh) -> ab -> alu ; (ryh) -> db -> alu	
+p130	2bf	raql1	raqw1	irix	dbi	2i	dtry	L	roal2	au -> aob,pc ; ftu -> abe -> alu,rx ; (ryl) -> db -> alu	
+p130	00b	rlql1	rlql1	irix	dbi	1i	rxdy	L	mmrw3	au -> db -> aob,au,pc ; ftu -> abe -> alu,rx ; -1 -> alu ; +2 -> au	
+p130	1d3	cpmw1	romw1	irix	dbi	2i	rxuk	L	rcaw2	au -> aob,pc ; (dbin) -> abe -> alu,at ; (rxl) -> db -> alu	
+p130	1d7	cpml1	romw1	irix	dbi	2i	rxuk	L	cpml2	au -> aob,pc ; (dbin) -> abe -> alu,at ; (rxl) -> db -> alu	
+p130	0c9	cpml2	cpml2	frix	db	3f	-	G	rcal3	(alub) -> alu ; edb -> dbin,irc ; (rxh) -> db -> alu	
+p130	1cf	cpmm1	romw1	irix	dbi	2i	rxuk	L	cprm2	au -> aob,pc ; (dbin) -> abe -> alu,at ; (rxl) -> db -> alu	
+p130	1d1	cprw1	rorw1	irix	dbi	2i	rxuk	L	rcaw2	au -> aob,pc ; (rxl) -> db -> alu ; (ryl) -> abe -> alu,at	
+p131	1d9	cprm1	rorw1	irix	dbi	2i	rxuk	L	cprm2	au -> aob,pc ; (rxl) -> db -> alu ; (ryl) -> abe -> alu,at	
+p131	0cb	cprm2	cprm2	frix	db	3f	-	G	rcal3	(ath) -> ab -> alu ; edb -> dbin,irc ; (rxh) -> db -> alu	
+p131	1d5	cprl1	rorw1	irix	dbi	2i	rxuk	L	cprl2	au -> aob,pc ; (rxl) -> db -> alu ; (ryl) -> abe -> alu,at	
+p132	326	cmml1	cmmw1	irop	db	x	rxry	L S	cmml2	au -> pc ; (rya) -> db -> aob,au ; +1,+2 -> au	
+p132	254	cmml2	cmmw2	frop	db	x	-	G S	cmml3	au -> db -> at,au,rya ; edb -> dbin ; +2 -> au	
+p132	340	cmml3	cmml3	trop	db	x	-	D	cmml4	(at) -> * -> aob ; au -> * -> rya ; (dbin) -> * -> alub ; edb -> dbin	
+p132	007	asbb5	asbb5	irix	db	2i	-	L	asbb6	(alub) -> alu ; (dbin) -> db* -> alu ; (pc) -> * -> aob	
+p132	3c2	asbb6	asbb6	frix	db	3i	-	G	morw2	alu -> ab* -> alu ; (at) -> db -> au ; edb -> dbin,irc ; corf -> alu ; 0 -> au	
+p132	1cd	rbrb1	rorw1	irix	dbi	2i	rxry	L	rbrb2	au -> aob,pc ; (rxl) -> db -> alu ; (ryl) -> abe -> alu,at	
+p132	1d4	stiw1	trac1	np	db	x	dtdy	-	stiw2	(psw) -> ftu ; (pc) -> db -> au ; -2 -> au	
+p132	044	stiw2	stiw2	np	db	2n	-	-	stiw3	ftu -> ab -> alu ; (rxdl) -> db* -> alu	
+p132	045	stiw3	stiw3	np	db	x	-	-	stiw4	alu -> ab -> ftu ; au -> db -> au ; +2 -> au	
+p132	046	stiw4	stiw4	np	db	x	-	-	malw3	ftu -> psw	
+p133	170	susp1	exge1	irix	dbi	x	usry	L	extr2	au -> aob,pc ; (rx) -> ab -> at,dcr ; (ry) -> db -> au ; 0 -> au	
+p133	0a7	lusp1	leaa1	irix	dbi	x	usry	L	leaa2	au -> aob,pc ; (dbin) -> ab -> ftu ; (rya) -> db -> at	
+p133	06b	mstw1	mstw1	np	db	x	dxuk	-	stiw4	au -> db -> au ; (dbin) -> ab -> ftu ; -2 -> au	
+p133	04c	swap1	swap1	irix	dbi	1i	dxry	L	swap2	au -> aob,pc ; (ryh) -> db -> alu ; (ryl) -> ab -> alub,ath ; -1 -> alu	
+p133	0a4	rcal3	rcal3	np	a1	x	-	-	-	(ir) -> ird ; (pc) -> db -> au ; +2 -> au	
+p133	087	rset1	stop1	np	db	1n	dxdy	-	rset2	au -> pc ; ftu -> *e -> at ; 0 -> alu	
+p134	06a	mulm1	mulm1	irix	dbi	1i	rxuk	L	mulm2	au -> ab -> aob,at ; (dbin) -> dbd -> alue ; ftu -> db -> au ; (rxdl) -> abd -> alub ; 0 -> alu ; 0 -> au	
+p134	3ef	mulm2	rorl2	frix	bc	x	-	G S	mulm3 if mulu*alue[0]=1 (mulu: ird[8]=0) ; mulm5 if muls*alue[0]=1 (muls: ird[8]=1) ; mulm4 if alue[0]=0	alu -> * -> rxl ; edb -> dbin,irc	
+p134	029	mulm6	mulm6	np	a1	1f	-	-	-	alu -> ab -> alu,rxh ; (alue) -> dbd -> rxdl ; (ath) -> dbh -> au,pch ; (atl) -> dbl -> au ; (ir) -> ird ; -1 -> alu ; +2 -> au	
+p134	069	mulm3	mulm3	np	db	3f	-	-	mulm4	alu -> dbd -> alu ; (alub) -> alu	
+p134	06f	mulr1	mulr1	irix	dbi	1i	rxuk	L	mulm2	au -> ab -> aob,at ; ftu -> db -> au ; (rxdl) -> abd -> alub ; (rydl) -> dbd -> alue ; 0 -> alu ; 0 -> au	
+p134	0e9	mulm4	mulm4	np	bc	4f	-	-	mulm3 if au/=0 [muls alue[1:0]=01 ; mulu alue[1]=1] ; mulm4 if au/=0 [muls alue[1:0]=00,11 ; mulu alue[1]=0] ; mulm6 if au=0 ; mulm5 if au/=0 muls alue[1:0]=10	alu -> abd -> alu ; (atl) -> ab -> pcl ; au -> db -> au ; -1 -> alu ; -1 -> au ; 'sr c-alu-alue'	
+p135	0ca	cprl2	cprl2	frix	db	3f	-	G	rcal3	edb -> dbin,irc ; (rxh) -> db -> alu ; (ryh) -> ab -> alu	
+p135	0a9	mulm5	mulm5	np	db	2f	-	-	mulm4	alu -> dbd -> alu ; (alub) -> alu	
+p136	3c7	cmml4	cmmw3	trop	dbi	in	-	D S	cmml5	(dbin) -> ab* -> alu ; edb -> dbin ; (rxa) -> db -> aob,au ; -1 -> alu ; +1,+2 -> au	
+p136	341	cmml5	cmml5	trop	db	x	-	D	cmml6	au -> db -> aob,au ; (dbin) -> dbd -> alue ; edb -> dbin ; +2 -> au	
+p136	342	cmml6	cmml6	irix	db	2i	-	L	cmml7	alu -> abd -> alu ; au -> ab -> rxa ; (dbin) -> dbd -> alu ; (pc) -> db -> aob,au ; +2 -> au	
+p136	343	cmml7	cmml7	frix	a1	3f	-	G	-	(alub) -> alu ; (alue) -> dbd -> alu ; edb -> dbin,irc ; (ir) -> ird	
+p136	3c6	rbrb2	asbb6	frix	db	3i	-	G	rbrb3	alu -> ab* -> alu ; (at) -> db -> au ; edb -> dbin,irc ; corf -> alu ; 0 -> au	
+p136	009	rbrb3	rbrb3	np	a1	xnf	-	-	-	alu -> ab -> rxl ; (ir) -> ird ; (pc) -> db -> au ; +2 -> au	
+p136	3e2	tsmw1	tsmw1	irix	dbi	1i	dxuk	L	mmrw3	au -> db -> aob,au,pc ; (dbin) -> ab* -> alu ; -1 -> alu ; +2 -> au	
+p136	23e	rstw1	rstw1	np	db	x	dxuk	-	stiw4	au -> db -> au ; (ryd) -> ab -> ftu ; -2 -> au	
+p136	3c5	tsrw1	rrgw1	irix	dbi	1i	dxry	L	mmrw3	au -> db -> aob,au,pc ; (ry) -> ab -> alu,at ; -1 -> alu ; +2 -> au	
+p137	04d	swap2	swap2	frix	a1	1f	-	G	-	alu -> dbd -> rydl ; (alub) -> alu ; (ath) -> ab -> ryh ; au -> db -> au ; edb -> dbin,irc ; (ir) -> ird ; -1 -> alu	
+p137	34a	stmw1	stmw1	irix	dbi	x	dxuk	-	stmw2	au -> aob,pc ; (psw) -> ftu	
+p137	049	stmw2	stmw2	frix	db	in	-	D	morw2	(at) -> db -> au ; edb -> dbin,irc ; ftu -> ab -> alu ; -1 -> alu ; 0 -> au	
+p137	065	rset5	rset5	trix	a1	x	-	D	-	edb -> dbin,irc ; (ir) -> ird ; (pc) -> db -> aob,au ; +2 -> au	
+p137	23b	rset2	rset2	np	dbi	x	-	-	rset3	alu -> dbe -> au ; -2 -> au	
+p137	0e5	rset3	rset3	ak	db	x	-	-	rset4	au -> db -> au ; -2 -> au	access read as 'ak' (2 characters)
+p137	114	rset4	dvumb	ak	bc	x	-	-	rset3 if au/=0 ; rset5 if au=0	'idle wait'	access read as 'ak'
+p138	15b	nnmw1	nnmw1	trix	dbi	2i	dxuk	D	morw2	(at) -> db -> au ; au -> aob,pc ; (dbin) -> ab* -> alu ; edb -> dbin,irc ; 0 -> alu ; 0 -> au	
+p138	112	nnrw1	nnrw1	irix	dbi	2i	dxry	L	roaw2	au -> db -> aob,au,pc ; (ryl) -> ab* -> alu ; 0 -> alu ; +2 -> au	
+p138	11a	nbcr1	nnrw1	irix	dbi	2i	dxry	L	nbcr2	au -> db -> aob,au,pc ; (ryl) -> ab* -> alu ; 0 -> alu ; +2 -> au	
+p138	0ac	nbcm1	nbcm1	irix	dbi	2i	dxuk	L	asbb6	au -> aob,pc ; (dbin) -> ab* -> alu ; 0 -> alu	
+p138	15f	nnml1	nnmw1	trix	dbi	2i	dxuk	D	nnml2	(at) -> db -> au ; au -> aob,pc ; (dbin) -> ab* -> alu ; edb -> dbin,irc ; 0 -> alu ; 0 -> au	
+p138	152	nnml2	nnml2	twop	db	3f	-	D	morw2	alu -> dob ; (alub) -> alu ; (at) -> db -> aob,au ; 0 -> alu ; -2 -> au	
+p139	000	rstp1	rstp1	np	dbc	x	-	-	rstp2	trap -> ftu	
+p139	23c	rstp2	rstp2	np	db	x	-	-	rstp3	ftu -> dbe -> au ; (inl) -> psw ; 0 -> au	
+p139	2b8	rstp3	rstp3	trix	db	x	-	D	rstp4	au -> db -> aob,au ; (dbin) -> ab -> sph ; edb -> dbin ; +2 -> au	
+p140	123	exge1	exge1	irix	dbi	x	rxry	L	exge2	au -> aob,pc ; (rx) -> ab -> at,dcr ; (ry) -> db -> au ; 0 -> au	
+p140	360	exge2	exge2	frix	db	x	-	G	rcal3	(at) -> * -> ry ; au -> * -> rx ; edb -> dbin,irc	
+p140	3e6	tsml1	tsmw1	irix	dbi	1i	dxuk	L	tsml2	au -> db -> aob,au,pc ; (dbin) -> ab* -> alu ; -1 -> alu ; +2 -> au	
+p140	08b	tsml2	tsml2	frix	a1	1f	-	G	-	(alub) -> alu ; edb -> dbin,irc ; (ir) -> ird ; -1 -> alu	
+p140	3cd	tsrl1	rrgw1	irix	dbi	1i	dxry	L	tsrl2	au -> db -> aob,au,pc ; (ry) -> ab -> alu,at ; -1 -> alu ; +2 -> au	
+p140	08c	tsrl2	tsrl2	frix	a1	1f	-	G	-	edb -> dbin,irc ; (ir) -> ird ; (ryh) -> ab -> alu ; -1 -> alu	
+p141	083	stop1	stop1	np	a1	1n	dxdy	-	-	au -> pc ; ftu -> *e -> at ; 0 -> alu	
+p141	1c8	strw1	trac1	irix	dbi	x	dxry	L S	strw2	(psw) -> ftu ; (pc) -> db -> au ; -2 -> au	
+p141	04b	strw2	strw2	frix	db	xnf	-	G S	rcal3	edb -> dbin,irc ; ftu -> * -> rydl	
+p141	001	halt1	dvumb	irnp	db	x	dxdy	-	halt1	'idle wait'	access read as 'irnp' (to be verified)
+p142	362	extr1	extr1	irix	dbi	1i	dxry	L S	extr2	au -> aob,pc ; (ryl) -> abe -> alu,at ; -1 -> alu	
+p142	363	extr2	extr2	frix	a1	x	-	G S	-	(at) -> ab -> ry ; edb -> dbin,irc ; (ir) -> ird ; (pc) -> db -> au ; +2 -> au	
+p142	116	nnrl1	nnrw1	irix	dbi	2i	dxry	L	nnrl2	au -> db -> aob,au,pc ; (ryl) -> ab* -> alu ; 0 -> alu ; +2 -> au	
+p142	0ae	nnrl2	nnrl2	frix	db	3f	-	G	roal4	alu -> db -> ryl ; edb -> dbin,irc ; (ryh) -> ab -> alu ; 0 -> alu	
+p142	3ca	nbcr2	asbb6	frix	db	3i	-	G	nbcr3	alu -> ab* -> alu ; (at) -> db -> au ; edb -> dbin,irc ; corf -> alu ; 0 -> au	
+p142	27c	nbcr3	nbcr3	np	a1	xnf	-	-	-	alu -> * -> rydl ; (ir) -> ird ; (pc) -> db -> au ; +2 -> au	
+p143	2bc	rstp4	rstp3	trix	db	x	-	D	rstp5	au -> db -> aob,au ; (dbin) -> ab -> sph ; edb -> dbin ; +2 -> au	
+p143	23d	rstp5	rstp5	trix	db	x	-	D	jmal1	au -> db -> aob,au ; (dbin) -> ab -> spl ; edb -> dbin ; +2 -> au	
+p144	1f2	jsal1	ablw1	trim	db	x	spdy	D	jsal2	au -> db -> aob,au ; (dbin) -> ab -> ath ; edb -> dbin ; +2 -> au	
+p144	0ce	jsal2	jsal2	trin	db	x	-	L	jsaw2	(ath) -> abh -> aob ; au -> pc ; (dbin) -> abl -> aob,atl ; edb -> irc ; (rxa) -> db -> au ; -4 -> au	
+p144	3ab	jsrd1	jsrd1	np	db	x	sppy	-	jsrd2	(dbin) -> *e -> au ; (rya) -> * -> au	
+p144	291	jsrd2	jsrd2	irin	db	x	-	L	jsrd3	au -> ab -> aob,at ; (pc) -> db -> au ; +2 -> au	
+p144	321	jsrd3	jsrd3	frin	db	x	-	G	jsaw2	au -> pc ; edb -> irc ; (rxa) -> db -> au ; -4 -> au	
+p144	3a9	jsaw0	jsaw0	np	db	x	spdy	-	jsaw1	(dbin) -> abe -> at	
+p144	279	jsaw1	jsaw1	trin	db	x	-	D	jsaw2	(at) -> ab -> aob ; au -> pc ; edb -> irc ; (rxa) -> db -> au ; -4 -> au	
+p144	27a	jsaw2	jsaw2	twop	db	x	-	D S	jsaw3	au -> db -> aob,au,rx ; (pch) -> ab -> dob ; +2 -> au	
+p144	27b	jsaw3	jsaw3	twop	dbi	x	-	D	b	(at) -> db -> au ; au -> aob ; (pcl) -> ab -> dob ; +2 -> au	next = connector 'b'
+p145	290	jsra1	jsra1	trin	db	x	spry	D	jsaw2	edb -> irc ; (rxa) -> db -> au ; (rya) -> ab -> aob,at ; -4 -> au	
+p145	2f9	jsrx1	jsrx1	np	bc	x	-	-	jsrx3 if irc[11]=1 ; jsrx2 if irc[11]=0	alu -> *e -> au ; (rya) -> * -> au	
+p145	211	jsrx2	jsrx2	np	db	x	-	-	jsrd2	au -> * -> au ; (rxl) -> *e -> au	
+p145	2d1	jsrx3	jsrx3	np	db	x	-	-	jsrd2	au -> * -> au ; (rx) -> * -> au	
+p145	1f3	jsrx0	aixw0	np	db	5n	sppy	-	jsrx1	(dbin) -> ab* -> alu ; 0 -> alu	
+p145	3ad	jmaw1	jsaw0	np	db	x	dxdy	-	jmal2	(dbin) -> abe -> at	arrow printed 'jmal 2' (to be verified: jmaw2?)
+p146	1f6	jmal1	ablw1	trim	db	x	dxdy	D	jmal2	au -> db -> aob,au ; (dbin) -> ab -> ath ; edb -> dbin ; +2 -> au	
+p146	218	jmal2	jmal2	trin	db	x	-	D	b	(ath) -> dbh -> aob,au ; (dbin) -> dbl -> aob,au ; edb -> irc ; +2 -> au	next = connector 'b'
+p146	107	unlk1	ldmr2	trop	db	x	spry	D	unlk2	au -> pc ; edb -> dbin ; (ry) -> db -> aob,at,au ; +2 -> au ; reset pren	
+p146	3af	jmpd1	jsrd1	np	db	x	dxpy	-	bbci3	(dbin) -> *e -> au ; (rya) -> * -> au	
+p146	159	dcnt1	dcnt1	np	db	2n	rxdy	-	dcnt2	ftu -> abe -> au ; (pc) -> db -> au ; (rxd) -> abd -> alu ; -1 -> alu	
+p146	0cc	dcnt2	dcnt2	irin	bci	x	-	L	dcnt3 if z=1 ; dcnt4 if z=0	alu -> * -> rxdl ; au -> db -> aob,au ; +2 -> au	
+p146	1f7	jmpx0	aixw0	np	db	5n	dxpy	-	jmpx1	(dbin) -> ab* -> alu ; 0 -> alu	
+p146	215	jmpx2	jsrx2	np	db	x	-	-	bbci3	au -> * -> au ; (rxl) -> *e -> au	
+p147	2fd	jmpx1	jsrx1	np	bc	x	-	-	jmpx3 if irc[11]=1 ; jmpx2 if irc[11]=0	alu -> *e -> au ; (rya) -> * -> au	
+p147	2d5	jmpx3	jsrx3	np	db	x	-	-	bbci3	au -> * -> au ; (rx) -> * -> au	
+p148	15d	bbci1	dcnt1	np	bc	2n	dxdy	-	bbci2 if cc false ; bbci3 if cc true	ftu -> abe -> au ; (pc) -> db -> au ; (rxdl) -> abd -> alu ; -1 -> alu	
+p148	0c4	bbcw1	bbcw1	np	bc	x	dxdy	-	bbci3 if cc true ; bbcw3 if cc false	(dbin) -> *e -> au ; (pc) -> * -> au	
+p148	060	bbci2	rcal3	np	db	2n	-	-	b	(ir) -> ird ; (pc) -> db -> au ; +2 -> au	next = connector 'b'
+p148	0e0	bbci3	bbci3	trin	db	x	-	D	b	au -> db -> aob,au ; edb -> dbin,irc ; +2 -> au	next = connector 'b'
+p148	0a0	bbcw3	rcal3	np	db	2n	-	-	malw3	(ir) -> ird ; (pc) -> db -> au ; +2 -> au	
+p149	171	bsri1	bsri1	np	db	in	spdy	-	bsri2	(pc) -> ab -> alu,at ; (rxa) -> db -> au ; -1 -> alu ; -4 -> au	
+p149	121	bsri2	bsri2	twop	db	x	-	D	bsri3	(ath) -> ab -> dob ; au -> db -> aob,au,rx ; +2 -> au	
+p149	32d	bsri3	bsri3	twop	db	x	-	D	malw3	alu -> dob ; au -> aob ; ftu -> *e -> au ; (pc) -> * -> au	
+p149	172	bsrw1	bsrw1	np	db	in	spdy	-	bsrw2	au -> ab -> alu,at ; (rxa) -> db -> au ; -1 -> alu ; -4 -> au	
+p149	125	bsrw2	bsri2	twop	db	x	-	D	bsrw3	(ath) -> ab -> dob ; au -> db -> aob,au,rx ; +2 -> au	
+p149	32e	bsrw3	bsrw3	twop	db	x	-	D	malw3	alu -> dob ; au -> aob ; (dbin) -> *e -> au ; (pc) -> * -> au	
+p149	0cd	jmpa1	jmpa1	trin	db	x	dxry	D	b	edb -> irc ; (rya) -> db -> aob,au ; +2 -> au	next = connector 'b'
+p149	1ff	peax0	aixw0	np	db	5n	sppy	-	peax1	(dbin) -> ab* -> alu ; 0 -> alu	
+p149	12e	peax1	aixw1	irin	bc	x	-	L	peax2 if irc[11]=0 ; peax3 if irc[11]=1	alu -> *e -> au ; au -> aob ; (rya) -> * -> au	
+p150	1fe	unlk2	ablw1	trop	dbi	x	-	D	unlk3	au -> db -> aob,au ; (dbin) -> ab -> ath ; edb -> dbin ; +2 -> au	
+p150	08d	unlk3	unlk3	irix	db	x	-	L	unlk4	au -> ab -> rx ; (pc) -> db -> aob,au ; +2 -> au	
+p150	08e	unlk4	unlk4	frix	a1	x	-	G	-	(ath) -> abh -> ryh ; (dbin) -> abl -> ryl ; edb -> dbin,irc ; (ir) -> ird	
+p150	327	dcnt3	rcaw2	frin	db	x	-	G	dcnt5	edb -> dbin,irc ; (ir) -> ird ; (pc) -> db -> au ; +2 -> au	
+p150	217	dcnt5	b	irix	db	x	-	L	mmrw3	au -> db -> aob,au,pc ; +2 -> au	
+p150	3e7	dcnt4	rorl2	frin	db	x	-	G	b	alu -> * -> rxl ; edb -> dbin,irc	next = connector 'b'
+p150	176	chkr1	chkr1	irix	dbi	2i	rxuk	L	chkr2	au -> db -> aob,au ; (rxdl) -> dbd -> alu,alub ; (rydl) -> ab* -> alu ; -2 -> au	'alub' added by hand
+p151	296	link1	link1	irin	db	in	spry	L	link2	au -> db -> aob,au ; (rya) -> ab -> alu,at ; -1 -> alu ; +2 -> au	
+p151	323	link2	jsrd3	frin	db	x	-	G	link3	au -> pc ; edb -> irc ; (rxa) -> db -> au ; -4 -> au	
+p151	08f	link3	link3	twop	dbi	x	-	D	link4	(ath) -> ab -> dob ; au -> db -> aob,au,rya ; +2 -> au	
+p151	2b2	link4	link4	twop	db	x	-	D	mmiw2	alu -> dob ; au -> aob ; (dbin) -> *e -> au ; (rya) -> * -> au	
+p152	3e4	leal1	o#l1	trim	db	x	rxdy	D	leal2	au -> db -> aob,au ; (dbin) -> ab -> rxh ; edb -> dbin ; +2 -> au	
+p152	3ae	leal2	o#w1	trin	db	x	-	D	b	au -> db -> aob,au,pc ; (dbin) -> ab -> rxl ; edb -> dbin,irc ; +2 -> au	next = connector 'b'
+p152	1fa	paal1	ablw1	trim	db	x	spdy	D	paal2	au -> db -> aob,au ; (dbin) -> ab -> ath ; edb -> dbin ; +2 -> au	
+p152	292	leaw1	leaw1	trin	db	x	rxdy	D	b	au -> db -> aob,au ; (dbin) -> abe -> rx ; edb -> irc ; +2 -> au	next = connector 'b'
+p152	0e6	paaw1	paaw1	trin	db	x	spdy	D	paaw2	au -> aob,pc ; (dbin) -> abe -> at ; edb -> irc ; (rxa) -> db -> au ; -4 -> au	
+p152	0a3	leaa1	leaa1	irix	dbi	x	rxry	L	leaa2	au -> aob,pc ; (dbin) -> ab -> ftu ; (rya) -> db -> at	
+p152	064	leaa2	leaa2	frix	a1	x	-	G	-	(at) -> ab -> rx ; edb -> dbin,irc ; (ir) -> ird ; (pc) -> db -> au ; +2 -> au	
+p152	27d	peaa1	peaa1	trix	dbi	in	spry	D	peax6	au -> aob,pc ; edb -> dbin,irc ; (rxa) -> db -> au ; (rya) -> ab -> alu,at ; -1 -> alu ; -4 -> au	
+p153	380	lead1	lead1	irin	db	x	rxpy	L	lead2	au -> aob ; (dbin) -> *e -> au ; (rya) -> * -> au	
+p153	294	lead2	lead2	frin	db	x	-	G	b	au -> ab -> rx ; edb -> irc ; (pc) -> db -> au ; +4 -> au	next = connector 'b'
+p153	27e	pead1	pead1	trin	db	in	sppy	D	pead2	au -> db -> aob,au ; (dbin) -> abd -> alu ; edb -> dbin,irc ; (rya) -> ab -> at ; -1 -> alu ; +2 -> au	
+p153	1fb	leax0	aixw0	np	db	5n	rxpy	-	leax1	(dbin) -> ab* -> alu ; 0 -> alu	
+p153	12a	leax1	aixw1	irin	bc	x	-	L	leax2 if irc[11]=0 ; leax3 if irc[11]=1	alu -> *e -> au ; au -> aob ; (rya) -> * -> au	
+p153	134	leax2	aixw2	frin	db	x	-	G	leax4	au -> * -> au ; edb -> dbin,irc ; (rxl) -> *e -> au ; reset pren	
+p153	130	peax2	aixw2	frin	db	x	-	G	peax4	au -> * -> au ; edb -> dbin,irc ; (rxl) -> *e -> au ; reset pren	
+p153	1f4	leax3	aixw4	frix	db	x	-	L	leax4	au -> * -> au ; edb -> dbin,irc ; (rx) -> * -> au ; reset pren	marker '<' as printed
+p154	1f8	peax3	aixw4	frix	db	x	-	G	peax4	au -> * -> au ; edb -> dbin,irc ; (rx) -> * -> au ; reset pren	
+p154	366	peax4	peax4	np	dbi	in	-	-	peax5	au -> ab -> alu,at ; (pc) -> db -> au ; -1 -> alu ; +4 -> au	
+p154	154	peax5	peax5	trix	db	x	-	D	peax6	au -> aob,pc ; edb -> dbin,irc ; (rxa) -> db -> au ; -4 -> au	
+p154	175	chkm1	chkm1	irix	dbi	2i	rxuk	L	chkr2	au -> db -> aob,au ; (dbin) -> ab* -> alu ; (rxdl) -> dbd -> alu,alub ; -2 -> au	
+p154	177	chkr2	chkr2	frix	bc	1i	-	G	chkr3 if n /v ; trap1 if /n+v	(alub) -> alu ; au -> db -> au,pc ; edb -> dbin,irc ; -1 -> alu ; +2 -> au	
+p154	110	chkr3	dvumb	np	bc	x	-	-	chkr4 if /n ; trap1 if n	'idle wait'	
+p155	3cb	rtr1	cmmw3	trop	db	in	spdy	D	rtr2	(dbin) -> ab* -> alu ; edb -> dbin ; (rxa) -> db -> aob,au ; -1 -> alu ; +1,+2 -> au	
+p155	139	rtr2	malw3	trop	db	x	-	D	rtr3	au -> db -> aob,au,pc ; (dbin) -> ab -> ftu ; edb -> dbin,irc ; +2 -> au	
+p156	0af	paal2	paal2	trin	db	x	-	D	paaw2	au -> aob,pc ; (dbin) -> ab -> atl ; edb -> irc ; (rxa) -> db -> au ; -4 -> au	
+p156	129	paaw2	bsri2	twop	db	x	-	D	mawl3	(ath) -> ab -> dob ; au -> db -> aob,au,rx ; +2 -> au	
+p157	295	pead2	pead2	irix	dbi	x	-	L	pead3	alu -> *e -> au ; (at) -> * -> au ; au -> aob,pc	
+p157	364	pead3	pead3	frix	db	in	-	G	peax6	au -> ab -> alu,at ; edb -> dbin,irc ; (rxa) -> db -> au ; -1 -> alu ; -4 -> au	
+p157	365	leax4	leax4	np	db	x	-	-	b	au -> ab -> rx ; (pc) -> db -> au ; +4 -> au	next = connector 'b'
+p158	12d	peax6	bsri2	twop	db	x	-	D	morw2	(ath) -> ab -> dob ; au -> db -> aob,au,rx ; +2 -> au	
+p158	3cf	rts1	cmmw3	trop	db	in	spdy	D	rts2	(dbin) -> ab* -> alu ; edb -> dbin ; (rxa) -> db -> aob,au ; -1 -> alu ; +1,+2 -> au	
+p158	234	rts2	ablw1	trop	db	x	-	D	rts3	au -> db -> aob,au ; (dbin) -> ab -> ath ; edb -> dbin ; +2 -> au	
+p158	34b	btsi1	btsi1	irix	dbi	x	rxdt	L	btsr2	(ath) -> db -> ryh ; au -> aob,pc ; (rx) -> ab -> dcr	
+p158	23f	rts3	rts3	trix	db	x	-	D	b	(ath) -> dbh -> aob,au ; au -> ab -> rx ; (dbin) -> dbl -> aob,au ; edb -> irc ; +2 -> au	next = connector 'b'
+p158	150	chkr4	chkr4	np	a1	x	-	-	-	au -> db -> au,pc ; (ir) -> ird ; +2 -> au	
+p159	3e5	rtr3	smaw2	irop	db	x	-	D	rtr4	au -> db -> aob,au ; (dbin) -> abe -> at ; +2 -> au	
+p159	040	rtr4	rtr4	frop	db	x	-	G	jmal2	au -> * -> rx ; (dbin) -> * -> ath ; edb -> dbin ; ftu -> psw	
+p160	0c5	bcsm1	bcsm1	trix	dbi	2n	dxdy	D	bcsm2	au -> db -> aob,au,pc ; (dbin) -> ab* -> alu,alub ; (dcr) -> dbd -> alu ; edb -> dbin,irc ; +2 -> au	'alub' added by hand
+p160	0c6	bcsm2	bcsm2	twop	a1	1i	-	D	-	alu -> dob ; (alub) -> alu ; (at) -> * -> aob ; (dcr) -> db* -> alu ; (ir) -> ird	
+p160	12f	bcsr1	exge1	irix	dbi	x	ukry	L	bcsr2	au -> aob,pc ; (rx) -> ab -> at,dcr ; (ry) -> db -> au ; 0 -> au	
+p160	382	bcsr2	bcsr2	frix	bc	2n	-	G	bcsr4 if dcr[4]=0 ; bcsr3 if dcr[4]=1	(dcr) -> dbd -> alu ; edb -> dbin,irc ; (pc) -> db -> au ; (ryl) -> ab* -> alu,alub ; +2 -> au	
+p160	0ea	bcsr4	bcsr4	np	a1	1i	-	-	-	alu -> ab -> ryl ; (alub) -> alu ; (dcr) -> db* -> alu ; (ir) -> ird	
+p160	0aa	bcsr3	bcsr3	np	db	2n	-	-	bcsr5	(dcr) -> db* -> alu ; (ryh) -> ab -> alu,alub	
+p160	320	bclm1	bclm1	irix	dbi	2n	dxdy	L S	bclm2	au -> aob ; (dbin) -> ab* -> alu,alub ; (dcr) -> dbd -> alu ; (psw) -> ftu	'alub' added by hand
+p160	368	bclm2	bclm2	frix	db	4n	-	G	bcsm2	alu -> ab* -> alu ; au -> db -> au,pc ; (dcr) -> dbd -> alu ; edb -> dbin,irc ; +2 -> au	
+p160	2f1	bclr4	bclr4	np	db	4n	-	-	bcsr4	alu -> ab* -> alu ; (dcr) -> db* -> alu	
+p161	12b	bclr1	exge1	irix	dbi	x	ukry	L	bclr2	au -> aob,pc ; (rx) -> ab -> at,dcr ; (ry) -> db -> au ; 0 -> au	
+p161	386	bclr2	bcsr2	frix	bc	2n	-	G	bclr3 if dcr[4]=1 ; bclr4 if dcr[4]=0	(dcr) -> dbd -> alu ; edb -> dbin,irc ; (pc) -> db -> au ; (ryl) -> ab* -> alu,alub ; +2 -> au	
+p161	2b1	bclr3	bcsr3	np	db	2n	-	-	bclr5	(dcr) -> db* -> alu ; (ryh) -> ab -> alu,alub	
+p161	32f	btsm1	btsm1	irix	dbi	1i	dxuk	L	mmrw3	au -> db -> aob,au,pc ; (dbin) -> ab* -> alu ; (dcr) -> dbd -> alu ; +2 -> au	
+p161	1f5	ldmx0	malw3	trim	db	x	rppy	D	ldmx1	au -> db -> aob,au,pc ; (dbin) -> ab -> ftu ; edb -> dbin,irc ; +2 -> au	
+p161	006	ldmx1	aixw0	np	db	5n	-	-	ldmx2	(dbin) -> ab* -> alu ; 0 -> alu	
+p161	153	tasr1	tasr1	irix	dbi	2n	dxry	L S	tasr2	au -> aob,pc ; ftu -> ab -> alu ; (rydl) -> dbd -> alu,alub	'alu,alu' cut by the edge: presumably alub
+p161	088	tasr2	tasr2	frix	a1	1if	-	G S	-	alu -> * -> ryl ; (alub) -> alu ; au -> db -> au ; edb -> dbin,irc ; (ir) -> ird ; -1 -> alu ; +2 -> au	
+p162	127	btsr1	exge1	irix	dbi	x	ukry	L	btsr2	au -> aob,pc ; (rx) -> ab -> at,dcr ; (ry) -> db -> au ; 0 -> au	
+p162	174	btsr2	btsr2	frix	bc	1n	-	G	btsr3 if dcr[4]=1 ; bcsr4 if dcr[4]=0	edb -> dbin,irc ; (pc) -> db -> au ; (ryl) -> ab* -> alu,alub ; -1 -> alu ; +2 -> au	
+p162	06e	btsr3	btsr3	np	a1	1i	-	-	-	(dcr) -> db* -> alu ; (ir) -> ird ; (ryh) -> ab -> alu	
+p162	04e	tasm1	tasm1	np	db	2n	dxdy	-	tasm2	(at) -> db -> au ; (dbin) -> dbd -> alu ; ftu -> ab -> alu ; 0 -> au	
+p162	04f	tasm2	tasm2	twop	db	1i	-	D S	b	alu -> dob ; au -> aob ; (dbin) -> ab* -> alu ; (pc) -> db -> au ; -1 -> alu ; +2 -> au	next = connector 'b'
+p162	302	srrw1	srrw1	irix	dbi	1n	rxry	L	srrw2	au -> aob,pc ; (rxdl) -> dbe -> au ; (ryh) -> ab -> alu ; -1 -> alu ; 0 -> au	
+p162	303	srrw2	srrw2	frix	bc	1i	-	G	srrw3 if au/=0 ; nbcr3 if au=0	alu -> dbd -> alue ; au -> db -> au ; edb -> dbin,irc ; (rydl) -> ab* -> alu ; -1 -> alu ; -1 -> au	
+p162	2fc	srrw3	srrw3	np	bc	4i	-	-	srrw3 if au/=0 ; nbcr3 if au=0	alu -> ab* -> alu ; au -> db -> au ; -1 -> alu ; -1 -> au	
+p163	305	sril1	sriw1	irix	dbi	1n	dxry	L	srrl2	au -> aob,pc ; ftu -> dbe -> au ; (ryh) -> ab -> alu ; -1 -> alu ; 0 -> au	
+p163	306	srrl1	srrw1	irix	dbi	1n	rxry	L	srrl2	au -> aob,pc ; (rxdl) -> dbe -> au ; (ryh) -> ab -> alu ; -1 -> alu ; 0 -> au	
+p163	307	srrl2	srrw2	frix	bc	1i	-	G	srrl3 if au/=0 ; srrl4 if au=0	alu -> dbd -> alue ; au -> db -> au ; edb -> dbin,irc ; (rydl) -> ab* -> alu ; -1 -> alu ; -1 -> au	
+p164	1e5	smal1	malw3	trim	db	x	rpdy	D	smal2	au -> db -> aob,au,pc ; (dbin) -> ab -> ftu ; edb -> dbin,irc ; +2 -> au	
+p164	230	smal2	ablw1	trim	db	x	-	D	smal3	au -> db -> aob,au ; (dbin) -> ab -> ath ; edb -> dbin ; +2 -> au	
+p164	067	smal3	smal3	irin	db	x	-	L	smaw3	au -> db -> aob,au ; (dbin) -> ab -> atl ; +2 -> au	
+p164	329	bcsr5	bcsr5	np	a1	1i	-	-	-	alu -> ab -> ryh ; (alub) -> alu ; (dcr) -> db* -> alu ; (ir) -> ird	
+p164	04a	stmx1	stmx1	trim	db	x	rpry	D	stmx2	au -> db -> aob,au ; (dbin) -> ab -> ftu ; edb -> dbin,irc ; +4 -> au	
+p164	156	stmx2	stmx2	np	db	5n	-	-	stmx3	au -> db -> au,pc ; (dbin) -> ab* -> alu,atl ; 0 -> alu ; -2 -> au	
+p165	2f5	bclr5	bclr4	np	db	4n	-	-	bcsr5	alu -> ab* -> alu ; (dcr) -> db* -> alu	
+p165	027	ldmx4	ldmx4	frin	db	x	-	G	ldmx5	au -> * -> au ; edb -> irc ; (rxl) -> *e -> au	
+p165	15a	ldmx2	aixw1	irin	bc	x	-	L	ldmx3 if irc[11]=1 ; ldmx4 if irc[11]=0	alu -> *e -> au ; au -> aob ; (rya) -> * -> au	
+p165	0e7	ldmx3	ldmx3	frin	db	x	-	G	ldmx5	au -> * -> au ; edb -> irc ; (rx) -> * -> au	
+p165	277	ldmx5	adsw2	iruk	db	x	-	L S	ldmx6	au -> ab -> aob,at ; (dbin) -> abd -> alu ; (pc) -> db -> au ; -1 -> alu ; +4 -> au	
+p165	1f9	lmaw1	malw3	trim	db	x	rpdt	D	lmaw2	au -> db -> aob,au,pc ; (dbin) -> ab -> ftu ; edb -> dbin,irc ; +2 -> au	
+p165	36a	lmaw2	lmaw2	trin	db	x	-	D	ldmr2	au -> db -> aob,au ; (dbin) -> abe -> ry ; edb -> irc ; +2 -> au	
+p165	135	ldmr1	malw3	trin	db	x	rpry	D	ldmr2	au -> db -> aob,au,pc ; (dbin) -> ab -> ftu ; edb -> dbin,irc ; +2 -> au	
+p166	1fd	ldmd1	malw3	trim	db	x	rppy	D	ldmd2	au -> db -> aob,au,pc ; (dbin) -> ab -> ftu ; edb -> dbin,irc ; +2 -> au	
+p166	384	ldmd2	lead1	irin	db	x	-	L	ldmd3	au -> aob ; (dbin) -> *e -> au ; (rya) -> * -> au	
+p166	157	ldmd3	ldmd3	frin	db	x	-	G	ldmd4	au -> ab -> at ; edb -> irc ; (pc) -> db -> au ; +4 -> au	
+p166	301	sriw1	sriw1	irix	dbi	1n	dxry	L	srrw2	au -> aob,pc ; ftu -> dbe -> au ; (ryh) -> ab -> alu ; -1 -> alu ; 0 -> au	
+p166	1e9	lmal1	malw3	trim	db	x	rpdt	D	lmal2	au -> db -> aob,au,pc ; (dbin) -> ab -> ftu ; edb -> dbin,irc ; +2 -> au	
+p166	278	srrl4	srrl4	np	db	x	-	-	srrl5	alu -> ab* -> rydl ; (alue) -> db -> alub,ryh	
+p166	043	srrl5	srrl5	np	a1	1f	-	-	-	(alub) -> alu ; (ir) -> ird ; (pc) -> db -> au ; -1 -> alu ; +2 -> au	
+p167	2f8	srrl3	srrw3	np	bc	4i	-	-	srrl3 if au/=0 ; srrl4 if au=0	alu -> ab* -> alu ; au -> db -> au ; -1 -> alu ; -1 -> au	the block also shows 'nbcr3 au=0' (annotation)
+p167	3ea	sftm1	tsmw1	irix	dbi	1i	dxuk	L S	sftm2	au -> db -> aob,au,pc ; (dbin) -> ab* -> alu ; -1 -> alu ; +2 -> au	
+p168	3a1	stmr1	stmr1	irin	db	x	rpry	L	stmr2	au -> db -> aob,au ; (dbin) -> ab -> ftu ; +2 -> au	
+p168	048	stmr2	stmr2	frin	bc	x	-	G	stmr4 if l*/end ; mmrw2 if end ; stmr5 if w*/end	au -> pc ; edb -> irc ; (rya) -> db -> au ; 0 -> au ; reset pren	
+p168	15e	stmx3	aixw1	irin	bc	x	-	L	stmx4 if irc[11]=0 ; stmx5 if irc[11]=1	alu -> *e -> au ; au -> aob ; (rya) -> * -> au	
+p168	13c	stmx4	aixw2	frin	bc	x	-	G	stmr5 if w*/end ; mmrw2 if end ; stmr4 if l*/end	au -> * -> au ; edb -> dbin,irc ; (rxl) -> *e -> au ; reset pren	
+p168	257	smaw3	smaw3	frin	bc	x	-	G	mmrw2 if end ; stmr4 if l*/end ; stmr5 if w*/end	(at) -> db -> au ; au -> pc ; edb -> dbin,irc ; 0 -> au ; reset pren	
+p168	1fc	stmx5	aixw4	frin	bc	x	-	G	mmrw2 if end ; stmr4 if l*/end ; stmr5 if w*/end	au -> * -> au ; edb -> dbin,irc ; (rx) -> * -> au ; reset pren	
+p169	1f1	stmd1	malw3	trim	db	x	rpry	D	stmd2	au -> db -> aob,au,pc ; (dbin) -> ab -> ftu ; edb -> dbin,irc ; +2 -> au	
+p169	3e9	stmd2	smaw2	irin	db	2n	-	L	stmd3	au -> db -> aob,au ; (dbin) -> abe -> at ; +2 -> au	
+p169	047	stmd3	stmd3	frin	bc	x	-	G	mmrw2 if end ; stmr4 if l*/end ; stmr5 if w*/end	au -> pc ; (dbin) -> *e -> au ; edb -> irc ; (rya) -> * -> au ; reset pren	
+p169	293	ldmx6	ldmx6	fruk	bc	x	-	G	ldmr3 if l*/end ; mmrw2 if end ; ldmr4 if w*/end	(at) -> db -> au ; au -> pc ; edb -> dbin ; +2 -> au ; reset pren	
+p169	3e8	ldmr3	o#l1	truk	db	x	-	D	ldmr5	au -> db -> aob,au ; (dbin) -> ab -> rxh ; edb -> dbin ; +2 -> au	address read as '3e0/3e8': 3e0 is o#l1, hence 3e8
+p169	252	ldmr5	ldmr5	truk	bc	x	-	D	ldmr3 if l*/end ; mmrw2 if end ; ldmr4 if w*/end	au -> db -> aob,at,au ; (dbin) -> ab -> rxl ; edb -> dbin ; +2 -> au ; reset pren	address read as '232/252': 232 is rmmw1, hence 252
+p169	103	ldmr2	ldmr2	trop	bc	x	-	D	ldmr4 if w*/end ; ldmr3 if l*/end ; mmrw2 if end	au -> pc ; edb -> dbin ; (ry) -> db -> aob,at,au ; +2 -> au ; reset pren	
+p169	3a8	ldmr4	ldmr4	truk	bc	x	-	D	mmrw2 if end ; ldmr3 if l*/end ; ldmr4 if w*/end	au -> db -> aob,at,au ; (dbin) -> abe -> rx ; edb -> dbin ; +2 -> au ; reset pren	
+p170	2fa	ldmd4	ldmd4	truk	bc	x	-	D	mmrw2 if end ; ldmr3 if l*/end ; ldmr4 if w*/end	(at) -> db -> aob,au ; au -> pc ; edb -> dbin ; +2 -> au ; reset pren	
+p170	29d	lmal2	o#l1	trim	db	x	-	D	lmal3	au -> db -> aob,au ; (dbin) -> ab -> ryh ; edb -> dbin ; +2 -> au	
+p170	274	lmal3	e#w1	trin	db	x	-	D	ldmr2	au -> db -> aob,au,pc ; (dbin) -> ab -> rydl,ath ; edb -> dbin,irc ; +2 -> au	
+p170	3ec	popm3	o#l1	trop	db	x	-	D	popm5	au -> db -> aob,au ; (dbin) -> ab -> rxh ; edb -> dbin ; +2 -> au	
+p170	3ac	popm4	ldmr4	trop	bc	x	-	D	popm3 if l*/end ; popm6 if end ; popm4 if w*/end	au -> db -> aob,at,au ; (dbin) -> abe -> rx ; edb -> dbin ; +2 -> au ; reset pren	
+p170	131	popm1	malw3	trin	db	x	rpry	D	popm2	au -> db -> aob,au,pc ; (dbin) -> ab -> ftu ; edb -> dbin,irc ; +2 -> au	
+p170	10b	popm2	ldmr2	trop	bci	x	-	D	?	au -> pc ; edb -> dbin ; (ry) -> db -> aob,at,au ; +2 -> au ; reset pren	exit arrows outside the crop
+p170	32c	popm6	popm6	irix	db	x	-	L	mmrw3	(at) -> ab -> ry ; (pc) -> db -> aob,au ; +2 -> au	
+p172	0a1	stmr4	stmr4	twop	db	x	-	D	stmr6	au -> db -> aob,au ; (rxh) -> ab -> dob ; +2 -> au	
+p172	0a5	stmr6	stmr6	twop	bc	x	-	D	stmr4 if l*/end ; mmrw2 if end ; stmr5 if w*/end	au -> db -> aob,au ; (rxl) -> ab -> dob ; +2 -> au ; reset pren	
+p172	0a1?	stmr5	stmr6	twop	bc	x	-	D	stmr5 if w*/end ; mmrw2 if end ; stmr4 if l*/end	au -> db -> aob,au ; (rxl) -> ab -> dob ; +2 -> au ; reset pren	address printed 'a1' as for stmr4: to be resolved with the map
+p172	17f	sccr1	sccb1	irix	bci	1n	dxry	L S	sccr2 if cc=true ; roaw2 if cc=false	au -> db -> aob,pc ; (dbin) -> ab* -> dcr ; 0 -> alu	
+p172	2d7	sccr2	sccb2	frix	db	2n	-	G	nbcr3	alu -> ab* -> alu ; (at) -> db -> au ; edb -> dbin,irc ; -1 -> alu ; 0 -> au	
+p173	324	trpv1	bclm1	irix	bci	2n	spdy	L	trpv2 if v=0 ; trpv3 if v=1	au -> aob ; (dbin) -> ab* -> alu,alub ; (dcr) -> dbd -> alu ; (psw) -> ftu	'alub' added by hand
+p173	0e2	trpv2	trpv2	frix	a1	x	-	G	-	au -> db -> au,pc ; edb -> dbin,irc ; (ir) -> ird ; +2 -> au	
+p173	022	trpv3	trpv3	frix	db	in	-	G	trap3	edb -> dbin ; (pcl) -> ab -> alu ; (sp) -> db -> au ; -1 -> alu ; -2 -> au ; +1 -> psws	
+p173	17b	sccb1	sccb1	irix	bci	in	dxdy	L S	sccb2 if cc=true ; sccb3 if cc=false	au -> db -> aob,pc ; (dbin) -> ab* -> dcr ; 0 -> alu	
+p173	2d3	sccb2	sccb2	frix	db	2n	-	G	morw2	alu -> ab* -> alu ; (at) -> db -> au ; edb -> dbin,irc ; -1 -> alu ; 0 -> au	
+p174	256	popm5	ldmr5	trop	bc	x	-	D	popm3 if l*/end ; popm6 if end ; popm4 if w*/end	au -> db -> aob,at,au ; (dbin) -> ab -> rxl ; edb -> dbin ; +2 -> au ; reset pren	
+p174	253	sccb3	smaw3	frix	db	x	-	G	morw2	(at) -> db -> au ; au -> pc ; edb -> dbin,irc ; 0 -> au ; reset pren	
+p174	0ab	push4	push4	twop	db	x	-	D	push6	au -> db -> aob,at,au ; (rxl) -> ab -> dob ; -2 -> au	address read as 'ab' (push5 also reads 'ab': one of the two is wrong)
+p174	008	push6	push6	twop	bc	x	-	L	push4 if l*/end ; push3 if end ; push5 if w*/end	au -> db -> aob,at,au ; (rxh) -> ab -> dob ; -2 -> au ; reset pren	
+p174	0ab?	push5	push5	twop	bc	x	-	D	push3 if end ; push4 if l*/end ; push5 if w*/end	au -> db -> aob,at,au ; (rxl) -> ab -> dob ; -2 -> au ; reset pren	address read as 'ab' like push4: to be resolved with the map
+p171	041	sftm2	sftm2	frix	db	4i	-	G S	morw2	alu -> ab* -> alu ; (at) -> db -> au ; edb -> dbin,irc ; -1 -> alu ; 0 -> au	
+p171	3a5	push1	stmr1	irin	db	x	rpry	L	push2	au -> db -> aob,au ; (dbin) -> ab -> ftu ; +2 -> au	
+p171	25f	push2	push2	frin	bc	x	-	G	push3 if end ; push4 if l*/end ; push5 if w*/end	au -> pc ; edb -> irc ; (rya) -> db -> at,au ; -2 -> au ; reset pren	
+p175	02b	push3	popm6	irix	dbi	x	-	D	mmrw3	(at) -> ab -> ry ; (pc) -> db -> aob,au ; +2 -> au	from the USPTO PDF s175 (col. 245), the only page beyond the Google series

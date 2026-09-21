@@ -1,0 +1,15 @@
+# die words missing from the patent (die_only_words.py): label die_addr micro nano_atoms(map 144) same_nanoword_as trace_ops
+aaa01	327	fmt=0 ty=1 cbc= nma=000 fc=0 I=0	alub<-db ; alub<-db* ; ird<-(ir)		au = dbh/l - 2 ; dbh = auh ; dbl = aul ; ir = irc ; ird = ir ; pch = dbh ; jump a1
+dvs0e	32d	fmt=1 ty= cbc=c nma=214 fc=0 I=0			jumpcc c 254, 214
+dvs12	214	fmt=0 ty=0 cbc= nma=210 fc=0 I=0	alu+=0 ; dbd<-(dbin) ; irc<-edb ; ird<-(ir) ; rxh<-db ; rydl<-ab* ; ryh<-db		au = dbh/l - 1 ; dbh = auh ; dbl = aul ; jump 210
+dvs1f	08a	fmt=0 ty=0 cbc= nma=049 fc=0 I=1			jump 049
+dvs20	049	fmt=1 ty= cbc=nz2 nma=026 fc=2 I=0	atl<-ab* ; ird<-(ir) ; rxh<-db ; rydl<-ab* ; ryh<-db	dvs17	aobh = dbh ; aobl = dbl ; au = dbh/l + 2 ; bus access mode instruction word read ; dbh = pch ; jumpcc nz2 0e6, 066
+rstp6	27f	fmt=0 ty=0 cbc= nma=2fb fc=0 I=0	ab<-(pcl)		abh = sign(abl) ; au = dbh/l ; jump 2fb
+rstp7	2fb	fmt=0 ty=0 cbc= nma=2ff fc=2 I=0	acc_class=f ; acc_mode=w ; dbd<-(dbin)		abd = dbin ; abh <-> abl ; aobh = dbh ; aobl = dbl ; au = dbh/l + 2 ; bus access mode instruction word read ; dbh = auh ; dbin = ebd ; dbl = aul ; dth = abh ; jump 2ff
+rstp8	2ff	fmt=0 ty=0 cbc= nma=300 fc=2 I=0	acc_class=f ; acc_mode=w ; dbd<-(dbin)		abd = dbin ; abh <-> abl ; aobh = dbh ; aobl = dbl ; au = dbh/l + 2 ; bus access mode instruction word read ; dbh = auh ; dbin = ebd ; dbl = aul ; dth = abh ; jump 300
+rstp9	300	fmt=0 ty=0 cbc= nma=11e fc=2 I=0	ab<-(pcl) ; alub<-dbd ; dbd<-(dbin) ; pcl<-ab ; psw<-(inl) ; rxa<-* ; sr c-alu-alue		abd = dbin ; aobh = dbh ; aobl = dbl ; au = dbh/l + 2 ; bus access mode instruction word read ; dbh = auh ; dbin = ebd ; dbl = aul ; jump 11e
+rstpa	11e	fmt=0 ty=0 cbc= nma=2b7 fc=2 I=0	acc_mode=w ; dbd<-(dbin)	rts2|smal2	abd = dbin ; abh <-> abl ; aobh = dbh ; aobl = dbl ; ath = abh ; au = dbh/l + 2 ; bus access mode instruction word read ; dbh = auh ; dbin = ebd ; dbl = aul ; jump 2b7
+trac1	1c0	fmt=0 ty=0 cbc= nma=3a3 fc=0 I=0	ab<-(pcl) ; ftu<-(ssw) ; ird<-(ir) ; psw<-(inl) ; ryl<-ab	itlx1|trap1|stiw1	au = dbh/l - 2 ; dbh = pch ; jump 3a3
+trac2	3a3	fmt=0 ty=0 cbc= nma=3c2 fc=0 I=0	ab<-(pcl) ; abd<-(dbin) ; acc_class=f ; alub<-dbd ; au+=+1,+2 ; db<-ftu ; irc<-edb ; pc<-ab ; psw<-(inl) ; rxa<-* ; rydl<-ab* ; ryh<-db ; ryl<-ab		abh = auh ; abl = aul ; au = dbh/l - 2 ; dbh = dth ; pch = abh ; jump 3c2
+trap7	11a	fmt=0 ty=0 cbc= nma=2b7 fc=1 I=0	acc_mode=w ; dbd<-(dbin)	rts2|smal2	abd = dbin ; abh <-> abl ; aobh = dbh ; aobl = dbl ; ath = abh ; au = dbh/l + 2 ; bus access mode data word read ; dbh = auh ; dbin = ebd ; dbl = aul ; jump 2b7
+trap8	2b7	fmt=0 ty=0 cbc= nma=11c fc=2 I=0	acc_mode=w ; alub<-db* ; au+=-1 ; db<-au	jmal2	aobh = dbh ; aobl = dbl ; au = dbh/l + 2 ; bus access mode instruction word read ; dbd = dbin ; dbh = ath ; dbl <-> dbd ; irc = ebd ; jump 11c

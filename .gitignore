@@ -1,0 +1,39 @@
+# ============================================================
+# NEVER commit: third-party material and build artifacts.
+# Verilator .gch files are ~158 MB each and BLOCK THE PUSH.
+# ============================================================
+
+# --- THIRD-PARTY material: needed to run the benches locally,
+#     NOT part of the release, it must never reach a public repo ---
+sim/*.bin
+sim/rom/
+sim/rtl/
+sim/oracle/*-ext/
+sim/oracle/golden/
+sim/darius_ref/
+reference/
+
+# --- build Verilator / C++ ---
+**/obj_*/
+**/build*/
+**/*.gch
+**/*.exe
+**/*.o
+**/*.a
+**/*.d
+**/*.so
+**/*.dll
+
+# --- logs and markers ---
+*.log
+*.done
+*.vcd
+*.fst
+
+# --- Quartus ---
+db/
+incremental_db/
+output_files/
+*.qws
+*.rpt
+*.summary

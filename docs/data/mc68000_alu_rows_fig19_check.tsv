@@ -1,0 +1,51 @@
+# US 4,325,121 FIG. 19A/19B (Sheets 29-30) - PLA check of the lines of FIG. 18
+# line	bit_from_PLA	rows_inhibited_by_PLA	result
+0	15 14 13 12' 7 6'		same as the table
+1	15 14 13 12' 7' 6		differs: bit +7'
+2	15 14 13 12' 7' 6'		same as the table
+3	15 14 13' 12	1 3 4 5 6 7 8 9 10 11 13 14 15	same as the table
+4	15 13' 12 8 7' 5' 4'	2 5	same as the table
+5	15 13' 12 8 6' 5' 4'	2 5	same as the table
+6	15 13' 12	10 12	same as the table
+7	15 14' 13' 12	1 2 3 4 6 7 8 9 11 12 13 14 15	same as the table
+8	15 14 13' 12'	1 2 5 6 8 9 10 11 12 13 14 15	same as the table
+9	15 13' 12' 7 6	3 4 9 14	same as the table
+10	15 13' 12' 8 7' 6' 5' 4'	1 4 7 14	same as the table
+11	15 13' 12'	1 3 7 9	same as the table
+12	15 14' 13' 12'	2 3 4 5 6 7 8 10 11 12 13 15	same as the table
+13	15' 13	1 3 4 5 6 7 8 9 10 11 12 13 14 15	same as the table
+14	15' 13' 12 7 6	1 2 3 4 5 6 7 8 9 10 11 12 13 14	same as the table
+15	15' 13' 12 8	1 2 3 4 6 7 8 9 10 11 12 13 14 15	same as the table
+16	15' 13' 12 8'	1 3 4 5 6 7 8 9 10 11 12 13 14 15	same as the table
+17	15' 14' 13' 12'	1 3 7 8 9 10 11 12 15	same as the table
+18	15' 14' 13' 12' 8 7'	2 4 5 6 13	differs: bit -7 +7'
+19	15' 14' 13' 12' 8 6	2 4 5 6 14	differs: bit -7' +6
+20	15' 14' 13' 12' 11 10 9' 8'	2 4 5 13 14	differs: bit -12 +12'
+21	15' 13' 12' 11 10' 9' 8' 7	2 4 5 6 9 10 11 13 15	same as the table
+22	15' 13' 12' 11' 10' 9' 8'	2 4 5 6 8 9 10 11 13	differs: bit -11,9 +11',9'; rows -14 +13
+23	15' 13' 12' 11 10' 9 8'	2 4 5 6 8 9 11 14 15	differs: bit -11',9' +11,9; rows -13 +14
+24	15' 13' 12' 11' 10 9 8'	4 5 6 8 9 10 13 14 15	same as the table
+25	15' 13' 12' 11' 10 9' 8'	2 4 6 8 9 10 11 13 14 15	same as the table
+26	15' 13' 12' 11 10' 9' 8' 7'	2 4 5 6 8 10 11 14 15	same as the table
+27	15' 13' 12' 11' 10' 9 8'	2 5 6 8 9 10 11 13 14 15	same as the table
+28	15' 14 13' 12' 11' 10 9' 8' 7 6	4 5 8 9 10 11 15	differs: bit -6' +11',10,9',6
+29	15' 14 13' 12'	1 2 3 7 12 13 14	same as the table
+30	15 14 13 12' 7 6		same as the table
+31	15 14 13 12' 4' 3	2 3 8 9 10 11	same as the table
+32	15 14 13 12' 10' 9 7 6	2 3 8 9 10 11	same as the table
+33	15 14 13 12' 4 3	2 3 4 5 8 11	same as the table
+34	15 14 13 12' 10 9 7 6	2 3 4 5 8 11	same as the table
+35	15 14 13 12' 4' 3'	4 5 8 9 10 11	same as the table
+36	15 14 13 12' 10' 9' 7 6	4 5 8 9 10 11	same as the table
+37	15 14 13 12' 4 3'	2 3 4 5 9 10	same as the table
+38	15 14 13 12' 10 9' 7 6	2 3 4 5 9 10	same as the table
+39	15 14 13 12' 8	1 2 5 6 7 8 10 12 13 14 15	differs: bit -12 +12'
+40	15 14 13 12' 8'	1 3 4 6 7 9 11 12 13 14 15	same as the table
+41	15 14' 13 12 5' 4' 3	1 2 3 4 5 7 8 9 10 11 12 13 14 15	same as the table
+42	15 14' 13 12 8 7 6	1 2 3 4 5 7 8 9 10 11 12 13 14 15	same as the table
+43	15 14' 13 12 8'	1 2 3 4 5 7 8 9 10 11 12 13 14 15	same as the table
+44	15 14' 13 12	1 2 3 4 5 6 7 8 9 10 11 12 14 15	same as the table
+# DBcc (0101 cccc 11 001 rrr): no line of the 0101 group (13,14,15,16) has bubbles on IRD5/4/3;
+#   the only lines with bits 5/4/3 are 41 (cmpm), 37/35/33/31 (shift) and 10/5/4 (abcd,sbcd,addx,subx).
+#   DBcc activates exactly the same lines as Scc: 14 (7 6) + 15 (8) or 16 (8') depending on IRD8,
+#   but 15 and 16 are inhibited by 14 ((14) i) -> only the rows inhibited by 14 remain = rows 1..14, only row 15 stays free.

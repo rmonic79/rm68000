@@ -1,0 +1,107 @@
+# This file is part of rm68000, an MC68000 core in SystemVerilog.
+# Copyright (c) 2026 Umberto Parisi (rmonic79)
+#
+# rm68000 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+# later version. It is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+# more details: LICENSE in the root of the repository, or <https://www.gnu.org/licenses/>.
+#
+# A commercial license, for use without the obligations of the GPL (for example in closed-source products), is
+# available from the author, who can also be contacted for other licensing needs.
+
+# Per-RESOURCE decoder of the nanoword (the "about three gate levels" of the silicon, patent col. 17-18; docs/microcode-structure.md §5).
+# From the nano ROM slots (mc68000_nano_encoding.tsv) it derives, for each resource L (AB/DB bus with section, destination
+# register + operator, ACCESS/ALU/REGISTER POINTERS cell), a field of the possible values: enumerated (0 = none)
+# if no word uses two values together, otherwise one-hot (e.g. au<- and alu<- have two inputs: 'au<-dbh'+'au<-dbl').
+# Generates rtl/cpu_si/m68k_nano_dec.sv (combinational: nw -> dec) and rtl/cpu_si/m68k_nano_dec_pkg.sv (offsets/codes).
+# Usage: python gen_nano_dec.py <repo_root>
+import re, sys, math, collections
+# License header written at the top of every generated file (the same text as in the hand-written sources).
+LICENSE_HEADER = ('// This file is part of rm68000, an MC68000 core in SystemVerilog.\n'
+                  '// Copyright (c) 2026 Umberto Parisi (rmonic79)\n'
+                  '//\n'
+                  '// rm68000 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public\n'
+                  '// License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any\n'
+                  '// later version. It is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the\n'
+                  '// implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for\n'
+                  '// more details: LICENSE in the root of the repository, or <https://www.gnu.org/licenses/>.\n'
+                  '//\n'
+                  '// A commercial license, for use without the obligations of the GPL (for example in closed-source products), is\n'
+                  '// available from the author, who can also be contacted for other licensing needs.\n'
+                  '\n')
+R = sys.argv[1]; D = f'{R}/docs/data'
+slots = []; words = []
+for l in open(f'{D}/mc68000_nano_encoding.tsv', encoding='utf-8'):
+    f = l.rstrip('\n').split('\t')
+    if l.startswith('slot'): slots.append((f[0], int(f[1]), int(f[2]), [x.split('=', 1)[1] for x in re.split(r' (?=\d+=)', f[3])]))
+    elif re.match(r'^[0-9a-f]{3}\t', l): words.append([x for x in f[4].split(' ; ') if x])
+def split(at):
+    if '<-' in at: L, V = at.split('<-', 1); return L + '<-', V
+    if '+=' in at: L, V = at.split('+=', 1); return L + '+=', V
+    if '=' in at: L, V = at.split('=', 1); return L + '=', V
+    return at, ''
+def ident(s):
+    s = s.replace('<-', '_from_').replace('+=', '_const_').replace('*', 'star').replace('(', 'p_').replace(')', '')
+    s = s.replace('+', 'plus').replace('-', 'minus').replace(',', '_or_')
+    return re.sub(r'[^A-Za-z0-9]+', '_', s).strip('_').upper()
+res = collections.defaultdict(dict)   # L -> {V: (slot lsb, slot w, slot code)}
+for name, lsb, w, al in slots:
+    for k, at in enumerate(al):
+        L, V = split(at); res[L][V] = (lsb, w, k + 1)
+multi = set()
+for A in words:
+    per = collections.defaultdict(set)
+    for at in A:
+        L, V = split(at); per[L].add(V)
+    multi |= {L for L, vs in per.items() if len(vs) > 1}
+multi |= {'ab<-', 'alu<-', 'alub<-', 'aob<-', 'au<-'}   # always one-hot: stable interface for the hand-written RTL (alux, ftu, au)
+# bus sources in one-hot: one LUT per atom instead of a priority code compared again in the consumers
+# (fewer logic levels between the nanoword and the register file index)
+multi |= {'ab*<-', 'abd<-', 'abe<-', 'db<-', 'db*<-', 'dbd<-', 'dbe<-'}
+# register pointers in one-hot: the dt/sp/us/rp/py flags of the register file are bits of dec (no decoding in front of the register file)
+multi |= {'rp_dst=', 'rp_src='}
+fields = []; off = 0
+for L in sorted(res):
+    vs = sorted(res[L]); oh = L in multi
+    w = len(vs) if oh else max(1, math.ceil(math.log2(len(vs) + 1)))
+    fields.append((L, vs, off, w, oh)); off += w
+DW = off
+nl = '\n'
+with open(f'{R}/rtl/cpu_si/m68k_nano_dec_pkg.sv', 'w', newline=nl) as f:
+    f.write(LICENSE_HEADER)
+    f.write('// per-resource nano decoder - generated by docs/data/scripts/gen_nano_dec.py, DO NOT edit by hand' + nl)
+    f.write('// enumerated: value V active <=> dec[ND_<resource>_LSB +: ND_<resource>_W] == ND_<resource>__<V>' + nl)
+    f.write('// one-hot (ND_<resource>_ONEHOT = 1): value V active <=> dec[ND_<resource>_LSB + ND_<resource>__<V>]' + nl)
+    f.write('package m68k_nano_dec_pkg;' + nl)
+    f.write('/* verilator lint_off UNUSEDPARAM */' + nl + f'localparam int NDEC_W = {DW};' + nl)
+    for L, vs, o, w, oh in fields:
+        f.write(f'localparam int ND_{ident(L)}_LSB = {o}, ND_{ident(L)}_W = {w}, ND_{ident(L)}_ONEHOT = {int(oh)};  // {L}' + nl)
+        for k, v in enumerate(vs): f.write(f'localparam int ND_{ident(L)}__{ident(v) or "ON"} = {k if oh else k + 1};  // {L}{v}' + nl)
+    f.write('endpackage' + nl)
+with open(f'{R}/rtl/cpu_si/m68k_nano_dec.sv', 'w', newline=nl) as f:
+    f.write(LICENSE_HEADER)
+    f.write('// m68k_nano_dec.sv - per-resource decoder of the nanoword. GENERATED by gen_nano_dec.py, DO NOT edit by hand.' + nl)
+    f.write('// nw (mutually exclusive slots, m68k_nano_pkg.sv) -> dec (one field per resource, m68k_nano_dec_pkg.sv).' + nl)
+    f.write('// Purely combinational: it is the "about three gate levels" decoding of the nano latch of the silicon.' + nl)
+    f.write('import m68k_nano_pkg::*;' + nl + 'import m68k_nano_dec_pkg::*;' + nl)
+    f.write('module m68k_nano_dec (' + nl + '  input  logic [NROM_W-1:0]     nw,' + nl + '  output logic [NDEC_W-1:0] dec' + nl + ');' + nl)
+    f.write('  always_comb begin' + nl + '    dec = \'0;' + nl)
+    # every enumerated resource lives in ONE slot only (gen_nrom.py): every bit of the field is a function of that slot.
+    # If the slot holds only that resource the codes coincide (same alphabetical order, k+1) and the dec field IS the slot: wires.
+    slot_atoms = {(lsb, w): al for name, lsb, w, al in slots}
+    for L, vs, o, w, oh in fields:
+        if not oh:
+            places = {(res[L][v][0], res[L][v][1]) for v in vs}
+            assert len(places) == 1, ('enumerated resource on more than one slot', L, places)
+            (lsb, sw), = places
+            if len(slot_atoms[(lsb, sw)]) == len(vs):
+                assert sw == w and all(res[L][v][2] == k + 1 for k, v in enumerate(vs)), ('codes not aligned', L)
+                f.write(f'    dec[{o} +: {w}] = nw[{lsb} +: {sw}];  // {L} pure slot: field = slot' + nl)
+                continue
+        for k, v in enumerate(vs):
+            lsb, sw, code = res[L][v]
+            if oh: f.write(f'    if (nw[{lsb} +: {sw}] == {sw}\'d{code}) dec[{o + k}] = 1\'b1;  // {L}{v}' + nl)
+            else:  f.write(f'    if (nw[{lsb} +: {sw}] == {sw}\'d{code}) dec[{o} +: {w}] = {w}\'d{k + 1};  // {L}{v}' + nl)
+    f.write('  end' + nl + 'endmodule' + nl)
+print(f'resources {len(fields)} (one-hot {len(multi)}: {sorted(multi)}) | atoms {sum(len(vs) for _, vs, _, _, _ in fields)} | dec {DW} bits')

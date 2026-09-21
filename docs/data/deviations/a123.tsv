@@ -1,0 +1,25 @@
+# Deviations of the A1/A2/A3 decoder from the PLA table of the die (docs/data/mc68000_a123_die.tsv).
+# Lines: type<TAB>arguments...<TAB>source
+#  pair A B                  : A and B are the first word of the same EA chain in the two sizes (word/long) - die map
+#  a1_line4_long_mem         : line 4, single-operand instructions NEGX/CLR/NEG/NOT/TST (bits 11:8 = 0000/0010/0100/0110/1010), bits 7:6 = 10 (long), EA mode >= 2 (memory): A1 = twin of the word given by the die (not CHK/LEA/MOVEM)
+#  a2_set LO HI V            : opcodes LO..HI: A2 = V
+#  a3_alias X Y              : where the die gives A3 = X (address with no word in App. H) the core uses Y, for EA modes >= 2; for modes 0/1 (register) A3 is not reached: not checked
+#  a3_none                   : where the die gives A3 = 3ff (none) the core value is not checked (filler)
+#  priv_set LO HI V          : opcodes LO..HI: priv = V
+#  lineaf_dontcare           : line A/F: illegal and A1 of the decoder are not checked (they are detected by the exception block)
+# Sources independent of the RTL: patent US 4,325,121 (App. H by label), die map docs/data/us4325121_appH_die_map.tsv, manual (M68000PRM par. 4 and 8, MC68000UM par. 6), patent FIG. 21 (docs/data/us4325121_fig21_a123.tsv), docs/silicon-datapath.md §15,
+# measurements against the reference core with comparison benches made during development, not part of this repository (available from the author on request: diff-fuzz-si per family, lockstep-si) and the per-instruction testbenches of sim/Makefile.si.
+pair	006	00b	CONFIRMED: die map docs/data/us4325121_appH_die_map.tsv, rows of type w/l: adrw1 -> 006 (trace label adrl1), adrl1 -> 00b (trace label adrw1): the word/long labels of the trace are swapped (docs/silicon-datapath.md §15)
+pair	00a	00e	CONFIRMED: App. H abwl1 (00a) / abww1 (00e): first word of the abs.W chain in the two sizes; same w/l swap of the trace (docs/silicon-datapath.md §15)
+pair	21c	00f	CONFIRMED: App. H pinw1 (21c) / pinl1 (00f): (An)+ chain, word/long
+pair	103	179	CONFIRMED: die map, w/l rows: pdcw1 -> 103 (trace pdcl1), pdcl1 -> 179 (trace pdcw1): -(An) chain, word/long
+pair	1c2	1c6	CONFIRMED: App. H adsl1 (1c2) / adsw1 (1c6): d16(An) chain in the two sizes (same transfers, the micro continuation differs)
+pair	1e3	1e7	CONFIRMED: App. H aixl0 (1e3) / aixw0 (1e7): d8(An,Xn) chain in the two sizes
+pair	1e2	1e6	CONFIRMED: App. H abll1 (1e2) / ablw1 (1e6): abs.L chain in the two sizes
+a1_line4_long_mem	CONFIRMED (measurement): M68000PRM par. 4: NEGX/CLR/NEG/NOT/TST .L read a long operand; the PLA table of the die gives for these forms the word EA chain (006/00a/21c/103) or the twin (1c2/1e3/1e2), the core enters the long chain; measurement: diff-fuzz-si families NEGX, NEG, NOT, CLR, TST (.L forms in memory) and lockstep-si (bus cycles equal to the reference); docs/silicon-datapath.md §15 (word/long pairs of the EA chains of the die)
+a2_set	0890	0897	006	CONFIRMED: BCLR #n,(An): M68000PRM par. 4, bit operations on memory are byte operations; the decoded A2 PLA gave 00b (long pair adrl1/adrl2: second read at An+2 and write at An+2), corrected to 006 (patent FIG. 21B, docs/data/us4325121_fig21_a123.tsv row STATIC BCLR (RYA): A2 = ADRW1, i.e. 006 in the die map, row adrw1; per-instruction testbench bitext); measurement: diff-fuzz-si family BCLR
+a3_alias	091	299	CONFIRMED (measurement): 091 is neither an App. H word nor a mapped die word (address not used in the core); EOR Dn,<ea> to memory (line B) uses the same read-modify-write sequence as OR to memory (M68000PRM par. 4: EOR to memory only in the form Dn,<ea>): morw1 (299); measurement: diff-fuzz-si family EOR
+a3_alias	288	3cb	CONFIRMED (measurement): 288 is neither an App. H word nor a mapped die word; TST.L <ea> in memory uses tsml1 (3cb, App. H "TST memory long"); measurement: diff-fuzz-si family TST
+a3_none	CONFIRMED: the die table gives 3ff = no A3 for 8101 valid opcodes (LEA, MOVEM, Bcc, ...): the core value (1d0, trap1: filler) is not read
+priv_set	4e60	4e6f	1	CONFIRMED: MOVE USP is privileged (M68000PRM par. 4, MOVE USP: "privileged instruction"); the priv column of the PLA table of the die is 0 for these 16 opcodes (the die checks S elsewhere); measurement: per-instruction testbenches usp and priv, diff-fuzz-si family MOVEUSP
+lineaf_dontcare	CONFIRMED: lines A (1010) and F (1111) are detected by the exception block from ir[15:12] (rtl/cpu_si/m68k_exc_si.sv, inputs linea/linef registered by cpu_si), not by the A1/A2/A3 decoder: for these 8192 opcodes illegal and A1 of the decoder are not read; MC68000UM par. 6, vectors 10 and 11; measurement: diff-fuzz-si families LINEA and LINEF

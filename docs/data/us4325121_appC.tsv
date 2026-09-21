@@ -1,0 +1,55 @@
+# US 4,325,121 Appendix C - Conditional Branch Choices - literal transcription (page p78)
+# cbc_hex	variable	source	value	C1	C0
+0	i11	irc	0	0	0
+0	i11	irc	1	1	1
+1	auz	eu	0	1	1
+1	auz	eu	1	0	1
+11	auz	eu	0	1	1
+11	auz	eu	1	0	0
+2	c	psw	0	0	1
+2	c	psw	1	0	0
+12	c	psw	0	1	1
+12	c	psw	1	1	0
+3	z	psw	0	0	0
+3	z	psw	1	1	1
+4	nz1	psw	00	1	0
+4	nz1	psw	10	0	1
+4	nz1	psw	x1	1	1
+5	n	psw	0	0	1
+5	n	psw	1	1	1
+15	n	psw	0	1	0
+15	n	psw	1	1	1
+6	nz2	psw	00	1	1
+6	nz2	psw	1x,x1	0	1
+7	ms0	eu,ird	x0	1	1
+7	ms0	eu,ird	01	0	1
+7	ms0	eu,ird	11	1	0
+8	m01	eu,ird	1xxx	0	0
+8	m01	eu,ird	000x	1	1
+8	m01	eu,ird	001x	0	1
+8	m01	eu,ird	0100	1	1
+8	m01	eu,ird	0101	0	1
+8	m01	eu,ird	0110	1	0
+8	m01	eu,ird	0111	1	1
+a	ze	eu	0	1	1
+a	ze	eu	1	0	0
+b	nv	psw	x1,0x	1	1
+b	nv	psw	10	0	0
+c	d4	dcr	0	1	1
+c	d4	dcr	1	0	1
+1c	d4	dcr	0	1	1
+1c	d4	dcr	1	1	0
+d	v	psw	0	1	1
+d	v	psw	1	0	0
+e	enl	eu,ird	00	1	0
+e	enl	eu,ird	10	1	1
+e	enl	eu,ird	x1	0	0
+1e	enl	eu,ird	00	1	0
+1e	enl	eu,ird	10	1	1
+1e	enl	eu,ird	x1	0	1
+9	cc	psw	0 F	0	1
+9	cc	psw	1 T	1	1
+19	cc	psw	0 F	1	0
+19	cc	psw	1 T	1	1
+# REMARKS column (per code, as printed): 4 nz1 = n^z ; 6 nz2 = n^z ; 7 ms0 = ir[8]^alue[0] ;
+# 8 m01 = auz^ir[8]^alue[1:0] ; b nv = n^v ; e enl = end^ir[6] ; the other codes have an empty REMARKS.

@@ -1,0 +1,502 @@
+# App. H -> die mapping (apph_match.py). label pat_addr die_addr label_galibert match_kind status score missing_in_trace extra_in_trace alternatives_if_ambiguous
+adrw1	004	006	adrl1	w/l	ok	5			
+adrw2	367	024	adrl2	w/l	mismatch	-1		reg->ab	
+abww1	271	00e	abww1	exact	mismatch	6		reg->ab	
+ablw1	1e2	1e6	ablw1	exact	ok	7			
+ablw2	233	00d	ablw2	exact	mismatch	6		reg->ab	
+ablw3	36b	004	abll3	w/l	ok	7			
+adsw1	1c2	1c6	adsw1	exact	mismatch	5		pc->ab	
+adsw2	273	02a	adsl2	w/l	ok	7			
+aixw2	120	124	aixw2	exact	ambiguous	3			aixl2=120
+e#w1	270	0ea	e#w1	exact	no_trace	-18	ab->at|au->db|au=+2|db->aob|db->pc|dbin->ab|edb->dbin|edb->irc|read		
+o#w1	3aa	2b9	o#w1	exact	no_trace	-16	au->db|au=+2|db->aob|db->pc|dbin->ab|edb->dbin|edb->irc|read		
+pinw1	21f	21c	pinw1	exact	mismatch	4		reg->ab	
+pinw2	173	21d	pinw2	exact	ok	5			
+pdcw1	3c0	103	pdcl1	w/l	mismatch	2		reg->ab	
+pdcw2	361	17b	pdcl2	w/l	ok	8			
+aixw4	1e0	1e4	aixw4	exact	ok	4			
+aixw0	1e3	1e7	aixw0	exact	ok	1			
+aixw1	122	3e6	aixw1	exact	mismatch	1		pc->db	
+o#l1	3e0	3e0	o#l1	exact	no_trace	-14	ab->reg|au->db|au=+2|db->aob|dbin->ab|edb->dbin|read		
+abll1	1e6	1e2	abll1	exact	ok	7			
+abll2	237	009	abll2	exact	mismatch	6		reg->ab	
+abll3	231	008	ablw3	w/l	ok	6			
+abwl1	275	00a	abwl1	exact	mismatch	6		reg->ab	
+adrl1	179	00b	adrw1	w/l	ok	6			
+adrl2	348	005	adrw2	w/l	ok	8			
+adsl1	1c6	1c2	adsl1	exact	mismatch	5		pc->ab	
+adsl2	235	00c	adsw2	w/l	ok	6			
+adsl3	005	026	adsl3	exact	ok	8			
+e#l1	299	0a7	e#l1	exact	no_trace	-14	ab->reg|au->db|au=+2|db->aob|dbin->ab|edb->dbin|read		
+aixl0	1e7	1e3	aixl0	exact	ok	1			
+aixl1	126	3e2	aixl1	exact	mismatch	1		pc->db	
+pinl1	17d	00f	pinl1	exact	ok	6			
+pinl2	27f	21a	pinl2	exact	ok	6			
+pinl3	21b	21b	pinl3	exact	ok	5			
+pdcl1	0ee	179	pdcw1	w/l	ok	3			
+pdcl2	0ef	17a	pdcw2	w/l	ok	6			
+aixl2	124	120	aixl2	exact	ambiguous	3			aixw2=124
+aixl5	1e4	1e0	aixl5	exact	ok	4			
+mrgw1	0a2	29b	mrgw1	exact	ok	6			
+mrgm1	068	158	mrgm1	exact	ok	7			
+malw1	0cf	32b	malw1	exact	ambiguous	6			mall1=30f
+malw2	020	32e	malw2	exact	ok	6			
+malw3	1e1	1e1	malw3	exact	ok	8			
+maww1	383	388	maww1	exact	ambiguous	6			mawl1=38c
+maww2	38b	389	maww2	exact	ok	4			
+mmrw1	388	3ab	mmrw1	exact	ambiguous	6			mmrl1=3a9
+mmrw2?	328	025	mmrw2	exact	ok	4			
+mmrw3	026	34c	mmrw3	exact	ok	2			
+mmdw1	080	38a	mmdw1	exact	ambiguous	7			mmdl1=38e
+mmxw0	389	298	mmxw0	exact	ambiguous	0			mmxl0=29c
+mmxw1	111	101	mmxw1	exact	ambiguous	4			mmxl1=10d
+mmxw2	210	028	mmxw2	exact	ambiguous	4			mmxl2=02c
+mmxw3	2d0	0e8	mmxw3	exact	ambiguous	5			mmxl3=0ec
+mmiw1	38c	3af	mmiw1	exact	ambiguous	6			mmil1=3ad
+mmiw2	023	349	mmiw2	exact	ok	8			
+mmmw1	081	38b	mmmw1	exact	ambiguous	8			mmml1=38f
+mmmw2	025	34b	mmmw2	exact	ok	6			
+asxw1	3c4	10f	asxw1	exact	mismatch	2		reg->ab	
+asxw2	100	131	asxw2	exact	ok	5			
+asxw3	102	132	asxw3	exact	ok	3			
+asxw4	212	04a	asxw4	exact	ok	7			
+mrgl1	0a6	29f	mrgl1	exact	ok	6			
+mrgl2	066	36f	mrgl2	exact	ok	3			
+mall1	2b5	30f	mall1	exact	ambiguous	6			malw1=32b
+mall2	2b6	329	mall2	exact	ok	5			
+mall3	2b7	32a	mall3	exact	ok	4			
+mawl1	387	38c	mawl1	exact	ambiguous	6			maww1=388
+mawl2	369	32f	mawl2	exact	ok	4			
+mawl3	155	348	mawl3	exact	ok	4			
+mmrl1	082	3a9	mmrl1	exact	ambiguous	6			mmrw1=3ab
+mmrl2	2fb	3aa	mmrl2	exact	ok	4			
+mmdl1	084	38e	mmdl1	exact	ambiguous	7			mmdw1=38a
+mmxl0	38d	29c	mmxl0	exact	ambiguous	0			mmxw0=298
+mmxl1	115	10d	mmxl1	exact	ambiguous	4			mmxw1=101
+mmxl2	214	02c	mmxl2	exact	ambiguous	4			mmxw2=028
+mmxl3	2d4	0ec	mmxl3	exact	ambiguous	5			mmxw3=0e8
+mmil1	086	3ad	mmil1	exact	ambiguous	6			mmiw1=3af
+mmil2	2ff	3ae	mmil2	exact	ok	4			
+mmml1	085	38f	mmml1	exact	ambiguous	8			mmmw1=38b
+mmml2	024	34a	mmml2	exact	ok	4			
+asxw5	0c3	065	asxw5	exact	ok	8			
+rrgw1	3c1	121	rrgw1	exact	ok	7			
+rrgw2	23a	27a	rrgw2	exact	ok	4			
+asxl1	3c8	10b	asxl1	exact	mismatch	2		reg->ab	
+rrgm1	239	279	rrgm1	exact	ok	6			
+ralw1	1ea	1ea	ralw1	exact	ok	7			
+ralw2	2ba	2bb	ralw2	exact	ok	7			
+raww1	3a2	2d9	raww1	exact	ok	6			
+rmrw1	2d2	2fa	rmrw1	exact	ok	5			
+rmdw1	3a3	2da	rmdw1	exact	ok	6			
+rmdw2	132	2db	rmdw2	exact	ok	4			
+rmxw0	1eb	1eb	rmxw0	exact	ok	1			
+rmxw1	119	109	rmxw1	exact	ok	4			
+rmxw2	128	128	rmxw2	exact	ambiguous	3			rmxl2=12c
+rmxw3	1e8	1e8	rmxw3	exact	ambiguous	4			rmxl3=1ec
+rmiw1	2d6	2fe	rmiw1	exact	ok	5			
+rmmw1	232	2f8	rmmw1	exact	ok	7			
+asxl2	300	048	asxl2	exact	ok	6			
+asxl3	104	139	asxl3	exact	ok	5			
+asxl4	106	13a	asxl4	exact	ok	3			
+asxl5	304	04c	asxl5	exact	ok	6			
+rrgl1	3c9	129	rrgl1	exact	ok	7			
+rrgl2	238	278	rrgl2	exact	ok	5			
+rall1	1ee	1ee	rall1	exact	ok	7			
+rall2	2be	2bf	rall2	exact	ok	7			
+rall3	2b9	2ba	rall3	exact	ok	5			
+rawl1	3a6	2dd	rawl1	exact	ok	6			
+rmrl1	2f0	2f9	rmrl1	exact	ok	6			
+rmrl2	00f	23f	rmrl2	exact	ok	4			
+rmrl3	308	258	rmrl3	exact	ok	7			
+rmdl1	3a7	2de	rmdl1	exact	ok	6			
+rmdl2	2bd	2be	rmdl2	exact	ok	5			
+rmdl3	136	2df	rmdl3	exact	ok	4			
+rmxl0	1ef	1ef	rmxl0	exact	ok	1			
+rmxl1	11d	105	rmxl1	exact	ok	4			
+rmxl2	12c	12c	rmxl2	exact	ambiguous	3			rmxw2=128
+rmxl3	1ec	1ec	rmxl3	exact	ambiguous	4			rmxw3=1e8
+rmil1	2f4	2fd	rmil1	exact	ok	6			
+rmil2	00c	23c	rmil2	exact	ok	4			
+rmil3	00d	23d	rmil3	exact	ok	8			
+rmml1	236	2fc	rmml1	exact	ok	7			
+rmml2	00e	23e	rmml2	exact	ok	5			
+asxl6	0c0	047	asxl6	exact	ok	8			
+asxl7	0c1	061	asxl7	exact	ok	4			
+asxl8	0c2	062	asxl8	exact	ok	8			
+morw1	38a	299	morw1	exact	ambiguous	8			morl1=29d
+morw2	38f	38d	morw2	exact	ok	4			
+morl1	38e	29d	morl1	exact	ambiguous	8			morw1=299
+morl2	349	34d	morl2	exact	ok	5			
+romw1	1c3	1c3	romw1	exact	ok	5			
+roml1	1cb	1cb	roml1	exact	ok	5			
+roml2	30c	25c	roml2	exact	ok	3			
+romm1	1c7	1c7	romm1	exact	ok	5			
+roml3	30d	25d	roml3	exact	ok	3			
+rorw1	1c1	1c1	rorw1	exact	ok	4			
+rorl1	1c5	1c5	rorl1	exact	ok	4			
+rorl2	3e3	3c0	rorl2	exact	ok	2			
+rorl3	30e	25e	rorl3	exact	ok	2			
+roaw1	101	100	roaw1	exact	ok	3			
+roaw2	297	08b	roaw2	exact	ok	4			
+roal1	105	10c	roal1	exact	ok	3			
+roal2	309	259	roal2	exact	ok	2			
+roal3	30a	25a	roal3	exact	ok	2			
+rorm1	1c9	1c9	rorm1	exact	ok	4			
+rorm2	3eb	3c8	rorm2	exact	ok	2			
+rorm3	30f	25f	rorm3	exact	ok	2			
+roal4	30b	25b	roal4	exact	ok	3			
+dvumb	2d9	3e9	dvumb	exact	no_trace	0			
+dvs01	17e	0ae	dvs01	exact	mismatch	-3		ab->at|dbin->ab	
+dvume	298	290	dvume	exact	no_trace	0			
+dvs05	06d	063	dvs05	exact	ok	2			
+dvs02	17c	0ac	dvs02	exact	mismatch	-3	dbin->ab	ab->at	
+dvs03	2f2	0c9	dvs03	exact	no_trace	0			
+dvs04	0ad	0a3	dvs04	exact	ok	2			
+dvur1	17a	0a6	dvur1	exact	ok	2			
+dvum1	178	0a4	dvum1	exact	ok	3			
+dvum2	21e	213	dvum2	exact	ok	1			
+dvur2	0ed	0e3	dvur2	exact	ok	2			
+dvum3	02d	023	dvum3	exact	ok	2			
+dvs17	276	04d	dvs17	exact	ok	4			
+bser1	003	003	bser1	exact	ok	3			
+bser2	3a4	3a7	bser2	exact	mismatch	1	reg->db		
+bser3	117	3ca	bser3	exact	ok	4			
+bser4	32a	0a2	bser4	exact	ok	5			
+itlx1	1c4	1c4	itlx1	exact	ok	2			
+itlx2	344	234	itlx2	exact	ok	2			
+itlx3	345	235	itlx3	exact	mismatch	-1	reg->db		
+itlx4	29b	0eb	itlx4	exact	ok	5			
+dvur3	151	217	dvur3	exact	mismatch	1	reg->db		
+dvum4	2de	2d1	dvum4	exact	ok	4			
+dvuma	0e4	0e6	dvuma	exact	ok	2			
+dvumz	2da	2d5	dvumz	exact	ok	4			
+dvum5	29a	291	dvum5	exact	ok	2			
+dvum7	2db	2d2	dvum7	exact	ok	0			
+dvum6	2d8	2d0	dvum6	exact	ok	2			
+dvs06	2b0	176	dvs06	exact	no_trace	0			
+dvum8	25b	252	dvum8	exact	ok	0			
+dvs07	06c	042	dvs07	exact	ok	0			
+dvs08	219	216	dvs08	exact	no_trace	0			
+dvs10	0ec	0c2	dvs10	exact	ok	1			
+dvs11	21a	177	dvs11	exact	ok	0			
+bser5	11b	3c6	bser5	exact	ok	4			
+bser6	32b	088	bser6	exact	ok	6			
+dvs0d	2dd	3ed	dvs0d	exact	no_trace	0			
+itlx5	346	236	itlx5	exact	ok	4			
+itlx6	118	118	itlx6	exact	no_trace	0			
+itlx7	347	292	itlx7	exact	ok	0			
+trap3	113	3c2	trap3	exact	ok	4			
+trap4	08a	360	trap4	exact	mismatch	3	db->reg		
+trap1	1d0	1d0	trap1	exact	ok	2			
+trap2	089	347	trap2	exact	mismatch	-1	reg->db		
+dvum9	258	250	dvum9	exact	ok	1			
+dvumd	0e8	0c0	dvumd	exact	ok	4			
+dvs16	063	041	dvs16	exact	ok	1			
+dvum0	25e	212	dvum0	exact	ok	2			
+dvumc	259	369	dvumc	exact	ok	1			
+dvs1d	0e3	0c1	dvs1d	exact	ok	1			
+dvumf	0a8	080	dvumf	exact	ok	5			
+dvs09	29e	295	dvs09	exact	ok	2			
+dvs0c	2df	2d6	dvs0c	exact	ok	0			
+dvs0a	2dc	2d4	dvs0a	exact	ok	2			
+dvs0f	29c	294	dvs0f	exact	no_trace	0			
+dvs13	25c	254	dvs13	exact	no_trace	0			
+mpiw1	1d2	1d2	mpiw1	exact	ok	7			
+mpiw2	158	29a	mpiw2	exact	ok	5			
+mpiw3	02c	368	mpiw3	exact	ok	5			
+mpiw4	042	36a	mpiw4	exact	ok	8			
+mpow1	1ca	1ca	mpow1	exact	ok	7			
+mpow2	061	36d	mpow2	exact	ok	4			
+mpow3	062	36e	mpow3	exact	ok	4			
+trap5	29f	0ef	trap5	exact	ok	5			
+trap6	2fe	367	trap6	exact	mismatch	1	au->pc	db->pc	
+mpil1	1d6	1d6	mpil1	exact	ok	7			
+dvs1c	25a	251	dvs1c	exact	ok	5			
+dvs1a	2f6	0cd	dvs1a	exact	no_trace	0			
+dvs1b	2f7	0ce	dvs1b	exact	ok	1			
+dvs1e	2f3	0ca	dvs1e	exact	ok	1			
+cmmw1	322	06b	cmmw1	exact	ok	5			
+cmmw2	250	086	cmmw2	exact	ok	5			
+cmmw3	3c3	122	cmmw3	exact	ok	6			
+cmmw4	0c7	170	cmmw4	exact	ok	9			
+asbb1	3cc	107	asbb1	exact	mismatch	2		reg->ab	
+asbb2	108	135	asbb2	exact	ok	5			
+asbb3	10a	136	asbb3	exact	ok	3			
+asbb4	216	04e	asbb4	exact	ok	7			
+b	213	363	b	exact	ok	5			
+cpdw1	251	087	cpdw1	exact	ok	6			
+dvs14	25d	210	dvs14	exact	ok	1			
+dvs15	2b4	211	dvs15	exact	ok	1			
+mpol1	1ce	1ce	mpol1	exact	ok	7			
+mpol2	02e	36b	mpol2	exact	ok	5			
+mpol3	02f	36c	mpol3	exact	ok	5			
+mpil2	15c	29e	mpil2	exact	ok	5			
+mpil3	028	34e	mpil3	exact	ok	5			
+mpil4	02a	34f	mpil4	exact	ok	7			
+maqw1	391	2f3	maqw1	exact	ambiguous	6	ab->reg		maql1=2f7
+maql1	385	2f7	maql1	exact	ambiguous	6	ab->reg		maqw1=2f3
+cpdl1	255	08f	cpdl1	exact	ok	6			
+cpdl2	0c8	171	cpdl2	exact	mismatch	0	reg->ab		
+rcaw1	109	108	rcaw1	exact	ambiguous	3			rcal1=104
+rcaw2	323	23a	rcaw2	exact	ok	4			
+raqw1	2bb	2d8	raqw1	exact	mismatch	1	ab->reg		
+rcal1	10d	104	rcal1	exact	ambiguous	3			rcaw1=108
+rcal2	00a	239	rcal2	exact	mismatch	1	reg->ab		
+raql1	2bf	2dc	raql1	exact	ambiguous	1	ab->reg		raqw1=2d8
+rlql1	00b	23b	rlql1	exact	ok	6			
+cpmw1	1d3	1d3	cpmw1	exact	ok	5			
+cpml1	1d7	1d7	cpml1	exact	ok	5			
+cpml2	0c9	172	cpml2	exact	ok	3			
+cpmm1	1cf	1cf	cpmm1	exact	ok	5			
+cprw1	1d1	1d1	cprw1	exact	ok	4			
+cprm1	1d9	1d9	cprm1	exact	ok	4			
+cprm2	0cb	174	cprm2	exact	ok	4			
+cprl1	1d5	1d5	cprl1	exact	ok	4			
+cmml1	326	06f	cmml1	exact	ok	5			
+cmml2	254	08e	cmml2	exact	ok	5			
+cmml3	340	154	cmml3	exact	ok	7			
+asbb5	007	040	asbb5	exact	ok	4			
+asbb6	3c2	113	asbb6	exact	ok	4			
+rbrb1	1cd	1cd	rbrb1	exact	ok	4			
+stiw1	1d4	1cc	stiw1	exact	ok	2			
+stiw2	044	307	stiw2	exact	no_trace	0			
+stiw3	045	320	stiw3	exact	ok	2			
+stiw4	046	321	stiw4	exact	no_trace	0			
+susp1	170	230	susp1	exact	ok	7			
+lusp1	0a7	2f5	lusp1	exact	ok	6			
+mstw1	06b	159	mstw1	exact	ok	3			
+swap1	04c	341	swap1	exact	mismatch	-5	ab->at|reg->db	db->at|reg->ab	
+rcal3	0a4	08d	rcal3	exact	ok	2			
+rset1	087	3a6	rset1	exact	mismatch	-10	any->at|au->pc	au->db|db->pc|dbin->ab	
+mulm1	06a	15a	mulm1	exact	ok	6			
+mulm2	3ef	3c4	mulm2	exact	ok	2			
+mulm6	029	020	mulm6	exact	ok	4			
+mulm3	069	060	mulm3	exact	no_trace	0			
+mulr1	06f	15b	mulr1	exact	ok	5			
+mulm4	0e9	0e0	mulm4	exact	ok	2			
+cprl2	0ca	173	cprl2	exact	ok	4			
+mulm5	0a9	0a0	mulm5	exact	no_trace	0			
+cmml4	3c7	12e	cmml4	exact	ok	6			
+cmml5	341	155	cmml5	exact	ok	6			
+cmml6	342	156	cmml6	exact	ok	7			
+cmml7	343	157	cmml7	exact	ok	2			
+rbrb2	3c6	11b	rbrb2	exact	ok	4			
+rbrb3	009	238	rbrb3	exact	ok	2			
+tsmw1	3e2	3c3	tsmw1	exact	ok	6			
+rstw1	23e	301	rstw1	exact	mismatch	0		reg->ab	
+tsrw1	3c5	12d	tsrw1	exact	ok	7			
+swap2	04d	342	swap2	exact	ok	5			
+stmw1	34a	3a1	stmw1	exact	ok	3			
+stmw2	049	324	stmw2	exact	ok	4			
+rset5	065	064	rset5	exact	ok	6			
+rset2	23b	27b	rset2	exact	ok	1			
+rset3	0e5	0e4	rset3	exact	ok	2			
+rset4	114	114	rset4	exact	ok	0			
+nnmw1	15b	2b8	nnmw1	exact	ok	8			
+nnrw1	112	133	nnrw1	exact	ok	5			
+nbcr1	11a	13b	nbcr1	exact	ok	5			
+nbcm1	0ac	15c	nbcm1	exact	mismatch	-10	au->aob|au->pc	ab->reg|au->db|db->aob|db->pc	
+nnml1	15f	2bc	nnml1	exact	ok	8			
+nnml2	152	15d	nnml2	exact	mismatch	-9	at->db|db->aob|write	au->db|dbin->ab	
+rstp1	000	000	rstp1	exact	no_trace	0			
+rstp2	23c	1c8	rstp2	exact	no_trace	-2	au=0		
+rstp3	2b8	002	rstp3	exact	no_trace	-14	ab->reg|au->db|au=+2|db->aob|dbin->ab|edb->dbin|read		
+exge1	123	3e3	exge1	exact	ok	7			
+exge2	360	231	exge2	exact	mismatch	3		db->pc	
+tsml1	3e6	3cb	tsml1	exact	ok	6			
+tsml2	08b	361	tsml2	exact	ok	2			
+tsrl1	3cd	125	tsrl1	exact	ok	7			
+tsrl2	08c	362	tsrl2	exact	ok	3			
+stop1	083	3a2	stop1	exact	mismatch	-13	any->at|au->pc|TYPE	au->db|db->pc|dbin->ab	
+strw1	1c8	3a5	strw1	exact	mismatch	-7	au=-2|pc->db	au->aob|au->pc	
+strw2	04b	340	strw2	exact	ok	2			
+halt1	001	001	halt1	exact	mismatch	-2	read		
+extr1	362	232	extr1	exact	ok	4			
+extr2	363	233	extr2	exact	ok	6			
+nnrl1	116	137	nnrl1	exact	ok	5			
+nnrl2	0ae	15e	nnrl2	exact	mismatch	-16	edb->dbin|edb->irc|reg->ab	ab->aob|ab->at|au->ab|dbin->db|read	
+nbcr2	3ca	117	nbcr2	exact	ok	4			
+nbcr3	27c	253	nbcr3	exact	ok	2			
+rstp4	2bc	296	rstp4	exact	mismatch	-14	ab->reg|au->db|au=+2|db->aob|dbin->ab|edb->dbin|read		
+rstp5	23d	27e	rstp5	exact	no_trace	-12	au->db|au=+2|db->aob|dbin->ab|edb->dbin|read		
+jsal1	1f2	1f2	jsal1	exact	ok	7			
+jsal2	0ce	256	jsal2	exact	ok	8			
+jsrd1	3ab	2b0	jsrd1	exact	mismatch	0		pc->ab	
+jsrd2	291	274	jsrd2	exact	ok	6			
+jsrd3	321	2b1	jsrd3	exact	ok	4			
+jsaw0	3a9	293	jsaw0	exact	ok	2			
+jsaw1	279	270	jsaw1	exact	ok	7			
+jsaw2	27a	271	jsaw2	exact	ok	6			
+jsaw3	27b	272	jsaw3	exact	ok	4			
+jsra1	290	273	jsra1	exact	ok	7			
+jsrx1	2f9	2b2	jsrx1	exact	mismatch	-1		pc->ab	
+jsrx2	211	029	jsrx2	exact	ok	1			
+jsrx3	2d1	0e9	jsrx3	exact	ok	2			
+jsrx0	1f3	1f3	jsrx0	exact	ok	1			
+jmaw1	3ad	297	jmaw1	exact	ok	2			
+jmal1	1f6	1f6	jmal1	exact	ok	7			
+jmal2	218	2b3	jmal2	exact	ok	6			
+unlk1	107	119	unlk1	exact	ok	7			
+jmpd1	3af	2b4	jmpd1	exact	mismatch	0		pc->ab	
+dcnt1	159	06c	dbcc1	rename	mismatch	-8	pc->db|TYPE	dbin->db|pc->ab	
+dcnt2	0cc	046	dbcc2	rename	mismatch	-13	au->db|db->aob|TYPE	ab->aob|ab->at|au->ab|pc->db	
+jmpx0	1f7	1f7	jmpx0	exact	ok	1			
+jmpx2	215	02d	jmpx2	exact	ok	1			
+jmpx1	2fd	2b6	jmpx1	exact	mismatch	-1		pc->ab	
+jmpx3	2d5	0ed	jmpx3	exact	ok	2			
+bbci1	15d	308	bbci1	exact	ok	2			
+bbcw1	0c4	068	bbcw1	exact	ok	2			
+bbci2	060	045	bbci2	exact	ok	2			
+bbci3	0e0	0c5	bbci3	exact	ok	6			
+bbcw3	0a0	085	bbcw3	exact	ok	2			
+bsri1	171	089	bsri1	exact	ok	4			
+bsri2	121	102	bsri2	exact	ok	6			
+bsri3	32d	0a8	bsri3	exact	ok	3			
+bsrw1	172	0a9	bsrw1	exact	ok	4			
+bsrw2	125	10e	bsrw2	exact	ok	6			
+bsrw3	32e	0aa	bsrw3	exact	ok	4			
+jmpa1	0cd	255	jmpa1	exact	ok	5			
+peax0	1ff	1ff	peax0	exact	ok	1			
+peax1	12e	3ee	peax1	exact	mismatch	1		pc->db	
+unlk2	1fe	1fe	unlk2	exact	ok	7			
+unlk3	08d	27c	unlk3	exact	ok	6			
+unlk4	08e	27d	unlk4	exact	ok	5			
+dcnt3	327	175	dbcc3	rename	mismatch	-9	edb->dbin|pc->db|TYPE	at->db|au->pc	
+dcnt5	217	007	dbcc5	rename	mismatch	-7	au->db|db->pc	edb->dbin|edb->irc|pc->db	
+dcnt4	3e7	0c7	dbcc4	rename	mismatch	-12	edb->dbin|edb->irc	au->db|db->aob|db->pc|read	
+chkr1	176	152	chkr1	exact	mismatch	-2	db->aob|read		
+link1	296	30b	link1	exact	ok	6			
+link2	323	2b5	link2	exact	ok	4			
+link3	08f	30c	link3	exact	ok	6			
+link4	2b2	30d	link4	exact	ok	4			
+leal1	3e4	3e4	laal1	rename	ok	7			
+leal2	3ae	2bd	laal2	rename	ok	8			
+paal1	1fa	1fa	paal1	exact	ok	7			
+leaw1	292	275	laaw1	rename	ok	7			
+paaw1	0e6	178	paaw1	exact	ok	8			
+leaa1	0a3	2f1	leaa1	exact	ok	6			
+leaa2	064	066	leaa2	exact	ok	6			
+peaa1	27d	17c	peaa1	exact	mismatch	1	edb->dbin|reg->ab	dbin->ab	
+lead1	380	2f2	lead1	exact	mismatch	2		pc->ab	
+lead2	294	309	lead2	exact	ok	5			
+pead1	27e	17d	pead1	exact	mismatch	-19	ab->at|au->db|au=+2|db->aob|edb->dbin|edb->irc|read|reg->ab	pc->db|reg->db	
+leax0	1fb	1fb	leax0	exact	ok	1			
+leax1	12a	3ea	leax1	exact	mismatch	1		pc->db	
+leax2	134	130	leax2	exact	ok	3			
+peax2	130	134	peax2	exact	ok	3			
+leax3	1f4	1f0	leax3	exact	ok	4			
+peax3	1f8	1f4	peax3	exact	ok	4			
+peax4	366	218	peax4	exact	ok	4			
+peax5	154	219	peax5	exact	ok	7			
+chkm1	175	151	chkm1	exact	mismatch	-6	db->aob|dbin->ab|read	dbin->db	
+chkr2	177	153	chkr2	exact	mismatch	-1	edb->dbin|edb->irc		
+chkr3	110	110	chkr3	exact	no_trace	0			
+rtr1	3cb	12a	rtr1	exact	ok	6			
+rtr2	139	12b	rtr2	exact	mismatch	5	db->pc		
+paal2	0af	15f	paal2	exact	mismatch	-17	au->aob|au->pc|au=-4|dbin->ab|edb->irc|reg->db	ab->aob|ab->at|au->ab	
+paaw2	129	10a	paaw2	exact	ok	6			
+pead2	295	17e	pead2	exact	mismatch	-15	at->any|au->aob|au->pc	au->db|db->aob|db->pc|db->reg|edb->dbin	
+pead3	364	17f	pead3	exact	mismatch	-13	au=-4|edb->irc|reg->db	ab->aob|ab->pc|ab->reg|pc->db|read	
+leax4	365	30a	leax4	exact	ok	4			
+peax6	12d	106	peax6	exact	ok	6			
+rts1	3cf	126	rts1	exact	ok	6			
+rts2	234	116	rts2	exact	ok	7			
+btsi1	34b	0ab	btsi1	exact	mismatch	3	db->reg		
+rts3	23f	303	rts3	exact	ok	8			
+chkr4	150	150	chkr4	exact	mismatch	-4	|TYPE	db->aob|read	
+rtr3	3e5	3c5	rtr3	exact	ok	6			
+rtr4	040	302	rtr4	exact	ok	5			
+bcsm1	0c5	081	bcsm1	exact	ok	8			
+bcsm2	0c6	082	bcsm2	exact	ok	3			
+bcsr1	12f	3ef	bcsr1	exact	ok	7			
+bcsr2	382	06a	bcsr2	exact	ok	4			
+bcsr4	0ea	0c4	bcsr4	exact	ok	0			
+bcsr3	0aa	084	bcsr3	exact	ok	1			
+bclm1	320	069	bclm1	exact	ok	3			
+bclm2	368	067	bclm2	exact	ok	5			
+bclr4	2f1	0cc	bclr4	exact	no_trace	0			
+bclr1	12b	3eb	bclr1	exact	ok	7			
+bclr2	386	06e	bclr2	exact	ok	4			
+bclr3	2b1	08c	bclr3	exact	ok	1			
+btsm1	32f	215	btsm1	exact	ok	6			
+ldmx0	1f5	1f5	ldmx0	exact	ok	8			
+ldmx1	006	027	ldmx1	exact	ok	1			
+tasr1	153	345	tasr1	exact	ok	3			
+tasr2	088	346	tasr2	exact	ok	4			
+btsr1	127	3e7	btsr1	exact	ok	7			
+btsr2	174	0e7	btsr2	exact	ok	4			
+btsr3	06e	044	btsr3	exact	ok	1			
+tasm1	04e	343	tasm1	exact	mismatch	1		au->pc	
+tasm2	04f	344	tasm2	exact	mismatch	2	au=+2		
+srrw1	302	382	srrw1	imm/reg-pla	ok	5			
+srrw2	303	383	srrw2	exact	ok	4			
+srrw3	2fc	2d3	srrw3	exact	ambiguous	2			srrl3=2d7
+sril1	305	385	sril1	imm/reg-pla	ok	5			
+srrl1	306	386	srrl1	imm/reg-pla	ok	5			
+srrl2	307	387	srrl2	exact	ok	4			
+smal1	1e5	1e5	smal1	exact	ambiguous	8			smaw1=1ed
+smal2	230	112	smal2	exact	ok	7			
+smal3	067	305	smal3	exact	ok	5			
+bcsr5	329	0a1	bcsr5	exact	ok	1			
+stmx1	04a	325	stmx1	exact	ok	7			
+stmx2	156	326	stmx2	exact	ok	4			
+bclr5	2f5	0c8	bclr5	exact	no_trace	0			
+# ldmx4 (.W) -> die 021 and ldmx3 (.L) -> die 0e1 (swapped with respect to Galibert's names): in ldmx2 "jumpcc i11 021, 0e1" the irc[11]=0 branch (.W) is 021 and 0e1 carries "dbh = reg[irc >> 12]h" (.L, like aixl5 1e0). Checked by the differential fuzz (MOVEMR family) against the reference core.
+ldmx4	027	021	ldmx3	exact	mismatch	0		reg->db	
+ldmx2	15a	02b	ldmx2	exact	mismatch	1		pc->db	
+ldmx3	0e7	0e1	ldmx4	exact	mismatch	0	reg->any		
+ldmx5	277	02e	ldmx5	exact	ok	7			
+lmaw1	1f9	1f9	lmaw1	exact	ambiguous	8			lmal1=1e9
+lmaw2	36a	30e	lmaw2	exact	mismatch	4	ab->reg		
+ldmr1	135	127	ldmr1	exact	mismatch	5	db->pc		
+ldmd1	1fd	1fd	ldmd1	exact	ok	8			
+ldmd2	384	2f6	ldmd2	exact	mismatch	2		pc->ab	
+ldmd3	157	276	ldmd3	exact	ok	5			
+sriw1	301	381	sriw1	imm/reg-pla	ok	5			
+lmal1	1e9	1e9	lmal1	exact	ambiguous	8			lmaw1=1f9
+srrl4	278	257	srrl4	exact	ok	1			
+srrl5	043	306	srrl5	exact	ok	2			
+srrl3	2f8	2d7	srrl3	exact	ambiguous	2			srrw3=2d3
+sftm1	3ea	3c7	sftm1	exact	ok	6			
+stmr1	3a1	3a0	stmr1	exact	ok	5			
+stmr2	048	323	stmr2	exact	ok	4			
+stmx3	15e	02f	stmx3	exact	ok	3			
+stmx4	13c	138	stmx4	exact	ok	3			
+smaw3	257	04b	smaw3	exact	ok	5			
+stmx5	1fc	1f8	stmx5	exact	ok	4			
+stmd1	1f1	1f1	stmd1	exact	ok	8			
+stmd2	3e9	3c9	stmd2	exact	ok	6			
+stmd3	047	322	stmd3	exact	ok	4			
+ldmx6	293	277	ldmx6	exact	ok	4			
+ldmr3	3e8	3e8	ldmr3	exact	ok	7			
+ldmr5	252	2f0	ldmr5	exact	ok	7			
+ldmr2	103	111	ldmr2	exact	ok	7			
+ldmr4	3a8	3a8	ldmr4	exact	ok	8			
+ldmd4	2fa	237	ldmd4	exact	ok	6			
+lmal2	29d	0af	lmal2	exact	mismatch	4	ab->reg		
+lmal3	274	0ee	lmal3	exact	ok	9			
+popm3	3ec	3ec	popm3	exact	ok	7			
+popm4	3ac	3ac	popm4	exact	ok	8			
+popm1	131	123	popm1	exact	mismatch	5	db->pc		
+popm2	10b	115	popm2	exact	ok	7			
+popm6	32c	32c	popm6	exact	ok	6			
+stmr4	0a1	0e5	stmr4	exact	ok	5			
+stmr6	0a5	0ad	stmr6	exact	ok	4			
+stmr5	0a1?	0a5	stmr5	exact	ok	4			
+sccr1	17f	384	sccr1	exact	mismatch	2	dbin->ab		
+sccr2	2d7	0cb	sccr2	exact	ok	4			
+trpv1	324	06d	trpv1	exact	ok	3			
+trpv2	0e2	0e2	trpv2	exact	ok	5			
+trpv3	022	022	trpv3	exact	mismatch	0	reg->db		
+sccb1	17b	380	sccb1	exact	mismatch	2	dbin->ab		
+sccb2	2d3	0cf	sccb2	exact	ok	4			
+popm5	256	2f4	popm5	exact	ok	7			
+sccb3	253	04f	sccb3	exact	ok	5			
+push4	0ab	0c3	push4	exact	ok	5			
+push6	008	21f	push6	exact	ok	6			
+push5	0ab?	083	push5	exact	ok	5			
+sftm2	041	304	sftm2	exact	ok	4			
+push1	3a5	3a4	push1	exact	ok	5			
+push2	25f	21e	push2	exact	ok	5			
+push3	02b	043	push3	exact	no_trace	-12	ab->reg|at->ab|au=+2|db->aob|pc->db|read		

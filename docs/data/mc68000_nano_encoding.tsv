@@ -1,0 +1,577 @@
+# our encoding of the nano ROM (gen_nrom.py): slot, lsb, width, atoms (code=atom)
+slot0	0	5	1=ab*<-(rxdl) 2=ab*<-(rxl) 3=ab*<-(rydl) 4=ab*<-(ryl) 5=ab<-(pc) 6=ab<-(pch) 7=ab<-(rx) 8=ab<-(rxa) 9=ab<-(rxh) 10=ab<-(rxl) 11=ab<-(ry) 12=ab<-(rya) 13=ab<-(ryd) 14=ab<-(rydl) 15=ab<-(ryh) 16=ab<-(ryl) 17=abd<-(rxd) 18=abe<-(rxl) 19=abe<-(ryl) 20=db*<-(rxdl) 21=db<-(rx) 22=db<-(rya) 23=db<-(sp) 24=dbd<-(rydl) 25=dbe<-(rxl) 26=rp_dst=dt 27=rp_dst=rp
+slot1	5	4	1=ab*<-(rxd) 2=ab<-(pcl) 3=db<-(pc) 4=db<-(rxa) 5=db<-(rxh) 6=db<-(rxl) 7=db<-(ry) 8=db<-(ryh) 9=db<-(ryl) 10=dbd<-(rxdl) 11=dbe<-(rxdl) 12=rp_src=dt 13=rp_src=py 14=rxsrc=rz
+slot2	9	3	1=rp_dst=dx 2=rp_dst=rx 3=rp_dst=sp 4=rp_dst=uk 5=rp_dst=us
+slot3	12	2	1=rp_src=dy 2=rp_src=ry 3=rp_src=uk
+slot4	14	1	1=abd<-(rxdl)
+slot5	15	1	1=dbin<-edb
+slot6	16	1	1=au<-db
+slot7	17	5	1=abd<-(dbin) 2=abe<-(dbin) 3=abe<-alu 4=abe<-ftu 5=abh<-(ath) 6=alub<-ab* 7=alub<-db 8=alub<-db* 9=aob<-dbl 10=ath<-ab 11=ath<-db 12=au<-dbe 13=db*<-(dcr) 14=db<-(atl) 15=dbd<-(alue) 16=dbd<-(dbin) 17=dbinh<-edb 18=dbinl<-edb 19=dobh<-ab 20=dobl<-ab 21=dobl<-ab* 22=idle wait 23=rxl<-ab 24=rxl<-dbe 25=rya<-ab 26=rya<-db 27=sp<-db 28=sph<-ab 29=spl<-ab 30=sr c-alu-alue
+slot8	22	5	1=*e<-ftu 2=ab*<-ftu 3=ab<-aob 4=acc=ak 5=alu<-corf 6=alu<-db 7=alu<-dbe 8=aob<-ab 9=aob<-abl 10=aob<-db 11=au<-abe 12=db*<-(alue) 13=db*<-alu 14=db<-(alue) 15=db<-(ath) 16=dbd<-alu 17=dbe<-(dbin) 18=dbe<-alu 19=dbe<-ftu 20=dbl<-(atl) 21=dbl<-(dbin) 22=pcl<-ab 23=psws+=+1 24=ryl<-ab 25=ryl<-abl 26=ryl<-db 27=tpend+=0
+slot9	27	5	1=ab*<-alu 2=ab<-(ath) 3=ab<-ftu 4=abd<-alu 5=alu<-abe 6=alub<-ab 7=aob<-abh 8=aob<-dbh 9=au<-ab 10=dbe<-(alue) 11=dcr<-ab 12=dcr<-ab* 13=ftu<-(inl) 14=ftu<-(ird) 15=ftu<-(psw) 16=ftu<-(ssw) 17=ftu<-(trap) 18=ftu<-ab 19=ftu<-trap 20=pch<-dbh 21=psw<-(inl) 22=psw<-ftu 23=ry<-ab 24=ry<-abe 25=ry<-db
+slot10	32	4	1=ab<-(at) 2=ab<-(atl) 3=ab<-alu 4=abl<-(dbin) 5=at<-*e 6=at<-ab 7=at<-abe 8=at<-db 9=at<-dbe 10=db<-(at) 11=db<-alu 12=dbd<-(dcr) 13=rydl<-ab 14=rydl<-ab* 15=rydl<-dbd
+slot11	36	4	1=alue<-db* 2=alue<-dbd 3=atl<-ab 4=atl<-ab* 5=atl<-abl 6=atl<-db 7=atl<-db* 8=atl<-dbl 9=db*<-(dbin) 10=ird<-(ir) 11=reset pren
+slot12	40	4	1=alu<-ab* 2=alu_byte 3=db<-ftu 4=rx<-ab 5=rx<-abe 6=rx<-db 7=rxh<-ab 8=rxh<-db 9=ryh<-ab 10=ryh<-abh 11=ryh<-db
+slot13	44	4	1=au+=+1 2=au+=+1,+2 3=au+=+2 4=au+=+4 5=au+=-1 6=au+=-1,-2 7=au+=-2 8=au+=-4 9=au+=0
+slot14	48	3	1=ab*<-(dbin) 2=ab<-(dbin) 3=alu<-db* 4=alub<-abd 5=dbh<-(ath) 6=rxa<-ab 7=rxa<-db
+slot15	51	3	1=acc_type=ak 2=acc_type=im 3=acc_type=in 4=acc_type=ix 5=acc_type=np 6=acc_type=op 7=acc_type=uk
+slot16	54	3	1=alu_col=1 2=alu_col=2 3=alu_col=3 4=alu_col=4 5=alu_col=5 6=alu_col=6 7=alu_col=x
+slot17	57	3	1=alub<-dbd 2=dob<-ab 3=dob<-ab* 4=dob<-alu 5=dob<-dbd 6=irc<-edb
+slot18	60	3	1=alu<-(alub) 2=alu<-abd 3=rxdl<-ab* 4=rxdl<-abe 5=rxdl<-dbd
+slot19	63	3	1=acc_class=f 2=acc_class=i 3=acc_class=n 4=acc_class=t
+slot20	66	2	1=ab<-au 2=aob<-au 3=db<-au
+slot21	68	2	1=acc_mode=p 2=acc_mode=r 3=acc_mode=w
+slot22	70	2	1=pc<-ab 2=pc<-au 3=pc<-db
+slot23	72	2	1=alu_cc=f 2=alu_cc=i 3=alu_cc=n
+slot24	74	2	1=alu+=-1 2=alu+=0 3=alu<-dbd
+slot25	76	1	1=alu<-ab
+
+# die address -> label, nanoword index, origin of the content, atoms
+000	rstp1	0	appH:rstp1:no_trace	acc_class=n ; acc_mode=p ; ftu<-trap
+001	halt1	1	appH:halt1:mismatch:class n from the die (i+f chain, lockstep)	acc_class=n ; acc_mode=r ; acc_type=np ; idle wait ; rp_dst=dx ; rp_src=dy
+002	rstp3	2	die:rstp3:internal (die state_reset)	acc_class=n ; acc_mode=p
+003	bser1	3	appH:bser1:ok	ab<-aob ; acc_class=n ; acc_mode=p ; at<-ab ; au+=0 ; au<-db ; db<-(pc) ; ftu<-(psw) ; rp_dst=uk ; rp_src=uk
+004	abll3	4	appH:ablw3:ok	ab<-(at) ; abd<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=op ; alu+=-1 ; alu<-abd ; alu_cc=n ; alu_col=1 ; aob<-ab ; au+=+2 ; au<-db ; db<-(pc) ; dbin<-edb
+005	adrw2	5	appH:adrl2:ok:class t from the die (i+f chain, lockstep)	ab<-au ; acc_class=t ; acc_mode=r ; acc_type=op ; alub<-dbd ; alue<-dbd ; aob<-ab ; at<-ab ; au+=+2 ; au<-db ; db<-(pc) ; dbd<-(dbin) ; dbin<-edb
+006	adrl1	6	appH:adrw1:ok	abe<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=op ; alu+=-1 ; alu<-abe ; alu_cc=n ; alu_col=1 ; aob<-db ; at<-db ; db<-(rya) ; rp_dst=uk ; rp_src=ry
+007	dbcc5	7	die:dbcc5:internal (die state_reset)	acc_class=t ; acc_mode=r ; acc_type=ix ; aob<-db ; au+=+2 ; au<-db ; db<-(pc) ; dbin<-edb ; irc<-edb ; ird<-(ir)
+008	ablw3	8	appH:abll3:ok:class t from the die (i+f chain, lockstep)	ab*<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=op ; alu+=-1 ; alu<-ab* ; alu_cc=n ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb
+009	abll2	9	appH:abll2:mismatch+au:die	ab*<-(rxd) ; acc_class=t ; acc_mode=r ; acc_type=ix ; aob<-au ; atl<-dbl ; au+=0 ; au<-db ; dbh<-(ath) ; dbin<-edb ; dbl<-(dbin) ; dcr<-ab* ; irc<-edb ; pc<-au
+00a	abwl1	10	appH:abwl1:mismatch	ab*<-(rxd) ; acc_class=t ; acc_mode=r ; acc_type=ix ; aob<-au ; at<-dbe ; au+=0 ; au<-dbe ; dbe<-(dbin) ; dbin<-edb ; dcr<-ab* ; irc<-edb ; pc<-au ; rp_dst=uk ; rp_src=dy
+00b	adrw1	11	appH:adrl1:ok:class t from the die (i+f chain, lockstep)	abe<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=op ; alu+=-1 ; alu<-abe ; alu_cc=n ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-(rya) ; dbin<-edb ; rp_dst=uk ; rp_src=ry
+00c	adsw2	12	appH:adsl2:ok:class t from the die (i+f chain, lockstep)	ab*<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=uk ; alu+=-1 ; alu<-ab* ; alu_cc=n ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb
+00d	ablw2	13	appH:ablw2:mismatch+au:die	ab*<-(rxd) ; acc_class=t ; acc_mode=r ; acc_type=ix ; aob<-au ; atl<-dbl ; au+=0 ; au<-db ; dbh<-(ath) ; dbin<-edb ; dbl<-(dbin) ; dcr<-ab* ; irc<-edb ; pc<-au
+00e	abww1	14	appH:abww1:mismatch	ab*<-(rxd) ; acc_class=t ; acc_mode=r ; acc_type=ix ; aob<-au ; at<-dbe ; au+=0 ; au<-dbe ; dbe<-(dbin) ; dbin<-edb ; dcr<-ab* ; irc<-edb ; pc<-au ; rp_dst=uk ; rp_src=dy
+00f	pinl1	15	appH:pinl1:ok	ab*<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=op ; alu+=-1 ; alu<-ab* ; alu_cc=n ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-(rya) ; dbin<-edb ; rp_dst=uk ; rp_src=ry
+020	mulm6	20	appH:mulm6:ok+au:die	ab<-alu ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=f ; alu_col=1 ; au+=+2 ; au<-db ; dbd<-(alue) ; dbh<-(ath) ; dbl<-(atl) ; ird<-(ir) ; pch<-dbh ; rxdl<-dbd ; rxh<-ab
+021	ldmx3	21	appH:ldmx4:mismatch+au:die	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=in ; au+=0 ; au<-ab ; au<-db ; dbe<-(rxl) ; irc<-edb ; rxsrc=rz
+022	trpv3	22	appH:trpv3:mismatch	ab<-(pcl) ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; au+=-2 ; au<-db ; db<-(sp) ; dbin<-edb ; psws+=+1
+023	dvum3	23	appH:dvum3:ok	ab<-(rxh) ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; atl<-ab ; au+=+1 ; au<-db ; db<-ftu
+024	adrl2	24	appH:adrw2:mismatch	ab*<-(rxd) ; acc_class=f ; acc_mode=r ; acc_type=uk ; dbin<-edb ; dcr<-ab*
+025	mmrw2	25	appH:mmrw2?:ok	acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-db ; au+=+2 ; au<-db ; db<-(pc)
+026	adsl3	26	appH:adsl3:ok:class t from the die (i+f chain, lockstep)	ab<-au ; acc_class=t ; acc_mode=r ; acc_type=uk ; alub<-dbd ; alue<-dbd ; aob<-ab ; at<-ab ; au+=+4 ; au<-db ; db<-(pc) ; dbd<-(dbin) ; dbin<-edb
+027	ldmx1	27	appH:ldmx1:ok	ab*<-(dbin) ; acc_class=n ; acc_mode=p ; alu+=0 ; alu<-ab* ; alu_cc=n ; alu_col=5
+028	mmxw2	28	appH:mmxw2:ambiguous+au:die	ab<-au ; abd<-(dbin) ; acc_class=f ; acc_mode=r ; acc_type=in ; alu+=-1 ; alu<-abd ; alu_cc=i ; alu_col=1 ; au+=0 ; au<-ab ; au<-db ; dbe<-(rxl) ; irc<-edb ; rxsrc=rz
+029	jsrx2	29	appH:jsrx2:ok+au:die	abe<-(rxl) ; acc_class=n ; acc_mode=p ; au+=0 ; au<-abe ; au<-db ; db<-au ; rxsrc=rz
+02a	adsl2	30	appH:adsw2:ok	ab<-au ; abd<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=uk ; alu+=-1 ; alu<-abd ; alu_cc=n ; alu_col=1 ; aob<-ab ; at<-ab ; au+=+4 ; au<-db ; db<-(pc)
+02b	ldmx2	31	appH:ldmx2:mismatch+au:die	abe<-alu ; acc_class=i ; acc_mode=r ; acc_type=in ; aob<-au ; au+=0 ; au<-abe ; au<-db ; db<-(rya)
+02c	mmxl2	32	appH:mmxl2:ambiguous+au:die	ab<-au ; abd<-(dbin) ; acc_class=f ; acc_mode=r ; acc_type=in ; alu+=-1 ; alu<-abd ; alu_cc=i ; alu_col=1 ; au+=0 ; au<-ab ; au<-db ; dbe<-(rxl) ; irc<-edb ; rxsrc=rz
+02d	jmpx2	33	appH:jmpx2:ok+au:die	abe<-(rxl) ; acc_class=n ; acc_mode=p ; au+=0 ; au<-abe ; au<-db ; db<-au ; rxsrc=rz
+02e	ldmx5	34	appH:ldmx5:ok	ab<-au ; abd<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=uk ; alu+=-1 ; alu<-abd ; aob<-ab ; at<-ab ; au+=+4 ; au<-db ; db<-(pc)
+02f	stmx3	35	appH:stmx3:ok+au:die	abe<-alu ; acc_class=i ; acc_mode=r ; acc_type=in ; aob<-au ; au+=0 ; au<-abe ; au<-db ; db<-(rya)
+040	asbb5	36	appH:asbb5:ok	acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-(alub) ; alu<-db* ; alu_cc=i ; alu_col=2 ; aob<-db ; db*<-(dbin) ; db<-(pc)
+041	dvs16	37	appH:dvs16:ok	acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-(alub) ; alu_cc=i ; alu_col=1 ; ath<-db ; dbl<-(atl)
+042	dvs07	38	appH:dvs07:ok	acc_class=n ; acc_mode=p ; alu<-(alub) ; alu<-db ; alu_cc=i ; alu_col=2 ; db<-(atl)
+043	push3	39	appH:push3:no_trace	ab<-(at) ; acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-db ; au+=+2 ; au<-db ; db<-(pc) ; ry<-ab
+044	btsr3	40	appH:btsr3:ok	ab<-(ryh) ; acc_class=n ; acc_mode=p ; alu<-ab ; alu<-db* ; alu_cc=i ; alu_col=1 ; db*<-(dcr) ; ird<-(ir)
+045	bbci2	41	appH:bbci2:ok	acc_class=n ; acc_mode=p ; alu_cc=n ; alu_col=2 ; au+=+2 ; au<-db ; db<-(pc) ; ird<-(ir)
+046	dbcc2	42	appH:dcnt2:mismatch	ab*<-alu ; ab<-au ; acc_class=i ; acc_mode=r ; acc_type=in ; aob<-ab ; at<-ab ; au+=+2 ; au<-db ; db<-(pc) ; rxdl<-ab*
+047	asxl6	43	appH:asxl6:ok	ab*<-alu ; acc_class=t ; acc_mode=r ; acc_type=op ; alu<-ab* ; alu<-dbd ; alu_cc=i ; alu_col=2 ; aob<-db ; at<-db ; au+=+2 ; au<-db ; db<-au ; dbd<-(dbin) ; dbin<-edb ; rxa<-db
+048	asxl2	44	appH:asxl2:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=op ; alub<-ab ; aob<-db ; au+=-2 ; au<-db ; db<-au ; dbin<-edb
+049	dvs20	45	die:dvs20=nano of dvs17	ab<-alu ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; aob<-db ; atl<-ab ; au+=+2 ; au<-db ; db<-(pc)
+04a	asxw4	46	appH:asxw4:ok	acc_class=t ; acc_mode=r ; acc_type=op ; alub<-db* ; aob<-db ; at<-db ; db*<-(dbin) ; db<-au ; dbin<-edb ; rxa<-db
+04b	smaw3	47	appH:smaw3:ok	acc_class=f ; acc_mode=r ; acc_type=in ; au+=0 ; au<-db ; db<-(at) ; dbin<-edb ; irc<-edb ; pc<-au ; reset pren
+04c	asxl5	48	appH:asxl5:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=op ; alub<-ab ; aob<-db ; au+=-2 ; au<-db ; db<-au ; dbin<-edb
+04d	dvs17	49	appH:dvs17:ok	ab<-alu ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-(alub) ; alu_cc=i ; alu_col=1 ; aob<-db ; atl<-ab ; au+=+2 ; au<-db ; db<-(pc)
+04e	asbb4	50	appH:asbb4:ok	acc_class=t ; acc_mode=r ; acc_type=op ; alub<-db* ; aob<-db ; at<-db ; db*<-(dbin) ; db<-au ; dbin<-edb ; rxa<-db
+04f	sccb3	51	appH:sccb3:ok	acc_class=f ; acc_mode=r ; acc_type=ix ; au+=0 ; au<-db ; db<-(at) ; dbin<-edb ; irc<-edb ; pc<-au ; reset pren
+060	mulm3	52	appH:mulm3:no_trace	acc_class=n ; acc_mode=p ; alu<-(alub) ; alu<-dbd ; alu_cc=f ; alu_col=3 ; dbd<-alu
+061	asxl7	53	appH:asxl7:ok	acc_class=t ; acc_mode=w ; acc_type=op ; aob<-au ; au+=0 ; au<-dbe ; dbe<-(dbin) ; dob<-alu
+062	asxl8	54	appH:asxl8:ok	ab<-(pc) ; acc_class=t ; acc_mode=r ; acc_type=ix ; alu<-(alub) ; alu<-dbd ; alu_cc=f ; alu_col=3 ; aob<-ab ; au+=0 ; au<-db ; db<-(at) ; dbd<-(dbin) ; dbin<-edb ; irc<-edb
+063	dvs05	55	appH:dvs05:ok	ab<-(rxh) ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; alub<-dbd ; atl<-ab ; au+=+1 ; au<-db ; db<-ftu ; dbd<-alu
+064	rset5	56	appH:rset5:ok	acc_class=t ; acc_mode=r ; acc_type=ix ; aob<-db ; au+=+2 ; au<-db ; db<-(pc) ; dbin<-edb ; irc<-edb ; ird<-(ir)
+065	asxw5	57	appH:asxw5:ok	ab<-(pc) ; acc_class=t ; acc_mode=r ; acc_type=ix ; alu<-(alub) ; alu<-dbd ; alu_cc=i ; alu_col=2 ; aob<-ab ; au+=0 ; au<-db ; db<-(at) ; dbd<-(dbin) ; dbin<-edb ; irc<-edb
+066	leaa2	58	appH:leaa2:ok	ab<-(at) ; acc_class=f ; acc_mode=r ; acc_type=ix ; au+=+2 ; au<-db ; db<-(pc) ; dbin<-edb ; irc<-edb ; ird<-(ir) ; rx<-ab
+067	bclm2	59	appH:bclm2:ok	ab*<-alu ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu<-ab* ; alu<-dbd ; alu_cc=n ; alu_col=4 ; au+=+2 ; au<-db ; db<-au ; dbd<-(dcr) ; dbin<-edb ; irc<-edb ; pc<-db
+068	bbcw1	60	appH:bbcw1:ok+au:die	ab<-(pc) ; acc_class=n ; acc_mode=p ; au+=0 ; au<-ab ; au<-db ; dbe<-(dbin) ; rp_dst=dx ; rp_src=dy
+069	bclm1	61	appH:bclm1:ok	ab*<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-ab* ; alu<-dbd ; alu_cc=n ; alu_col=2 ; alub<-ab* ; aob<-au ; dbd<-(dcr) ; ftu<-(psw) ; rp_dst=dx ; rp_src=dy
+06a	bcsr2	62	appH:bcsr2:ok	ab*<-(ryl) ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu<-ab* ; alu<-dbd ; alu_cc=n ; alu_col=2 ; alub<-ab* ; au+=+2 ; au<-db ; db<-(pc) ; dbd<-(dcr) ; dbin<-edb ; irc<-edb
+06b	cmmw1	63	appH:cmmw1:ok	acc_class=i ; acc_mode=r ; acc_type=op ; aob<-db ; au+=+1,+2 ; au<-db ; db<-(rya) ; pc<-au ; rp_dst=rx ; rp_src=ry
+06c	dbcc1	64	appH:dcnt1:mismatch+au:die	abd<-(rxd) ; abe<-ftu ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-abd ; alu_cc=n ; alu_col=2 ; au+=0 ; au<-abe ; au<-db ; db<-(pc) ; rp_dst=rx ; rp_src=dy
+06d	trpv1	65	appH:trpv1:ok	ab*<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-ab* ; alu<-dbd ; alu_cc=n ; alu_col=2 ; alub<-ab* ; aob<-au ; dbd<-(dcr) ; ftu<-(psw) ; rp_dst=sp ; rp_src=dy
+06e	bclr2	66	appH:bclr2:ok	ab*<-(ryl) ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu<-ab* ; alu<-dbd ; alu_cc=n ; alu_col=2 ; alub<-ab* ; au+=+2 ; au<-db ; db<-(pc) ; dbd<-(dcr) ; dbin<-edb ; irc<-edb
+06f	cmml1	67	appH:cmml1:ok	acc_class=i ; acc_mode=r ; acc_type=op ; aob<-db ; au+=+1,+2 ; au<-db ; db<-(rya) ; pc<-au ; rp_dst=rx ; rp_src=ry
+080	dvumf	68	appH:dvumf:ok	ab<-(atl) ; abd<-alu ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-abd ; alu_cc=n ; alu_col=4 ; alub<-abd ; aob<-db ; au+=+2 ; au<-db ; db<-(pc) ; rxh<-ab
+081	bcsm1	69	appH:bcsm1:ok	ab*<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=ix ; alu<-ab* ; alu<-dbd ; alu_cc=n ; alu_col=2 ; alub<-ab* ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbd<-(dcr) ; dbin<-edb ; irc<-edb ; pc<-db ; rp_dst=dx ; rp_src=dy
+082	bcsm2	70	appH:bcsm2:ok	acc_class=t ; acc_mode=w ; acc_type=op ; alu<-(alub) ; alu<-db* ; alu_cc=i ; alu_col=1 ; aob<-db ; db*<-(dcr) ; db<-(at) ; dob<-alu ; ird<-(ir)
+083	push5	71	appH:push5:ok	ab<-(rxl) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-db ; at<-db ; au+=-2 ; au<-db ; db<-au ; dob<-ab ; reset pren
+084	bcsr3	72	appH:bcsr3:ok	ab<-(ryh) ; acc_class=n ; acc_mode=p ; alu<-ab ; alu<-db* ; alu_cc=n ; alu_col=2 ; alub<-ab ; db*<-(dcr)
+085	bbcw3	73	appH:bbcw3:ok	acc_class=n ; acc_mode=p ; alu_cc=n ; alu_col=2 ; au+=+2 ; au<-db ; db<-(pc) ; ird<-(ir)
+086	cmmw2	74	appH:cmmw2:ok	acc_class=f ; acc_mode=r ; acc_type=op ; at<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; rya<-db
+087	cpdw1	75	appH:cpdw1:ok	ab*<-(rxl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-ab* ; alu<-dbd ; alu_cc=i ; alu_col=2 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbd<-(dbin) ; pc<-db ; rp_dst=uk ; rp_src=uk
+088	bser6	76	appH:bser6:ok:acc_type ix (frame a word)	ab<-(at) ; acc_class=t ; acc_mode=w ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; aob<-db ; au+=-2 ; au<-db ; db<-au ; dob<-alu ; ftu<-(ssw) ; pc<-ab
+089	bsri1	77	appH:bsri1:ok	ab<-(pc) ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; at<-ab ; au+=-4 ; au<-db ; db<-(rxa) ; rp_dst=sp ; rp_src=dy
+08a	dvs1f	78	die:dvs1f:from the trace	acc_class=n ; acc_mode=p ; alu+=0 ; alu<-(alub) ; alu_cc=i ; alu_col=2
+08b	roaw2	79	appH:roaw2:ok	ab<-alu ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu_byte ; alu_cc=n ; alu_col=x ; au+=+2 ; au<-db ; db<-(pc) ; dbin<-edb ; irc<-edb ; ird<-(ir) ; ryl<-ab
+08c	bclr3	80	appH:bclr3:ok	ab<-(ryh) ; acc_class=n ; acc_mode=p ; alu<-ab ; alu<-db* ; alu_cc=n ; alu_col=2 ; alub<-ab ; db*<-(dcr)
+08d	rcal3	81	appH:rcal3:ok	acc_class=n ; acc_mode=p ; au+=+2 ; au<-db ; db<-(pc) ; ird<-(ir)
+08e	cmml2	82	appH:cmml2:ok	acc_class=f ; acc_mode=r ; acc_type=op ; at<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; rya<-db
+08f	cpdl1	83	appH:cpdl1:ok	ab*<-(rxl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-ab* ; alu<-dbd ; alu_cc=i ; alu_col=2 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbd<-(dbin) ; pc<-db ; rp_dst=uk ; rp_src=uk
+0a0	mulm5	84	appH:mulm5:no_trace	acc_class=n ; acc_mode=p ; alu<-(alub) ; alu<-dbd ; alu_cc=f ; alu_col=2 ; dbd<-alu
+0a1	bcsr5	85	appH:bcsr5:ok	ab<-alu ; acc_class=n ; acc_mode=p ; alu<-(alub) ; alu<-db* ; alu_cc=i ; alu_col=1 ; db*<-(dcr) ; ird<-(ir) ; ryh<-ab
+0a2	bser4	86	appH:bser4:ok:acc_type ix (frame a word)	ab<-(pch) ; acc_class=t ; acc_mode=w ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dob<-alu ; ftu<-(ird)
+0a3	dvs04	87	appH:dvs04:ok	ab<-(rxh) ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; atl<-ab ; au+=+1 ; au<-db ; db<-ftu
+0a4	dvum1	88	appH:dvum1:ok	ab<-(dbin) ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; alub<-ab ; alue<-dbd ; ath<-ab ; dbd<-(rxdl) ; pc<-au ; rp_dst=rx ; rp_src=uk
+0a5	stmr5	89	appH:stmr5:ok	ab<-(rxl) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dob<-ab ; reset pren
+0a6	dvur1	90	appH:dvur1:ok	ab<-(rydl) ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; alub<-ab ; alue<-dbd ; ath<-ab ; dbd<-(rxdl) ; pc<-au ; rp_dst=rx ; rp_src=uk
+0a7	e#l1	91	appH:e#l1:no_trace	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; rp_dst=uk ; rp_src=dt ; ryh<-ab
+0a8	bsri3	92	appH:bsri3:ok+au:die	ab<-(pc) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-au ; au+=0 ; au<-ab ; au<-db ; dbe<-ftu ; dob<-alu
+0a9	bsrw1	93	appH:bsrw1:ok	ab<-au ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; at<-ab ; au+=-4 ; au<-db ; db<-(rxa) ; rp_dst=sp ; rp_src=dy
+0aa	bsrw3	94	appH:bsrw3:ok+au:die	ab<-(pc) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-au ; au+=0 ; au<-ab ; au<-db ; dbe<-(dbin) ; dob<-alu
+0ab	btsi1	95	appH:btsi1:mismatch	ab<-(rx) ; acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-au ; db<-(ath) ; dcr<-ab ; pc<-au ; rp_dst=rx ; rp_src=dt ; ryh<-db
+0ac	dvs01	96	appH:dvs02:mismatch	ab<-(dbin) ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; alub<-ab ; alue<-dbd ; ath<-ab ; dbd<-(rxdl) ; pc<-au ; rp_dst=rx ; rp_src=uk
+0ad	stmr6	97	appH:stmr6:ok	ab<-(rxl) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dob<-ab ; reset pren
+0ae	dvs02	98	appH:dvs01:mismatch	ab<-(rydl) ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; alub<-ab ; alue<-dbd ; ath<-ab ; dbd<-(rxdl) ; pc<-au ; rp_dst=rx ; rp_src=uk
+0af	lmal2	99	appH:lmal2:mismatch	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; ryh<-ab
+0c0	dvumd	100	appH:dvumd:ok	ab<-alu ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=6 ; alub<-ab ; aob<-db ; au+=+2 ; au<-db ; db<-(pc)
+0c1	dvs1d	101	appH:dvs1d:ok	acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-(alub) ; alu_cc=i ; alu_col=1 ; ath<-db ; dbl<-(atl)
+0c2	dvs10	102	appH:dvs10:ok	ab<-(rxh) ; acc_class=n ; acc_mode=p ; alu+=0 ; alu<-ab ; alu_cc=n ; alu_col=3 ; alue<-db* ; db*<-alu
+0c3	push4	103	appH:push4:ok	ab<-(rxl) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-db ; at<-db ; au+=-2 ; au<-db ; db<-au ; dob<-ab
+0c4	bcsr4	104	appH:bcsr4:ok	ab<-alu ; acc_class=n ; acc_mode=p ; alu<-(alub) ; alu<-db* ; alu_cc=i ; alu_col=1 ; db*<-(dcr) ; ird<-(ir) ; ryl<-ab
+0c5	bbci3	105	appH:bbci3:ok	acc_class=t ; acc_mode=r ; acc_type=in ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; irc<-edb
+0c6	dbcc6	106	die:dbcc6:internal (die state_reset)	acc_class=n ; acc_mode=p ; au+=+2 ; au<-db ; db<-(pc) ; ird<-(ir)
+0c7	dbcc4	107	die:dbcc4:internal (die state_reset):class i from the die (i+f chain, lockstep)	acc_class=i ; acc_mode=r ; acc_type=in ; aob<-db ; au+=+2 ; au<-db ; db<-au ; pc<-db
+0c8	bclr5	108	appH:bclr5:no_trace	ab*<-alu ; acc_class=n ; acc_mode=p ; alu<-ab* ; alu<-db* ; alu_cc=n ; alu_col=4 ; db*<-(dcr)
+0c9	dvs03	109	appH:dvs03:no_trace	acc_class=n ; acc_mode=p ; alu+=0 ; alu<-(alub) ; alu_cc=i ; alu_col=2
+0ca	dvs1e	110	appH:dvs1e:ok	ab<-(ath) ; acc_class=n ; acc_mode=p ; alu+=0 ; alu<-ab ; alu_cc=n ; alu_col=2 ; alub<-db ; atl<-db ; db<-alu
+0cb	sccr2	111	appH:sccr2:ok	ab*<-alu ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab* ; alu_cc=n ; alu_col=2 ; au+=0 ; au<-db ; db<-(at) ; dbin<-edb ; irc<-edb
+0cc	bclr4	108	appH:bclr4:no_trace	ab*<-alu ; acc_class=n ; acc_mode=p ; alu<-ab* ; alu<-db* ; alu_cc=n ; alu_col=4 ; db*<-(dcr)
+0cd	dvs1a	109	appH:dvs1a:no_trace	acc_class=n ; acc_mode=p ; alu+=0 ; alu<-(alub) ; alu_cc=i ; alu_col=2
+0ce	dvs1b	110	appH:dvs1b:ok	ab<-(ath) ; acc_class=n ; acc_mode=p ; alu+=0 ; alu<-ab ; alu_cc=n ; alu_col=2 ; alub<-db ; atl<-db ; db<-alu
+0cf	sccb2	111	appH:sccb2:ok	ab*<-alu ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab* ; alu_cc=n ; alu_col=2 ; au+=0 ; au<-db ; db<-(at) ; dbin<-edb ; irc<-edb
+0e0	mulm4	112	appH:mulm4:ok	ab<-(atl) ; abd<-alu ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-abd ; alu_cc=f ; alu_col=4 ; au+=-1 ; au<-db ; db<-au ; pcl<-ab ; sr c-alu-alue
+0e1	ldmx4	113	appH:ldmx3:mismatch+au:die	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=in ; au+=0 ; au<-ab ; au<-db ; db<-(rx) ; irc<-edb ; rxsrc=rz
+0e2	trpv2	114	appH:trpv2:ok	acc_class=f ; acc_mode=r ; acc_type=ix ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; irc<-edb ; ird<-(ir) ; pc<-db
+0e3	dvur2	115	appH:dvur2:ok:class n from the die (i+f chain, lockstep)	acc_class=n ; acc_mode=p ; au+=-2 ; au<-db ; db<-(pc) ; ftu<-(psw)
+0e4	rset3	116	appH:rset3:ok	acc=ak ; au+=-2 ; au<-db ; db<-au
+0e5	stmr4	117	appH:stmr4:ok	ab<-(rxh) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dob<-ab
+0e6	dvuma	118	appH:dvuma:ok	acc_class=f ; acc_mode=r ; acc_type=ix ; alu_cc=i ; alu_col=5 ; dbin<-edb ; irc<-edb ; ird<-(ir)
+0e7	btsr2	119	appH:btsr2:ok	ab*<-(ryl) ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab* ; alu_cc=n ; alu_col=1 ; alub<-ab* ; au+=+2 ; au<-db ; db<-(pc) ; dbin<-edb ; irc<-edb
+0e8	mmxw3	120	appH:mmxw3:ambiguous+au:die	ab<-au ; abd<-(dbin) ; acc_class=f ; acc_mode=r ; acc_type=in ; alu+=-1 ; alu<-abd ; alu_cc=i ; alu_col=1 ; au+=0 ; au<-ab ; au<-db ; db<-(rx) ; irc<-edb ; rxsrc=rz
+0e9	jsrx3	121	appH:jsrx3:ok+au:die	ab<-(rx) ; acc_class=n ; acc_mode=p ; au+=0 ; au<-ab ; au<-db ; db<-au ; rxsrc=rz
+0ea	e#w1	122	appH:e#w1:no_trace	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=ix ; aob<-db ; ath<-ab ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; irc<-edb ; pc<-db ; rp_dst=uk ; rp_src=dt ; rydl<-ab
+0eb	itlx4	123	appH:itlx4:ok:acc_type ix (frame a word)	abe<-ftu ; acc_class=t ; acc_mode=w ; acc_type=ix ; alu+=-1 ; alu<-(alub) ; alu_cc=n ; alu_col=1 ; aob<-db ; at<-abe ; au+=-4 ; au<-db ; db<-au ; dob<-alu
+0ec	mmxl3	124	appH:mmxl3:ambiguous+au:die	ab<-au ; abd<-(dbin) ; acc_class=f ; acc_mode=r ; acc_type=in ; alu+=-1 ; alu<-abd ; alu_cc=i ; alu_col=1 ; au+=0 ; au<-ab ; au<-db ; db<-(rx) ; irc<-edb ; rxsrc=rz
+0ed	jmpx3	125	appH:jmpx3:ok+au:die	ab<-(rx) ; acc_class=n ; acc_mode=p ; au+=0 ; au<-ab ; au<-db ; db<-au ; rxsrc=rz
+0ee	lmal3	126	appH:lmal3:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=in ; aob<-db ; ath<-ab ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; irc<-edb ; pc<-db ; rydl<-ab
+0ef	trap5	127	appH:trap5:ok:acc_type ix (frame a word)	abe<-ftu ; acc_class=t ; acc_mode=w ; acc_type=ix ; alu+=-1 ; alu<-(alub) ; aob<-db ; at<-abe ; au+=-4 ; au<-db ; db<-au ; dob<-alu
+100	roaw1	128	appH:roaw1:ok	ab<-(rxl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-ab ; alu<-db ; alu_cc=i ; alu_col=2 ; aob<-au ; db<-(ryl) ; pc<-au ; rp_dst=uk ; rp_src=ry
+101	mmxw1	129	appH:mmxw1:ambiguous+au:die	abe<-alu ; acc_class=i ; acc_mode=r ; acc_type=in ; aob<-au ; au+=0 ; au<-abe ; au<-db ; db<-(rxa) ; pc<-au
+102	bsri2	130	appH:bsri2:ok	ab<-(ath) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dob<-ab ; rx<-db
+103	pdcl1	131	appH:pdcw1:mismatch	ab*<-(rxd) ; acc_class=n ; acc_mode=p ; alub<-dbd ; au+=-1,-2 ; au<-db ; db<-(rya) ; dbd<-(dbin) ; dcr<-ab* ; pc<-au ; rp_dst=uk ; rp_src=ry
+104	rcal1	132	appH:rcal1:ambiguous	ab<-(rxl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-ab ; alu<-db ; alu_cc=i ; alu_col=2 ; aob<-au ; db<-(ryl) ; pc<-au ; rp_dst=uk ; rp_src=ry
+105	rmxl1	133	appH:rmxl1:ok+au:die	abe<-alu ; acc_class=i ; acc_mode=r ; acc_type=in ; aob<-au ; au+=0 ; au<-abe ; au<-db ; db<-(rxa) ; pc<-au
+106	peax6	134	appH:peax6:ok	ab<-(ath) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dob<-ab ; rx<-db
+107	asbb1	135	appH:asbb1:mismatch	ab*<-(rxd) ; acc_class=n ; acc_mode=p ; alub<-dbd ; au+=-1,-2 ; au<-db ; db<-(rya) ; dbd<-(dbin) ; dcr<-ab* ; pc<-au ; rp_dst=rx ; rp_src=ry
+108	rcaw1	132	appH:rcaw1:ambiguous	ab<-(rxl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-ab ; alu<-db ; alu_cc=i ; alu_col=2 ; aob<-au ; db<-(ryl) ; pc<-au ; rp_dst=uk ; rp_src=ry
+109	rmxw1	133	appH:rmxw1:ok+au:die	abe<-alu ; acc_class=i ; acc_mode=r ; acc_type=in ; aob<-au ; au+=0 ; au<-abe ; au<-db ; db<-(rxa) ; pc<-au
+10a	paaw2	134	appH:paaw2:ok	ab<-(ath) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dob<-ab ; rx<-db
+10b	asxl1	135	appH:asxl1:mismatch	ab*<-(rxd) ; acc_class=n ; acc_mode=p ; alub<-dbd ; au+=-1,-2 ; au<-db ; db<-(rya) ; dbd<-(dbin) ; dcr<-ab* ; pc<-au ; rp_dst=rx ; rp_src=ry
+10c	roal1	132	appH:roal1:ok	ab<-(rxl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-ab ; alu<-db ; alu_cc=i ; alu_col=2 ; aob<-au ; db<-(ryl) ; pc<-au ; rp_dst=uk ; rp_src=ry
+10d	mmxl1	133	appH:mmxl1:ambiguous+au:die	abe<-alu ; acc_class=i ; acc_mode=r ; acc_type=in ; aob<-au ; au+=0 ; au<-abe ; au<-db ; db<-(rxa) ; pc<-au
+10e	bsrw2	134	appH:bsrw2:ok	ab<-(ath) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dob<-ab ; rx<-db
+10f	asxw1	135	appH:asxw1:mismatch	ab*<-(rxd) ; acc_class=n ; acc_mode=p ; alub<-dbd ; au+=-1,-2 ; au<-db ; db<-(rya) ; dbd<-(dbin) ; dcr<-ab* ; pc<-au ; rp_dst=rx ; rp_src=ry
+110	chkr3	136	appH:chkr3:no_trace	acc_class=n ; acc_mode=p ; idle wait
+111	ldmr2	137	appH:ldmr2:ok	acc_class=t ; acc_mode=r ; acc_type=op ; aob<-db ; at<-db ; au+=+2 ; au<-db ; db<-(ry) ; dbin<-edb ; pc<-au ; reset pren
+112	smal2	138	appH:smal2:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; ath<-ab ; au+=+2 ; au<-db ; db<-au ; dbin<-edb
+113	asbb6	139	appH:asbb6:ok	ab*<-alu ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu<-ab* ; alu<-corf ; alu_cc=i ; alu_col=3 ; au+=0 ; au<-db ; db<-(at) ; dbin<-edb ; irc<-edb
+114	rset4	140	appH:rset4:ok	acc=ak ; idle wait
+115	popm2	141	appH:popm2:ok	acc_class=t ; acc_mode=r ; acc_type=op ; aob<-db ; at<-db ; au+=+2 ; au<-db ; db<-(ry) ; dbin<-edb ; pc<-au ; reset pren
+116	rts2	142	appH:rts2:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=op ; aob<-db ; ath<-ab ; au+=+2 ; au<-db ; db<-au ; dbin<-edb
+117	nbcr2	143	appH:nbcr2:ok	ab*<-alu ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu<-ab* ; alu<-corf ; alu_cc=i ; alu_col=3 ; au+=0 ; au<-db ; db<-(at) ; dbin<-edb ; irc<-edb
+118	itlx6	144	appH:itlx6:no_trace	acc_class=n ; acc_mode=p ; idle wait
+119	unlk1	145	appH:unlk1:ok	acc_class=t ; acc_mode=r ; acc_type=op ; aob<-db ; at<-db ; au+=+2 ; au<-db ; db<-(ry) ; dbin<-edb ; pc<-au ; reset pren ; rp_dst=sp ; rp_src=ry
+11a	trap7	146	die:trap7=nano of rts2:acc_type ix (frame a word)	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=ix ; aob<-db ; ath<-ab ; au+=+2 ; au<-db ; db<-au ; dbin<-edb
+11b	rbrb2	147	appH:rbrb2:ok	ab*<-alu ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu<-ab* ; alu<-corf ; alu_cc=i ; alu_col=3 ; au+=0 ; au<-db ; db<-(at) ; dbin<-edb ; irc<-edb
+11c	trap8	148	die:trap8:empty	
+11d	zzz00	149	die:zzz00:empty	
+11e	rstpa	150	appH:jmal1:reassigned (die state_reset, lockstep)	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; ath<-ab ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; rp_dst=dx ; rp_src=dy
+11f	zzz01	151	die:zzz01:empty	
+120	aixl2	152	appH:aixl2:ambiguous+au:die	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=ix ; au+=0 ; au<-ab ; au<-dbe ; dbe<-(rxl) ; dbin<-edb ; irc<-edb ; reset pren ; rxsrc=rz
+121	rrgw1	153	appH:rrgw1:ok	ab<-(ry) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; aob<-db ; at<-ab ; au+=+2 ; au<-db ; db<-au ; pc<-db ; rp_dst=rx ; rp_src=uk
+122	cmmw3	154	appH:cmmw3:ok	ab*<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=op ; alu+=-1 ; alu<-ab* ; alu_cc=n ; alu_col=1 ; aob<-db ; au+=+1,+2 ; au<-db ; db<-(rxa) ; dbin<-edb
+123	popm1	155	appH:popm1:mismatch	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=in ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; ftu<-ab ; irc<-edb ; pc<-db ; rp_dst=rp ; rp_src=ry
+124	aixw2	156	appH:aixw2:ambiguous+au:die	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=ix ; au+=0 ; au<-ab ; au<-dbe ; dbe<-(rxl) ; dbin<-edb ; irc<-edb ; reset pren ; rxsrc=rz
+125	tsrl1	157	appH:tsrl1:ok	ab<-(ry) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; aob<-db ; at<-ab ; au+=+2 ; au<-db ; db<-au ; pc<-db ; rp_dst=dx ; rp_src=ry
+126	rts1	158	appH:rts1:ok	ab*<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=op ; alu+=-1 ; alu<-ab* ; alu_cc=n ; alu_col=1 ; aob<-db ; au+=+1,+2 ; au<-db ; db<-(rxa) ; dbin<-edb ; rp_dst=sp ; rp_src=dy
+127	ldmr1	159	appH:ldmr1:mismatch	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=in ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; ftu<-ab ; irc<-edb ; pc<-db ; rp_dst=rp ; rp_src=ry
+128	rmxw2	160	appH:rmxw2:ambiguous+au:die	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=in ; au+=0 ; au<-ab ; au<-dbe ; dbe<-(rxl) ; dbin<-edb ; irc<-edb ; reset pren ; rxsrc=rz
+129	rrgl1	161	appH:rrgl1:ok	ab<-(ry) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; aob<-db ; at<-ab ; au+=+2 ; au<-db ; db<-au ; pc<-db ; rp_dst=rx ; rp_src=uk
+12a	rtr1	162	appH:rtr1:ok	ab*<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=op ; alu+=-1 ; alu<-ab* ; alu_cc=n ; alu_col=1 ; aob<-db ; au+=+1,+2 ; au<-db ; db<-(rxa) ; dbin<-edb ; rp_dst=sp ; rp_src=dy
+12b	rtr2	163	appH:rtr2:mismatch	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=op ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; ftu<-ab ; irc<-edb ; pc<-db
+12c	rmxl2	164	appH:rmxl2:ambiguous+au:die	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=in ; au+=0 ; au<-ab ; au<-dbe ; dbe<-(rxl) ; dbin<-edb ; irc<-edb ; reset pren ; rxsrc=rz
+12d	tsrw1	165	appH:tsrw1:ok	ab<-(ry) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; aob<-db ; at<-ab ; au+=+2 ; au<-db ; db<-au ; pc<-db ; rp_dst=dx ; rp_src=ry
+12e	cmml4	166	appH:cmml4:ok	ab*<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=op ; alu+=-1 ; alu<-ab* ; alu_cc=n ; alu_col=1 ; aob<-db ; au+=+1,+2 ; au<-db ; db<-(rxa) ; dbin<-edb
+12f	zzz02	167	die:zzz02:empty	
+130	leax2	168	appH:leax2:ok+au:die	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=in ; au+=0 ; au<-ab ; au<-dbe ; dbe<-(rxl) ; dbin<-edb ; irc<-edb ; reset pren ; rxsrc=rz
+131	asxw2	169	appH:asxw2:ok	ab*<-(dbin) ; ab<-au ; acc_class=i ; acc_mode=r ; acc_type=op ; alu+=-1 ; alu<-ab* ; alu_cc=n ; alu_col=1 ; aob<-ab ; rya<-ab
+132	asxw3	170	appH:asxw3:ok	acc_class=f ; acc_mode=r ; acc_type=op ; au+=-1,-2 ; au<-db ; db<-(rxa) ; dbin<-edb
+133	nnrw1	171	appH:nnrw1:ok	ab*<-(ryl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=0 ; alu<-ab* ; alu_cc=i ; alu_col=2 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; pc<-db ; rp_dst=dx ; rp_src=ry
+134	peax2	168	appH:peax2:ok+au:die	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=in ; au+=0 ; au<-ab ; au<-dbe ; dbe<-(rxl) ; dbin<-edb ; irc<-edb ; reset pren ; rxsrc=rz
+135	asbb2	169	appH:asbb2:ok	ab*<-(dbin) ; ab<-au ; acc_class=i ; acc_mode=r ; acc_type=op ; alu+=-1 ; alu<-ab* ; alu_cc=n ; alu_col=1 ; aob<-ab ; rya<-ab
+136	asbb3	170	appH:asbb3:ok	acc_class=f ; acc_mode=r ; acc_type=op ; au+=-1,-2 ; au<-db ; db<-(rxa) ; dbin<-edb
+137	nnrl1	171	appH:nnrl1:ok	ab*<-(ryl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=0 ; alu<-ab* ; alu_cc=i ; alu_col=2 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; pc<-db ; rp_dst=dx ; rp_src=ry
+138	stmx4	168	appH:stmx4:ok+au:die	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=in ; au+=0 ; au<-ab ; au<-dbe ; dbe<-(rxl) ; dbin<-edb ; irc<-edb ; reset pren ; rxsrc=rz
+139	asxl3	169	appH:asxl3:ok	ab*<-(dbin) ; ab<-au ; acc_class=i ; acc_mode=r ; acc_type=op ; alu+=-1 ; alu<-ab* ; alu_cc=n ; alu_col=1 ; aob<-ab ; rya<-ab
+13a	asxl4	170	appH:asxl4:ok	acc_class=f ; acc_mode=r ; acc_type=op ; au+=-1,-2 ; au<-db ; db<-(rxa) ; dbin<-edb
+13b	nbcr1	171	appH:nbcr1:ok	ab*<-(ryl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=0 ; alu<-ab* ; alu_cc=i ; alu_col=2 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; pc<-db ; rp_dst=dx ; rp_src=ry
+13c	zzz03	16	die:zzz03:empty	
+13d	zzz04	17	die:zzz04:empty	
+13e	zzz05	18	die:zzz05:empty	
+13f	zzz06	19	die:zzz06:empty	
+150	chkr4	172	appH:chkr4:mismatch:class i from the die (i+f chain, lockstep)	acc_class=i ; acc_mode=p ; au+=+2 ; au<-db ; db<-au ; ird<-(ir) ; pc<-db
+151	chkm1	173	appH:chkm1:mismatch:class n from the die (i+f chain, lockstep)	ab*<-(dbin) ; acc_class=n ; acc_mode=r ; acc_type=ix ; alu<-ab* ; alu<-dbd ; alu_cc=i ; alu_col=2 ; alub<-dbd ; aob<-db ; au+=-2 ; au<-db ; db<-au ; dbd<-(rxdl) ; rp_dst=rx ; rp_src=uk
+152	chkr1	174	appH:chkr1:mismatch:class n from the die (i+f chain, lockstep)	ab*<-(rydl) ; acc_class=n ; acc_mode=r ; acc_type=ix ; alu<-ab* ; alu<-dbd ; alu_cc=i ; alu_col=2 ; alub<-dbd ; aob<-db ; au+=-2 ; au<-db ; db<-au ; dbd<-(rxdl) ; rp_dst=rx ; rp_src=uk
+153	chkr2	175	appH:chkr2:mismatch:class n from the die (i+f chain, lockstep)	acc_class=n ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-(alub) ; alu_cc=i ; alu_col=1 ; au+=+2 ; au<-db ; db<-au ; pc<-db
+154	cmml3	176	appH:cmml3:ok	ab<-(at) ; ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=op ; alub<-ab ; aob<-ab ; db<-au ; dbin<-edb ; rya<-db
+155	cmml5	177	appH:cmml5:ok	acc_class=t ; acc_mode=r ; acc_type=op ; alue<-dbd ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbd<-(dbin) ; dbin<-edb
+156	cmml6	178	appH:cmml6:ok	ab<-au ; abd<-alu ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-abd ; alu<-dbd ; alu_cc=i ; alu_col=2 ; aob<-db ; au+=+2 ; au<-db ; db<-(pc) ; dbd<-(dbin) ; rxa<-ab
+157	cmml7	179	appH:cmml7:ok	acc_class=f ; acc_mode=r ; acc_type=ix ; alu<-(alub) ; alu<-dbd ; alu_cc=f ; alu_col=3 ; dbd<-(alue) ; dbin<-edb ; irc<-edb ; ird<-(ir)
+158	mrgm1	180	appH:mrgm1:ok	abe<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-db ; au+=+2 ; au<-db ; db<-au ; pc<-db ; rp_dst=rx ; rp_src=uk ; rx<-abe
+159	mstw1	181	appH:mstw1:ok	ab<-(dbin) ; acc_class=n ; acc_mode=p ; au+=-2 ; au<-db ; db<-au ; ftu<-ab ; rp_dst=dx ; rp_src=uk
+15a	mulm1	182	appH:mulm1:ok	ab<-au ; abd<-(rxdl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=0 ; alu_cc=i ; alu_col=1 ; alub<-abd ; alue<-dbd ; aob<-ab ; at<-ab ; au+=0 ; au<-db ; db<-ftu ; dbd<-(dbin) ; rp_dst=rx ; rp_src=uk
+15b	mulr1	183	appH:mulr1:ok	ab<-au ; abd<-(rxdl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=0 ; alu_cc=i ; alu_col=1 ; alub<-abd ; alue<-dbd ; aob<-ab ; at<-ab ; au+=0 ; au<-db ; db<-ftu ; dbd<-(rydl) ; rp_dst=rx ; rp_src=uk
+15c	nbcm1	184	appH:nbcm1:mismatch	ab*<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=0 ; alu<-ab* ; alu_cc=i ; alu_col=2 ; aob<-au ; pc<-au ; rp_dst=dx ; rp_src=uk
+15d	nnml2	185	appH:nnml2:mismatch:class t from the die (i+f chain, lockstep)	acc_class=t ; acc_mode=w ; acc_type=op ; alu+=0 ; alu<-(alub) ; alu_cc=f ; alu_col=3 ; aob<-db ; au+=-2 ; au<-db ; db<-(at) ; dob<-alu
+15e	nnrl2	186	appH:nnrl2:mismatch:class f from the die (i+f chain, lockstep)	ab<-(ryh) ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu+=0 ; alu<-ab ; alu_cc=f ; alu_col=3 ; db<-alu ; dbin<-edb ; irc<-edb ; ryl<-db
+15f	paal2	187	appH:paal2:mismatch+au:die	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=in ; aob<-au ; atl<-ab ; au+=-4 ; au<-db ; db<-(rxa) ; irc<-edb ; pc<-au
+170	cmmw4	188	appH:cmmw4:ok	ab<-au ; abd<-alu ; acc_class=t ; acc_mode=r ; acc_type=ix ; alu<-abd ; alu<-dbd ; alu_cc=i ; alu_col=2 ; aob<-db ; au+=+2 ; au<-db ; db<-(pc) ; dbd<-(dbin) ; dbin<-edb ; irc<-edb ; ird<-(ir) ; rxa<-ab
+171	cpdl2	189	appH:cpdl2:mismatch	ab<-(rxh) ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu<-ab ; alu<-db* ; alu_cc=f ; alu_col=3 ; db*<-(alue) ; dbin<-edb ; irc<-edb ; ird<-(ir)
+172	cpml2	190	appH:cpml2:ok	acc_class=f ; acc_mode=r ; acc_type=ix ; alu<-(alub) ; alu<-db ; alu_cc=f ; alu_col=3 ; db<-(rxh) ; dbin<-edb ; irc<-edb
+173	cprl2	191	appH:cprl2:ok	ab<-(ryh) ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu<-ab ; alu<-db ; alu_cc=f ; alu_col=3 ; db<-(rxh) ; dbin<-edb ; irc<-edb
+174	cprm2	192	appH:cprm2:ok	ab<-(ath) ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu<-ab ; alu<-db ; alu_cc=f ; alu_col=3 ; db<-(rxh) ; dbin<-edb ; irc<-edb
+175	dbcc3	193	appH:dcnt3:mismatch	acc_class=f ; acc_mode=r ; acc_type=in ; au+=+2 ; au<-db ; db<-(at) ; dbin<-edb ; irc<-edb ; ird<-(ir) ; pc<-au
+176	dvs06	194	appH:dvs06:no_trace	ab*<-(rxl) ; acc_class=n ; acc_mode=p ; alu+=0 ; alu<-ab* ; alu_cc=n ; alu_col=2
+177	dvs11	195	appH:dvs11:ok	acc_class=n ; acc_mode=p ; alu<-(alub) ; alu<-db* ; alu_cc=i ; alu_col=2 ; atl<-db* ; db*<-alu
+178	paaw1	196	appH:paaw1:ok	abe<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=in ; aob<-au ; at<-abe ; au+=-4 ; au<-db ; db<-(rxa) ; irc<-edb ; pc<-au ; rp_dst=sp ; rp_src=dy
+179	pdcw1	197	appH:pdcl1:ok	ab*<-(dbin) ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab* ; alu_cc=n ; alu_col=1 ; au+=-4 ; au<-db ; db<-(rya) ; rp_dst=uk ; rp_src=ry
+17a	pdcw2	198	appH:pdcl2:ok:class t from the die (i+f chain, lockstep)	acc_class=t ; acc_mode=r ; acc_type=op ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; rya<-db
+17b	pdcl2	199	appH:pdcw2:ok	ab<-au ; acc_class=t ; acc_mode=r ; acc_type=op ; alu+=-1 ; alu<-(alub) ; alu_cc=n ; alu_col=1 ; aob<-ab ; at<-ab ; au+=0 ; au<-db ; db<-(pc) ; dbin<-edb ; rya<-ab
+17c	peaa1	200	appH:peaa1:mismatch	ab<-(rya) ; acc_class=t ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; aob<-au ; at<-ab ; au+=-4 ; au<-db ; db<-(rxa) ; dbin<-edb ; irc<-edb ; pc<-au ; rp_dst=sp ; rp_src=ry
+17d	pead1	201	appH:pead1:mismatch:class n from the die (i+f chain, lockstep)+au:die	ab<-(rya) ; abd<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-abd ; alu_cc=n ; alu_col=1 ; aob<-db ; at<-ab ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; irc<-edb ; rp_dst=sp ; rp_src=py
+17e	pead2	202	appH:pead2:mismatch+au:die	abe<-alu ; acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-au ; au+=0 ; au<-abe ; au<-db ; db<-(at) ; pc<-au
+17f	pead3	203	appH:pead3:mismatch:class t from the die (i+f chain, lockstep)+au:die	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; at<-ab ; au+=-4 ; au<-db ; db<-(rxa) ; dbin<-edb ; irc<-edb ; rp_dst=sp
+1c0	trac1	204	die:trac1=nano of itlx1	acc_class=n ; acc_mode=p ; au+=-2 ; au<-db ; db<-(pc) ; ftu<-(psw) ; rp_dst=uk ; rp_src=uk
+1c1	rorw1	205	appH:rorw1:ok	abe<-(ryl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-abe ; alu<-db ; alu_cc=i ; alu_col=2 ; aob<-au ; at<-abe ; db<-(rxl) ; pc<-au ; rp_dst=rx ; rp_src=uk
+1c2	adsl1	206	appH:adsl1:mismatch+au:die	ab<-(rya) ; acc_class=t ; acc_mode=r ; acc_type=ix ; aob<-au ; au+=0 ; au<-ab ; au<-db ; dbe<-(dbin) ; dbin<-edb ; irc<-edb ; rp_dst=uk ; rp_src=py
+1c3	romw1	207	appH:romw1:ok	abe<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-abe ; alu<-db ; alu_cc=i ; alu_col=2 ; aob<-au ; at<-abe ; db<-(rxl) ; pc<-au ; rp_dst=rx ; rp_src=uk
+1c4	itlx1	204	appH:itlx1:ok	acc_class=n ; acc_mode=p ; au+=-2 ; au<-db ; db<-(pc) ; ftu<-(psw) ; rp_dst=uk ; rp_src=uk
+1c5	rorl1	205	appH:rorl1:ok	abe<-(ryl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-abe ; alu<-db ; alu_cc=i ; alu_col=2 ; aob<-au ; at<-abe ; db<-(rxl) ; pc<-au ; rp_dst=rx ; rp_src=uk
+1c6	adsw1	206	appH:adsw1:mismatch+au:die	ab<-(rya) ; acc_class=t ; acc_mode=r ; acc_type=ix ; aob<-au ; au+=0 ; au<-ab ; au<-db ; dbe<-(dbin) ; dbin<-edb ; irc<-edb ; rp_dst=uk ; rp_src=py
+1c7	romm1	207	appH:romm1:ok	abe<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-abe ; alu<-db ; alu_cc=i ; alu_col=2 ; aob<-au ; at<-abe ; db<-(rxl) ; pc<-au ; rp_dst=rx ; rp_src=uk
+1c8	rstp2	208	appH:rstp2:no_trace	acc_class=n ; acc_mode=p ; au+=0 ; au<-dbe ; dbe<-ftu ; psw<-(inl)
+1c9	rorm1	209	appH:rorm1:ok	abe<-(ryl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-abe ; alu<-db ; alu_cc=i ; alu_col=2 ; aob<-au ; at<-abe ; db<-(rxl) ; pc<-au ; rp_dst=rx ; rp_src=uk
+1ca	mpow1	210	appH:mpow1:ok+au:die	ab<-(rya) ; acc_class=t ; acc_mode=r ; acc_type=in ; alu_cc=n ; alu_col=1 ; aob<-au ; au+=0 ; au<-ab ; au<-db ; dbe<-(dbin) ; dbin<-edb ; irc<-edb ; rp_dst=rx ; rp_src=ry
+1cb	roml1	211	appH:roml1:ok	abe<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-abe ; alu<-db ; alu_cc=i ; alu_col=2 ; aob<-au ; at<-abe ; db<-(rxl) ; pc<-au ; rp_dst=rx ; rp_src=uk
+1cc	stiw1	212	appH:stiw1:ok	acc_class=n ; acc_mode=p ; au+=-2 ; au<-db ; db<-(pc) ; ftu<-(psw) ; rp_dst=dt ; rp_src=dy
+1cd	rbrb1	213	appH:rbrb1:ok	abe<-(ryl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-abe ; alu<-db ; alu_cc=i ; alu_col=2 ; aob<-au ; at<-abe ; db<-(rxl) ; pc<-au ; rp_dst=rx ; rp_src=ry
+1ce	mpol1	214	appH:mpol1:ok+au:die	ab<-(rya) ; acc_class=t ; acc_mode=r ; acc_type=in ; alu_cc=n ; alu_col=1 ; aob<-au ; au+=0 ; au<-ab ; au<-db ; dbe<-(dbin) ; dbin<-edb ; irc<-edb ; rp_dst=rx ; rp_src=ry
+1cf	cpmm1	215	appH:cpmm1:ok	abe<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-abe ; alu<-db ; alu_cc=i ; alu_col=2 ; aob<-au ; at<-abe ; db<-(rxl) ; pc<-au ; rp_dst=rx ; rp_src=uk
+1d0	trap1	216	appH:trap1:ok	acc_class=n ; acc_mode=p ; au+=-2 ; au<-db ; db<-(pc) ; ftu<-(psw) ; rp_dst=dx ; rp_src=dy
+1d1	cprw1	217	appH:cprw1:ok	abe<-(ryl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-abe ; alu<-db ; alu_cc=i ; alu_col=2 ; aob<-au ; at<-abe ; db<-(rxl) ; pc<-au ; rp_dst=rx ; rp_src=uk
+1d2	mpiw1	218	appH:mpiw1:ok+au:die	ab<-(rya) ; acc_class=t ; acc_mode=r ; acc_type=in ; aob<-au ; au+=0 ; au<-ab ; au<-db ; dbe<-(dbin) ; dbin<-edb ; irc<-edb ; rp_dst=rx ; rp_src=ry
+1d3	cpmw1	219	appH:cpmw1:ok	abe<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-abe ; alu<-db ; alu_cc=i ; alu_col=2 ; aob<-au ; at<-abe ; db<-(rxl) ; pc<-au ; rp_dst=rx ; rp_src=uk
+1d4	zzz08	220	die:zzz08:empty	
+1d5	cprl1	221	appH:cprl1:ok	abe<-(ryl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-abe ; alu<-db ; alu_cc=i ; alu_col=2 ; aob<-au ; at<-abe ; db<-(rxl) ; pc<-au ; rp_dst=rx ; rp_src=uk
+1d6	mpil1	222	appH:mpil1:ok+au:die	ab<-(rya) ; acc_class=t ; acc_mode=r ; acc_type=in ; aob<-au ; au+=0 ; au<-ab ; au<-db ; dbe<-(dbin) ; dbin<-edb ; irc<-edb ; rp_dst=rx ; rp_src=ry
+1d7	cpml1	223	appH:cpml1:ok	abe<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-abe ; alu<-db ; alu_cc=i ; alu_col=2 ; aob<-au ; at<-abe ; db<-(rxl) ; pc<-au ; rp_dst=rx ; rp_src=uk
+1d8	zzz09	224	die:zzz09:empty	
+1d9	cprm1	225	appH:cprm1:ok	abe<-(ryl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-abe ; alu<-db ; alu_cc=i ; alu_col=2 ; aob<-au ; at<-abe ; db<-(rxl) ; pc<-au ; rp_dst=rx ; rp_src=uk
+1da	zzz0a	226	die:zzz0a:empty	
+1db	zzz0b	227	die:zzz0b:empty	
+1dc	zzz0c	16	die:zzz0c:empty	
+1dd	zzz0d	17	die:zzz0d:empty	
+1de	zzz0e	18	die:zzz0e:empty	
+1df	zzz0f	19	die:zzz0f:empty	
+1e0	aixl5	228	appH:aixl5:ok+au:die	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=ix ; au+=0 ; au<-ab ; au<-db ; db<-(rx) ; dbin<-edb ; irc<-edb ; reset pren ; rxsrc=rz
+1e1	malw3	229	appH:malw3:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=in ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; ftu<-ab ; irc<-edb ; pc<-db
+1e2	abll1	230	appH:abll1:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; ath<-ab ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; rp_dst=uk ; rp_src=dy
+1e3	aixl0	231	appH:aixl0:ok	ab*<-(dbin) ; acc_class=n ; acc_mode=p ; alu+=0 ; alu<-ab* ; alu_cc=n ; alu_col=5 ; rp_dst=uk ; rp_src=py
+1e4	aixw4	232	appH:aixw4:ok+au:die	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=ix ; au+=0 ; au<-ab ; au<-db ; db<-(rx) ; dbin<-edb ; irc<-edb ; reset pren ; rxsrc=rz
+1e5	smal1	233	appH:smal1:ambiguous	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; ftu<-ab ; irc<-edb ; pc<-db ; rp_dst=rp ; rp_src=dy
+1e6	ablw1	234	appH:ablw1:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; ath<-ab ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; rp_dst=uk ; rp_src=dy
+1e7	aixw0	235	appH:aixw0:ok	ab*<-(dbin) ; acc_class=n ; acc_mode=p ; alu+=0 ; alu<-ab* ; alu_cc=n ; alu_col=5 ; rp_dst=uk ; rp_src=py
+1e8	rmxw3	236	appH:rmxw3:ambiguous+au:die	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=in ; au+=0 ; au<-ab ; au<-db ; db<-(rx) ; dbin<-edb ; irc<-edb ; reset pren ; rxsrc=rz
+1e9	lmal1	237	appH:lmal1:ambiguous	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; ftu<-ab ; irc<-edb ; pc<-db ; rp_dst=rp ; rp_src=dt
+1ea	ralw1	238	appH:ralw1:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; ath<-ab ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; rp_dst=dx ; rp_src=uk
+1eb	rmxw0	239	appH:rmxw0:ok	ab*<-(dbin) ; acc_class=n ; acc_mode=p ; alu+=0 ; alu<-ab* ; alu_cc=n ; alu_col=5 ; rp_dst=rx ; rp_src=uk
+1ec	rmxl3	240	appH:rmxl3:ambiguous+au:die	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=in ; au+=0 ; au<-ab ; au<-db ; db<-(rx) ; dbin<-edb ; irc<-edb ; reset pren ; rxsrc=rz
+1ed	smaw1	241	die:smaw1:internal (die state_reset)	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; ftu<-ab ; irc<-edb ; pc<-db ; rp_dst=rp ; rp_src=dy
+1ee	rall1	242	appH:rall1:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; ath<-ab ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; rp_dst=dx ; rp_src=uk
+1ef	rmxl0	243	appH:rmxl0:ok	ab*<-(dbin) ; acc_class=n ; acc_mode=p ; alu+=0 ; alu<-ab* ; alu_cc=n ; alu_col=5 ; rp_dst=rx ; rp_src=uk
+1f0	leax3	244	appH:leax3:ok+au:die	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=ix ; au+=0 ; au<-ab ; au<-db ; db<-(rx) ; dbin<-edb ; irc<-edb ; reset pren ; rxsrc=rz
+1f1	stmd1	245	appH:stmd1:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; ftu<-ab ; irc<-edb ; pc<-db ; rp_dst=rp ; rp_src=ry
+1f2	jsal1	246	appH:jsal1:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; ath<-ab ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; rp_dst=sp ; rp_src=dy
+1f3	jsrx0	247	appH:jsrx0:ok	ab*<-(dbin) ; acc_class=n ; acc_mode=p ; alu+=0 ; alu<-ab* ; alu_cc=n ; alu_col=5 ; rp_dst=sp ; rp_src=py
+1f4	peax3	248	appH:peax3:ok+au:die	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=ix ; au+=0 ; au<-ab ; au<-db ; db<-(rx) ; dbin<-edb ; irc<-edb ; reset pren ; rxsrc=rz
+1f5	ldmx0	249	appH:ldmx0:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; ftu<-ab ; irc<-edb ; pc<-db ; rp_dst=rp ; rp_src=py
+1f6	jmal1	250	appH:jmal1:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; ath<-ab ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; rp_dst=dx ; rp_src=dy
+1f7	jmpx0	251	appH:jmpx0:ok	ab*<-(dbin) ; acc_class=n ; acc_mode=p ; alu+=0 ; alu<-ab* ; alu_cc=n ; alu_col=5 ; rp_dst=dx ; rp_src=py
+1f8	stmx5	252	appH:stmx5:ok+au:die	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=in ; au+=0 ; au<-ab ; au<-db ; db<-(rx) ; dbin<-edb ; irc<-edb ; reset pren ; rxsrc=rz
+1f9	lmaw1	253	appH:lmaw1:ambiguous	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; ftu<-ab ; irc<-edb ; pc<-db ; rp_dst=rp ; rp_src=dt
+1fa	paal1	254	appH:paal1:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; ath<-ab ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; rp_dst=sp ; rp_src=dy
+1fb	leax0	255	appH:leax0:ok	ab*<-(dbin) ; acc_class=n ; acc_mode=p ; alu+=0 ; alu<-ab* ; alu_cc=n ; alu_col=5 ; rp_dst=rx ; rp_src=py
+1fc	zzz10	256	die:zzz10:empty	
+1fd	ldmd1	257	appH:ldmd1:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; ftu<-ab ; irc<-edb ; pc<-db ; rp_dst=rp ; rp_src=py
+1fe	unlk2	258	appH:unlk2:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=op ; aob<-db ; ath<-ab ; au+=+2 ; au<-db ; db<-au ; dbin<-edb
+1ff	peax0	259	appH:peax0:ok	ab*<-(dbin) ; acc_class=n ; acc_mode=p ; alu+=0 ; alu<-ab* ; alu_cc=n ; alu_col=5 ; rp_dst=sp ; rp_src=py
+210	dvs14	260	appH:dvs14:ok	ab<-(ath) ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1
+211	dvs15	261	appH:dvs15:ok	ab<-(rxh) ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; alub<-db* ; db*<-(alue)
+212	dvum0	262	appH:dvum0:ok	acc_class=f ; acc_mode=r ; acc_type=ix ; alu<-(alub) ; alu<-dbe ; alu_cc=i ; alu_col=2 ; dbe<-(alue) ; dbin<-edb ; irc<-edb ; ird<-(ir) ; rxl<-dbe
+213	dvum2	263	appH:dvum2:ok	acc_class=n ; acc_mode=p ; alu<-(alub) ; alu<-db ; alu_cc=i ; alu_col=2 ; db<-(rxh)
+214	dvs12	264	die:dvs12:from the trace	ab<-alu ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=4 ; au+=-1 ; au<-db ; db<-au
+215	btsm1	265	appH:btsm1:ok	ab*<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-ab* ; alu<-dbd ; alu_cc=i ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbd<-(dcr) ; pc<-db ; rp_dst=dx ; rp_src=uk
+216	dvs08	266	appH:dvs08:no_trace	ab<-(atl) ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1
+217	dvur3	267	appH:dvur3:mismatch	ab<-au ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; au+=-2 ; au<-db ; db<-(sp) ; pc<-ab ; psws+=+1
+218	peax4	268	appH:peax4:ok	ab<-au ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; at<-ab ; au+=+4 ; au<-db ; db<-(pc)
+219	peax5	269	appH:peax5:ok	acc_class=t ; acc_mode=r ; acc_type=ix ; aob<-au ; au+=-4 ; au<-db ; db<-(rxa) ; dbin<-edb ; irc<-edb ; pc<-au
+21a	pinl2	270	appH:pinl2:ok	acc_class=i ; acc_mode=r ; acc_type=op ; alub<-dbd ; alue<-dbd ; aob<-db ; at<-db ; au+=+2 ; au<-db ; db<-au ; dbd<-(dbin)
+21b	pinl3	271	appH:pinl3:ok	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=op ; au+=+2 ; au<-db ; db<-(pc) ; dbin<-edb ; rya<-ab
+21c	pinw1	272	appH:pinw1:mismatch	ab*<-(rxd) ; acc_class=i ; acc_mode=r ; acc_type=op ; alub<-dbd ; aob<-db ; at<-db ; au+=+1,+2 ; au<-db ; db<-(rya) ; dbd<-(dbin) ; dcr<-ab* ; rp_dst=uk ; rp_src=ry
+21d	pinw2	273	appH:pinw2:ok	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=op ; alu+=-1 ; alu<-(alub) ; alu_cc=n ; alu_col=1 ; au+=+2 ; au<-db ; db<-(pc) ; dbin<-edb ; rya<-ab
+21e	push2	274	appH:push2:ok	acc_class=f ; acc_mode=r ; acc_type=in ; at<-db ; au+=-2 ; au<-db ; db<-(rya) ; irc<-edb ; pc<-au ; reset pren
+21f	push6	275	appH:push6:ok	ab<-(rxh) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-db ; at<-db ; au+=-2 ; au<-db ; db<-au ; dob<-ab ; reset pren
+230	susp1	276	appH:susp1:ok	ab<-(rx) ; acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-au ; at<-ab ; au+=0 ; au<-db ; db<-(ry) ; dcr<-ab ; pc<-au ; rp_dst=us ; rp_src=ry
+231	exge2	277	appH:exge2:mismatch	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=ix ; db<-(at) ; dbin<-edb ; irc<-edb ; rx<-ab ; ry<-db
+232	extr1	278	appH:extr1:ok	abe<-(ryl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-abe ; alu_cc=i ; alu_col=1 ; aob<-au ; at<-abe ; pc<-au ; rp_dst=dx ; rp_src=ry
+233	extr2	279	appH:extr2:ok	ab<-(at) ; acc_class=f ; acc_mode=r ; acc_type=ix ; au+=+2 ; au<-db ; db<-(pc) ; dbin<-edb ; irc<-edb ; ird<-(ir) ; ry<-ab
+234	itlx2	280	appH:itlx2:ok	ab<-au ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; alub<-db ; db<-ftu ; pc<-ab ; psw<-(inl)
+235	itlx3	281	appH:itlx3:mismatch	acc_class=n ; acc_mode=p ; au+=-2 ; au<-db ; db<-(sp) ; ftu<-(inl)
+236	itlx5	282	appH:itlx5:ok	ab<-(at) ; acc_class=t ; acc_mode=r ; acc_type=ak ; aob<-ab ; irc<-edb
+237	ldmd4	283	appH:ldmd4:ok	acc_class=t ; acc_mode=r ; acc_type=uk ; aob<-db ; au+=+2 ; au<-db ; db<-(at) ; dbin<-edb ; pc<-au ; reset pren
+238	rbrb3	284	appH:rbrb3:ok	ab<-alu ; acc_class=n ; acc_mode=p ; alu_byte ; alu_cc=n ; alu_col=x ; au+=+2 ; au<-db ; db<-(pc) ; ird<-(ir) ; rxl<-ab
+239	rcal2	285	appH:rcal2:mismatch	ab<-(rxh) ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu<-ab ; alu<-db ; alu_cc=f ; alu_col=3 ; db<-(ryh) ; dbin<-edb ; irc<-edb
+23a	rcaw2	286	appH:rcaw2:ok	acc_class=f ; acc_mode=r ; acc_type=ix ; au+=+2 ; au<-db ; db<-(pc) ; dbin<-edb ; irc<-edb ; ird<-(ir)
+23b	rlql1	287	appH:rlql1:ok	abe<-ftu ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-abe ; alu_cc=i ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; pc<-db ; rp_dst=rx ; rp_src=dy ; rx<-abe
+23c	rmil2	288	appH:rmil2:ok	ab<-(ryl) ; acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dob<-ab
+23d	rmil3	289	appH:rmil3:ok	ab<-au ; acc_class=t ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-(alub) ; alu_cc=f ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-(pc) ; dbin<-edb ; irc<-edb ; ird<-(ir) ; rxa<-ab
+23e	rmml2	290	appH:rmml2:ok	ab<-(ryh) ; acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-ab ; alu_cc=f ; alu_col=1 ; aob<-db ; au+=-2 ; au<-db ; db<-au ; dob<-alu
+23f	rmrl2	291	appH:rmrl2:ok	ab<-(ryl) ; acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; aob<-au ; au+=0 ; au<-db ; db<-(pc) ; dob<-ab
+250	dvum9	292	appH:dvum9:ok	ab<-alu ; acc_class=n ; acc_mode=p ; alu+=0 ; alu<-ab ; alu_cc=n ; alu_col=1 ; rxh<-ab
+251	dvs1c	293	appH:dvs1c:ok	ab<-alu ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-(alub) ; alu_cc=i ; alu_col=1 ; aob<-db ; ath<-ab ; au+=+2 ; au<-db ; db<-(pc)
+252	dvum8	294	appH:dvum8:ok	acc_class=n ; acc_mode=p ; alu<-(alub) ; alu<-db ; alu_cc=i ; alu_col=2 ; atl<-db ; db<-alu
+253	nbcr3	295	appH:nbcr3:ok	ab*<-alu ; acc_class=n ; acc_mode=p ; alu_byte ; alu_cc=n ; alu_col=x ; au+=+2 ; au<-db ; db<-(pc) ; ird<-(ir) ; rydl<-ab
+254	dvs13	296	appH:dvs13:no_trace	ab<-alu ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=6 ; atl<-ab
+255	jmpa1	297	appH:jmpa1:ok	acc_class=t ; acc_mode=r ; acc_type=in ; aob<-db ; au+=+2 ; au<-db ; db<-(rya) ; irc<-edb ; rp_dst=dx ; rp_src=ry
+256	jsal2	298	appH:jsal2:ok	abh<-(ath) ; abl<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=in ; aob<-abh ; aob<-abl ; atl<-abl ; au+=-4 ; au<-db ; db<-(rxa) ; irc<-edb ; pc<-au
+257	srrl4	299	appH:srrl4:ok	ab*<-alu ; acc_class=n ; acc_mode=p ; alub<-db ; db<-(alue) ; rydl<-ab* ; ryh<-db
+258	rmrl3	300	appH:rmrl3:ok	acc_class=t ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-(alub) ; alu_cc=f ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; irc<-edb ; ird<-(ir) ; pc<-db
+259	roal2	301	appH:roal2:ok	ab*<-alu ; acc_class=f ; acc_mode=r ; acc_type=ix ; dbin<-edb ; irc<-edb ; ryl<-ab
+25a	roal3	302	appH:roal3:ok	ab<-(rxh) ; acc_class=n ; acc_mode=p ; alu<-ab ; alu<-db ; alu_cc=f ; alu_col=3 ; db<-(ryh)
+25b	roal4	303	appH:roal4:ok	ab<-alu ; acc_class=n ; acc_mode=p ; au+=+2 ; au<-db ; db<-(pc) ; ird<-(ir) ; ryh<-ab
+25c	roml2	304	appH:roml2:ok	ab<-alu ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu<-(alub) ; alu<-db ; alu_cc=f ; alu_col=3 ; db<-(rxh) ; dbin<-edb ; irc<-edb ; rxl<-ab
+25d	roml3	305	appH:roml3:ok	ab<-alu ; acc_class=n ; acc_mode=p ; au+=+2 ; au<-db ; db<-(pc) ; ird<-(ir) ; rxh<-ab
+25e	rorl3	306	appH:rorl3:ok	ab<-(ryh) ; acc_class=n ; acc_mode=p ; alu<-ab ; alu<-db ; alu_cc=f ; alu_col=3 ; db<-(rxh)
+25f	rorm3	307	appH:rorm3:ok	ab<-(ath) ; acc_class=n ; acc_mode=p ; alu<-ab ; alu<-db ; alu_cc=f ; alu_col=3 ; db<-(rxh)
+270	jsaw1	308	appH:jsaw1:ok	ab<-(at) ; acc_class=t ; acc_mode=r ; acc_type=in ; aob<-ab ; au+=-4 ; au<-db ; db<-(rxa) ; irc<-edb ; pc<-au
+271	jsaw2	309	appH:jsaw2:ok	ab<-(pch) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dob<-ab ; rx<-db
+272	jsaw3	310	appH:jsaw3:ok	ab<-(pcl) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-au ; au+=+2 ; au<-db ; db<-(at) ; dob<-ab
+273	jsra1	311	appH:jsra1:ok	ab<-(rya) ; acc_class=t ; acc_mode=r ; acc_type=in ; aob<-ab ; at<-ab ; au+=-4 ; au<-db ; db<-(rxa) ; irc<-edb ; rp_dst=sp ; rp_src=ry
+274	jsrd2	312	appH:jsrd2:ok	ab<-au ; acc_class=i ; acc_mode=r ; acc_type=in ; aob<-ab ; at<-ab ; au+=+2 ; au<-db ; db<-(pc)
+275	laaw1	313	appH:leaw1:ok	abe<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=in ; aob<-db ; au+=+2 ; au<-db ; db<-au ; irc<-edb ; rp_dst=rx ; rp_src=dy ; rx<-abe
+276	ldmd3	314	appH:ldmd3:ok	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=in ; at<-ab ; au+=+4 ; au<-db ; db<-(pc) ; irc<-edb
+277	ldmx6	315	appH:ldmx6:ok	acc_class=f ; acc_mode=r ; acc_type=uk ; au+=+2 ; au<-db ; db<-(at) ; dbin<-edb ; pc<-au ; reset pren
+278	rrgl2	316	appH:rrgl2:ok	ab<-(ryh) ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=f ; alu_col=1 ; db<-(at) ; dbin<-edb ; irc<-edb ; ird<-(ir) ; rx<-db
+279	rrgm1	317	appH:rrgm1:ok	abe<-(ryl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-db ; at<-abe ; au+=+2 ; au<-db ; db<-au ; pc<-db ; rp_dst=rx ; rp_src=uk
+27a	rrgw2	318	appH:rrgw2:ok	ab<-alu ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu_byte ; alu_cc=n ; alu_col=x ; au+=+2 ; au<-db ; db<-(pc) ; dbin<-edb ; irc<-edb ; ird<-(ir) ; rxl<-ab
+27b	rset2	319	appH:rset2:ok	acc_class=n ; acc_mode=p ; au+=-2 ; au<-dbe ; dbe<-alu
+27c	unlk3	320	appH:unlk3:ok	ab<-au ; acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-db ; au+=+2 ; au<-db ; db<-(pc) ; rx<-ab
+27d	unlk4	321	appH:unlk4:ok	abh<-(ath) ; abl<-(dbin) ; acc_class=f ; acc_mode=r ; acc_type=ix ; dbin<-edb ; irc<-edb ; ird<-(ir) ; ryh<-abh ; ryl<-abl
+27e	rstp5	322	die:rstp5:internal (die state_reset)	acc_class=n ; acc_mode=p
+27f	rstp6	323	die:rstp6:internal (die state_reset)	acc_class=n ; acc_mode=p
+290	dvume	324	appH:dvume:no_trace	ab<-(atl) ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1
+291	dvum5	325	appH:dvum5:ok	ab*<-alu ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab* ; alu_cc=n ; alu_col=4 ; au+=-1 ; au<-db ; db<-au
+292	itlx7	326	appH:itlx7:ok	acc_class=n ; acc_mode=p ; ird<-(ir)
+293	jsaw0	327	appH:jsaw0:ok	abe<-(dbin) ; acc_class=n ; acc_mode=p ; at<-abe ; rp_dst=sp ; rp_src=dy
+294	dvs0f	328	appH:dvs0f:no_trace	ab<-(atl) ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1
+295	dvs09	329	appH:dvs09:ok	ab*<-alu ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab* ; alu_cc=n ; alu_col=4 ; au+=-1 ; au<-db ; db<-au
+296	rstp4	330	die:rstp4:internal (die state_reset)	acc_class=n ; acc_mode=p ; ird<-(ir)
+297	jmaw1	331	appH:jmaw1:ok	abe<-(dbin) ; acc_class=n ; acc_mode=p ; at<-abe ; rp_dst=dx ; rp_src=dy
+298	mmxw0	332	appH:mmxw0:ambiguous	ab*<-alu ; acc_class=n ; acc_mode=p ; alu+=0 ; alu<-ab* ; alu_cc=n ; alu_col=5 ; rp_dst=rx ; rp_src=uk
+299	morw1	333	appH:morw1:ambiguous	ab<-(rxl) ; acc_class=t ; acc_mode=r ; acc_type=ix ; alu<-ab ; alu<-dbd ; alu_cc=i ; alu_col=2 ; aob<-au ; au+=0 ; au<-db ; db<-(at) ; dbd<-(dbin) ; dbin<-edb ; irc<-edb ; pc<-au ; rp_dst=uk ; rp_src=uk
+29a	mpiw2	334	appH:mpiw2:ok	acc_class=t ; acc_mode=r ; acc_type=op ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbinh<-edb
+29b	mrgw1	335	appH:mrgw1:ok	ab<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_byte ; alu_cc=i ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; pc<-db ; rp_dst=rx ; rp_src=uk ; rxl<-ab
+29c	mmxl0	332	appH:mmxl0:ambiguous	ab*<-alu ; acc_class=n ; acc_mode=p ; alu+=0 ; alu<-ab* ; alu_cc=n ; alu_col=5 ; rp_dst=rx ; rp_src=uk
+29d	morl1	333	appH:morl1:ambiguous	ab<-(rxl) ; acc_class=t ; acc_mode=r ; acc_type=ix ; alu<-ab ; alu<-dbd ; alu_cc=i ; alu_col=2 ; aob<-au ; au+=0 ; au<-db ; db<-(at) ; dbd<-(dbin) ; dbin<-edb ; irc<-edb ; pc<-au ; rp_dst=uk ; rp_src=uk
+29e	mpil2	334	appH:mpil2:ok	acc_class=t ; acc_mode=r ; acc_type=op ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbinh<-edb
+29f	mrgl1	335	appH:mrgl1:ok	ab<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_byte ; alu_cc=i ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; pc<-db ; rp_dst=rx ; rp_src=uk ; rxl<-ab
+2b0	jsrd1	336	appH:jsrd1:mismatch+au:die	ab<-(rya) ; acc_class=n ; acc_mode=p ; au+=0 ; au<-ab ; au<-db ; dbe<-(dbin) ; rp_dst=sp ; rp_src=py
+2b1	jsrd3	337	appH:jsrd3:ok	acc_class=f ; acc_mode=r ; acc_type=in ; au+=-4 ; au<-db ; db<-(rxa) ; irc<-edb ; pc<-au
+2b2	jsrx1	338	appH:jsrx1:mismatch+au:die	ab<-(rya) ; acc_class=n ; acc_mode=p ; au+=0 ; au<-ab ; au<-db ; dbe<-alu
+2b3	jmal2	339	appH:jmal2:ok+au:die	acc_class=t ; acc_mode=r ; acc_type=in ; aob<-dbh ; aob<-dbl ; au+=+2 ; au<-db ; dbh<-(ath) ; dbl<-(dbin) ; irc<-edb
+2b4	jmpd1	340	appH:jmpd1:mismatch+au:die	ab<-(rya) ; acc_class=n ; acc_mode=p ; au+=0 ; au<-ab ; au<-db ; dbe<-(dbin) ; rp_dst=dx ; rp_src=py
+2b5	link2	341	appH:link2:ok	acc_class=f ; acc_mode=r ; acc_type=in ; au+=-4 ; au<-db ; db<-(rxa) ; irc<-edb ; pc<-au
+2b6	jmpx1	342	appH:jmpx1:mismatch+au:die	ab<-(rya) ; acc_class=n ; acc_mode=p ; au+=0 ; au<-ab ; au<-db ; dbe<-alu
+2b7	trap8	343	die:trap8=nano of jmal2+au:die	acc_class=t ; acc_mode=r ; acc_type=in ; aob<-dbh ; aob<-dbl ; au+=+2 ; au<-db ; dbh<-(ath) ; dbl<-(dbin) ; irc<-edb
+2b8	nnmw1	344	appH:nnmw1:ok	ab*<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=ix ; alu+=0 ; alu<-ab* ; alu_cc=i ; alu_col=2 ; aob<-au ; au+=0 ; au<-db ; db<-(at) ; dbin<-edb ; irc<-edb ; pc<-au ; rp_dst=dx ; rp_src=uk
+2b9	o#w1	345	appH:o#w1:no_trace	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=ix ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; irc<-edb ; pc<-db ; rp_dst=dt ; rp_src=uk ; rxl<-ab
+2ba	rall3	346	appH:rall3:ok	ab<-(ryh) ; acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-ab ; alu_cc=f ; alu_col=1 ; alub<-ab ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dob<-ab
+2bb	ralw2	347	appH:ralw2:ok+au:die	ab<-(ryl) ; acc_class=t ; acc_mode=r ; acc_type=in ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; aob<-au ; atl<-ab ; au+=0 ; au<-db ; dbh<-(ath) ; dbl<-(dbin) ; irc<-edb ; pc<-au
+2bc	nnml1	348	appH:nnml1:ok	ab*<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=ix ; alu+=0 ; alu<-ab* ; alu_cc=i ; alu_col=2 ; aob<-au ; au+=0 ; au<-db ; db<-(at) ; dbin<-edb ; irc<-edb ; pc<-au ; rp_dst=dx ; rp_src=uk
+2bd	laal2	349	appH:leal2:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=in ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; irc<-edb ; pc<-db ; rxl<-ab
+2be	rmdl2	350	appH:rmdl2:ok	ab<-(ryh) ; acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-ab ; alu_cc=f ; alu_col=1 ; alub<-ab ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dob<-ab
+2bf	rall2	351	appH:rall2:ok+au:die	ab<-(ryl) ; acc_class=t ; acc_mode=r ; acc_type=in ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; aob<-au ; atl<-ab ; au+=0 ; au<-db ; dbh<-(ath) ; dbl<-(dbin) ; irc<-edb ; pc<-au
+2d0	dvum6	352	appH:dvum6:ok	ab*<-alu ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab* ; alu_cc=n ; alu_col=6 ; au+=-1 ; au<-db ; db<-au
+2d1	dvum4	353	appH:dvum4:ok	acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-db ; au+=+2 ; au<-db ; db<-(pc)
+2d2	dvum7	354	appH:dvum7:ok	acc_class=n ; acc_mode=p ; alu<-(alub) ; alu<-db ; alu_cc=i ; alu_col=2 ; atl<-db ; db<-alu
+2d3	srrw3	355	appH:srrw3:ambiguous	ab*<-alu ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab* ; alu_cc=i ; alu_col=4 ; au+=-1 ; au<-db ; db<-au
+2d4	dvs0a	352	appH:dvs0a:ok	ab*<-alu ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab* ; alu_cc=n ; alu_col=6 ; au+=-1 ; au<-db ; db<-au
+2d5	dvumz	353	appH:dvumz:ok	acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-db ; au+=+2 ; au<-db ; db<-(pc)
+2d6	dvs0c	354	appH:dvs0c:ok	acc_class=n ; acc_mode=p ; alu<-(alub) ; alu<-db ; alu_cc=i ; alu_col=2 ; atl<-db ; db<-alu
+2d7	srrl3	355	appH:srrl3:ambiguous	ab*<-alu ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab* ; alu_cc=i ; alu_col=4 ; au+=-1 ; au<-db ; db<-au
+2d8	raqw1	356	appH:raqw1:mismatch	abe<-ftu ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-abe ; alu<-db ; alu_cc=i ; alu_col=2 ; aob<-au ; db<-(ryl) ; pc<-au ; rp_dst=dt ; rp_src=ry ; rx<-abe
+2d9	raww1	357	appH:raww1:ok	ab<-(ryl) ; acc_class=t ; acc_mode=r ; acc_type=in ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; aob<-au ; atl<-ab ; au+=0 ; au<-dbe ; dbe<-(dbin) ; irc<-edb ; pc<-au ; rp_dst=dx ; rp_src=uk
+2da	rmdw1	358	appH:rmdw1:ok+au:die	ab<-(rxa) ; acc_class=t ; acc_mode=r ; acc_type=in ; aob<-au ; au+=0 ; au<-ab ; au<-db ; dbe<-(dbin) ; irc<-edb ; pc<-au ; rp_dst=rx ; rp_src=uk
+2db	rmdw2	359	appH:rmdw2:ok	ab<-(ryl) ; acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; aob<-au ; au+=+2 ; au<-db ; db<-(pc) ; dob<-ab
+2dc	raql1	356	appH:raql1:ambiguous	abe<-ftu ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-abe ; alu<-db ; alu_cc=i ; alu_col=2 ; aob<-au ; db<-(ryl) ; pc<-au ; rp_dst=dt ; rp_src=ry ; rx<-abe
+2dd	rawl1	357	appH:rawl1:ok	ab<-(ryl) ; acc_class=t ; acc_mode=r ; acc_type=in ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; aob<-au ; atl<-ab ; au+=0 ; au<-dbe ; dbe<-(dbin) ; irc<-edb ; pc<-au ; rp_dst=dx ; rp_src=uk
+2de	rmdl1	358	appH:rmdl1:ok+au:die	ab<-(rxa) ; acc_class=t ; acc_mode=r ; acc_type=in ; aob<-au ; au+=0 ; au<-ab ; au<-db ; dbe<-(dbin) ; irc<-edb ; pc<-au ; rp_dst=rx ; rp_src=uk
+2df	rmdl3	359	appH:rmdl3:ok	ab<-(ryl) ; acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; aob<-au ; au+=+2 ; au<-db ; db<-(pc) ; dob<-ab
+2f0	ldmr5	360	appH:ldmr5:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=uk ; aob<-db ; at<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; reset pren ; rxl<-ab
+2f1	leaa1	361	appH:leaa1:ok	ab<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-au ; at<-db ; db<-(rya) ; ftu<-ab ; pc<-au ; rp_dst=rx ; rp_src=ry
+2f2	lead1	362	appH:lead1:mismatch+au:die	ab<-(rya) ; acc_class=i ; acc_mode=r ; acc_type=in ; aob<-au ; au+=0 ; au<-ab ; au<-db ; dbe<-(dbin) ; rp_dst=rx ; rp_src=py
+2f3	maqw1	363	appH:maqw1:ambiguous	abe<-ftu ; acc_class=t ; acc_mode=r ; acc_type=ix ; alu<-abe ; alu<-db* ; alu_cc=i ; alu_col=2 ; aob<-au ; au+=0 ; au<-db ; db*<-(dbin) ; db<-(at) ; dbin<-edb ; irc<-edb ; pc<-au ; rp_dst=dt ; rp_src=uk ; rx<-abe
+2f4	popm5	364	appH:popm5:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=op ; aob<-db ; at<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; reset pren ; rxl<-ab
+2f5	lusp1	365	appH:lusp1:ok	ab<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-au ; at<-db ; db<-(rya) ; ftu<-ab ; pc<-au ; rp_dst=us ; rp_src=ry
+2f6	ldmd2	366	appH:ldmd2:mismatch+au:die	ab<-(rya) ; acc_class=i ; acc_mode=r ; acc_type=in ; aob<-au ; au+=0 ; au<-ab ; au<-db ; dbe<-(dbin)
+2f7	maql1	367	appH:maql1:ambiguous	abe<-ftu ; acc_class=t ; acc_mode=r ; acc_type=ix ; alu<-abe ; alu<-db* ; alu_cc=i ; alu_col=2 ; aob<-au ; au+=0 ; au<-db ; db*<-(dbin) ; db<-(at) ; dbin<-edb ; irc<-edb ; pc<-au ; rp_dst=dt ; rp_src=uk ; rx<-abe
+2f8	rmmw1	368	appH:rmmw1:ok	ab<-(ryl) ; acc_class=t ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; aob<-au ; au+=-1,-2 ; au<-db ; db<-(rxa) ; dbin<-edb ; irc<-edb ; pc<-au ; rp_dst=rx ; rp_src=uk
+2f9	rmrl1	369	appH:rmrl1:ok	ab<-(ryh) ; acc_class=t ; acc_mode=w ; acc_type=op ; alub<-ab ; aob<-db ; au+=+2 ; au<-db ; db<-(rxa) ; dob<-ab ; pc<-au ; rp_dst=rx ; rp_src=uk
+2fa	rmrw1	370	appH:rmrw1:ok	ab<-(ryl) ; acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; aob<-db ; au+=+1,+2 ; au<-db ; db<-(rxa) ; dob<-ab ; pc<-au ; rp_dst=rx ; rp_src=uk
+2fb	rstp7	371	appH:rstp3:reassigned (die state_reset, lockstep)	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=ix ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; sph<-ab
+2fc	rmml1	368	appH:rmml1:ok	ab<-(ryl) ; acc_class=t ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; aob<-au ; au+=-1,-2 ; au<-db ; db<-(rxa) ; dbin<-edb ; irc<-edb ; pc<-au ; rp_dst=rx ; rp_src=uk
+2fd	rmil1	369	appH:rmil1:ok	ab<-(ryh) ; acc_class=t ; acc_mode=w ; acc_type=op ; alub<-ab ; aob<-db ; au+=+2 ; au<-db ; db<-(rxa) ; dob<-ab ; pc<-au ; rp_dst=rx ; rp_src=uk
+2fe	rmiw1	370	appH:rmiw1:ok	ab<-(ryl) ; acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; aob<-db ; au+=+1,+2 ; au<-db ; db<-(rxa) ; dob<-ab ; pc<-au ; rp_dst=rx ; rp_src=uk
+2ff	rstp8	371	appH:rstp4:reassigned (die state_reset, lockstep)	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=ix ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; sph<-ab
+300	rstp9	372	appH:rstp5:reassigned (die state_reset, lockstep)	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=ix ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; spl<-ab
+301	rstw1	373	appH:rstw1:mismatch	ab<-(ryd) ; acc_class=n ; acc_mode=p ; au+=-2 ; au<-db ; db<-au ; ftu<-ab ; rp_dst=dx ; rp_src=uk
+302	rtr4	374	appH:rtr4:ok	ab<-(dbin) ; acc_class=f ; acc_mode=r ; acc_type=op ; ath<-ab ; db<-au ; dbin<-edb ; psw<-ftu ; rx<-db
+303	rts3	375	appH:rts3:ok+au:die	ab<-au ; acc_class=t ; acc_mode=r ; acc_type=ix ; aob<-dbh ; aob<-dbl ; au+=+2 ; au<-db ; dbh<-(ath) ; dbl<-(dbin) ; irc<-edb ; rx<-ab
+304	stmw2	376	appH:sftm2:ok	ab*<-alu ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab* ; alu_cc=i ; alu_col=4 ; au+=0 ; au<-db ; db<-(at) ; dbin<-edb ; irc<-edb
+305	smal3	377	appH:smal3:ok	ab<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=in ; aob<-db ; atl<-ab ; au+=+2 ; au<-db ; db<-au
+306	srrl5	378	appH:srrl5:ok	acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-(alub) ; alu_cc=f ; alu_col=1 ; au+=+2 ; au<-db ; db<-(pc) ; ird<-(ir)
+307	stiw2	379	appH:stiw2:no_trace	ab<-ftu ; acc_class=n ; acc_mode=p ; alu<-ab ; alu<-db* ; alu_cc=n ; alu_col=2 ; db*<-(rxdl)
+308	bbci1	380	appH:bbci1:ok+au:die	abd<-(rxdl) ; abe<-ftu ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-abd ; alu_cc=n ; alu_col=2 ; au+=0 ; au<-abe ; au<-db ; db<-(pc) ; rp_dst=dx ; rp_src=dy
+309	lead2	381	appH:lead2:ok	ab<-au ; acc_class=f ; acc_mode=r ; acc_type=in ; au+=+4 ; au<-db ; db<-(pc) ; irc<-edb ; rx<-ab
+30a	leax4	382	appH:leax4:ok	ab<-au ; acc_class=n ; acc_mode=p ; au+=+4 ; au<-db ; db<-(pc) ; rx<-ab
+30b	link1	383	appH:link1:ok	ab<-(rya) ; acc_class=i ; acc_mode=r ; acc_type=in ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; aob<-db ; at<-ab ; au+=+2 ; au<-db ; db<-au ; rp_dst=sp ; rp_src=ry
+30c	link3	384	appH:link3:ok	ab<-(ath) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dob<-ab ; rya<-db
+30d	link4	385	appH:link4:ok+au:die	ab<-(rya) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-au ; au+=0 ; au<-ab ; au<-db ; dbe<-(dbin) ; dob<-alu
+30e	lmaw2	386	appH:lmaw2:mismatch	abe<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=in ; aob<-db ; au+=+2 ; au<-db ; db<-au ; irc<-edb ; ry<-abe
+30f	mall1	387	appH:mall1:ambiguous	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; alu+=-1 ; alu<-(alub) ; alu_cc=n ; alu_col=1 ; aob<-au ; ath<-db ; atl<-ab ; db<-alu ; dbin<-edb ; pc<-au ; rp_dst=dx ; rp_src=uk
+320	stiw3	388	appH:stiw3:ok	ab<-alu ; acc_class=n ; acc_mode=p ; au+=+2 ; au<-db ; db<-au ; ftu<-ab
+321	stiw4	389	appH:stiw4:no_trace	acc_class=n ; acc_mode=p ; psw<-ftu
+322	stmd3	390	appH:stmd3:ok+au:die	abe<-(dbin) ; acc_class=f ; acc_mode=r ; acc_type=in ; au+=0 ; au<-abe ; au<-db ; db<-(rya) ; irc<-edb ; pc<-au ; reset pren
+323	stmr2	391	appH:stmr2:ok	acc_class=f ; acc_mode=r ; acc_type=in ; au+=0 ; au<-db ; db<-(rya) ; irc<-edb ; pc<-au ; reset pren
+324	sftm2	392	appH:stmw2:ok	ab<-ftu ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; au+=0 ; au<-db ; db<-(at) ; dbin<-edb ; irc<-edb
+325	stmx1	393	appH:stmx1:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; au+=+4 ; au<-db ; db<-au ; dbin<-edb ; ftu<-ab ; irc<-edb ; rp_dst=rp ; rp_src=ry
+326	stmx2	394	appH:stmx2:ok	ab*<-(dbin) ; acc_class=n ; acc_mode=p ; alu+=0 ; alu<-ab* ; alu_cc=n ; alu_col=5 ; atl<-ab* ; au+=-2 ; au<-db ; db<-au ; pc<-db
+327	aaa01	395	die:aaa01:internal (die state_reset)	acc_class=n ; acc_mode=p ; au+=-2 ; au<-db ; db<-(pc) ; ird<-(ir) ; pc<-au ; psw<-ftu
+328	mmaw2	396	die:mmaw2:internal (die state_reset)	acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-db ; au+=+2 ; au<-db ; db<-(pc)
+329	mall2	397	appH:mall2:ok+au:die	ab<-(atl) ; acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-ab ; alu_cc=i ; alu_col=1 ; aob<-dbh ; aob<-dbl ; au+=+2 ; au<-db ; dbh<-(ath) ; dbl<-(dbin) ; dob<-alu
+32a	mall3	398	appH:mall3:ok	acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-(alub) ; alu_cc=f ; alu_col=1 ; aob<-au ; au+=+2 ; au<-db ; db<-(pc) ; dob<-alu
+32b	malw1	399	appH:malw1:ambiguous	ab*<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; alu+=-1 ; alu<-ab* ; alu_cc=i ; alu_col=1 ; aob<-au ; ath<-db ; db<-alu ; dbin<-edb ; pc<-au ; rp_dst=dx ; rp_src=uk
+32c	popm6	400	appH:popm6:ok	ab<-(at) ; acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-db ; au+=+2 ; au<-db ; db<-(pc) ; ry<-ab
+32d	dvs0e	401	die:dvs0e:from the trace	acc_class=n ; acc_mode=p
+32e	malw2	402	appH:malw2:ok	abh<-(ath) ; abl<-(dbin) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-abh ; aob<-abl ; au+=+2 ; au<-db ; db<-(pc) ; dob<-alu
+32f	mawl2	403	appH:mawl2:ok	ab<-alu ; acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-(alub) ; alu_cc=f ; alu_col=1 ; aob<-db ; atl<-ab ; au+=+2 ; au<-db ; db<-au ; dbd<-(alue) ; dob<-dbd
+340	strw2	404	appH:strw2:ok	ab*<-ftu ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu_byte ; alu_cc=n ; alu_col=x ; dbin<-edb ; irc<-edb ; rydl<-ab
+341	swap1	405	appH:swap1:mismatch	ab<-(ryl) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-db ; alu_cc=i ; alu_col=1 ; alub<-ab ; aob<-au ; ath<-ab ; db<-(ryh) ; pc<-au ; rp_dst=dx ; rp_src=ry
+342	swap2	406	appH:swap2:ok+au:die	ab<-(ath) ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-(alub) ; alu_cc=f ; alu_col=1 ; au+=+2 ; au<-db ; db<-au ; dbd<-alu ; dbin<-edb ; irc<-edb ; ird<-(ir) ; rydl<-dbd ; ryh<-ab
+343	tasm1	407	appH:tasm1:mismatch	ab<-ftu ; acc_class=n ; acc_mode=p ; alu<-ab ; alu<-dbd ; alu_cc=n ; alu_col=2 ; au+=0 ; au<-db ; db<-(at) ; dbd<-(dbin) ; pc<-au ; rp_dst=dx ; rp_src=dy
+344	tasm2	408	appH:tasm2:mismatch+au:die	ab*<-(dbin) ; acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-ab* ; alu_cc=i ; alu_col=1 ; aob<-au ; au+=0 ; au<-db ; db<-(pc) ; dob<-alu
+345	tasr1	409	appH:tasr1:ok	ab<-ftu ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu<-ab ; alu<-dbd ; alu_cc=n ; alu_col=2 ; alub<-dbd ; aob<-au ; dbd<-(rydl) ; pc<-au ; rp_dst=dx ; rp_src=ry
+346	tasr2	410	appH:tasr2:ok	ab*<-alu ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-(alub) ; alu_byte ; alu_cc=i ; alu_col=1 ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; irc<-edb ; ird<-(ir) ; ryl<-ab
+347	trap2	411	appH:trap2:mismatch	ab<-(pcl) ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; au+=-2 ; au<-db ; db<-(sp) ; psws+=+1
+348	mawl3	412	appH:mawl3:ok	ab<-(atl) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-au ; au+=+2 ; au<-db ; db<-(pc) ; dob<-ab ; ird<-(ir)
+349	mmiw2	413	appH:mmiw2:ok	ab<-au ; acc_class=t ; acc_mode=r ; acc_type=ix ; aob<-db ; au+=+2 ; au<-db ; db<-(pc) ; dbin<-edb ; irc<-edb ; ird<-(ir) ; rxa<-ab
+34a	mmml2	414	appH:mmml2:ok	acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-(alub) ; alu_cc=f ; alu_col=1 ; aob<-db ; au+=-2 ; au<-db ; db<-au ; dob<-alu
+34b	mmmw2	415	appH:mmmw2:ok	ab<-au ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-ab ; au+=+2 ; au<-db ; db<-(pc) ; dob<-alu ; ird<-(ir) ; rxa<-ab
+34c	mmrw3	416	appH:mmrw3:ok	acc_class=f ; acc_mode=r ; acc_type=ix ; dbin<-edb ; irc<-edb ; ird<-(ir)
+34d	morl2	417	appH:morl2:ok	ab<-(rxh) ; acc_class=t ; acc_mode=w ; acc_type=op ; alu<-ab ; alu<-dbd ; alu_cc=f ; alu_col=3 ; aob<-db ; au+=-2 ; au<-db ; db<-au ; dbd<-(alue) ; dob<-alu
+34e	mpil3	418	appH:mpil3:ok	acc_class=t ; acc_mode=r ; acc_type=op ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbinl<-edb
+34f	mpil4	419	appH:mpil4:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=op ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbinh<-edb ; rxh<-ab
+360	trap4	420	appH:trap4:mismatch:acc_type ix (frame a word)	ab<-(pch) ; acc_class=t ; acc_mode=w ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dob<-alu ; ftu<-(trap) ; sp<-db
+361	tsml2	421	appH:tsml2:ok	acc_class=f ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-(alub) ; alu_cc=f ; alu_col=1 ; dbin<-edb ; irc<-edb ; ird<-(ir)
+362	tsrl2	422	appH:tsrl2:ok	ab<-(ryh) ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=f ; alu_col=1 ; dbin<-edb ; irc<-edb ; ird<-(ir)
+363	b	423	appH:b:ok	acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-db ; au+=+2 ; au<-db ; db<-au ; pc<-db ; rp_dst=dx ; rp_src=dy
+364	zzz11	424	die:zzz11:empty	
+365	zzz12	425	die:zzz12:empty	
+366	zzz13	426	die:zzz13:empty	
+367	trap6	427	appH:trap6:mismatch	acc_class=t ; acc_mode=r ; acc_type=ix ; aob<-db ; au+=+2 ; au<-db ; db<-(at) ; dbin<-edb ; pc<-au ; reset pren
+368	mpiw3	428	appH:mpiw3:ok	acc_class=t ; acc_mode=r ; acc_type=op ; aob<-au ; au+=+4 ; au<-db ; db<-(pc) ; dbinl<-edb
+369	dvumc	429	appH:dvumc:ok	ab<-alu ; acc_class=n ; acc_mode=p ; alu+=0 ; alu<-ab ; alu_cc=n ; alu_col=1 ; rxh<-ab
+36a	mpiw4	430	appH:mpiw4:ok	abe<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=ix ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; irc<-edb ; ird<-(ir) ; pc<-db ; rxdl<-abe
+36b	mpol2	431	appH:mpol2:ok	ab<-(rxh) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dobh<-ab
+36c	mpol3	432	appH:mpol3:ok	ab<-(rxh) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dobl<-ab
+36d	mpow2	433	appH:mpow2:ok	ab*<-(rxdl) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dobh<-ab
+36e	mpow3	434	appH:mpow3:ok	ab*<-(rxdl) ; acc_class=t ; acc_mode=w ; acc_type=op ; aob<-au ; au+=+4 ; au<-db ; db<-(pc) ; dobl<-ab*
+36f	mrgl2	435	appH:mrgl2:ok	acc_class=f ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-(alub) ; alu_cc=f ; alu_col=1 ; db<-(alue) ; dbin<-edb ; irc<-edb ; ird<-(ir) ; rxh<-db
+380	sccb1	436	appH:sccb1:mismatch	ab*<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=0 ; alu_cc=n ; alu_col=1 ; aob<-db ; db<-au ; dcr<-ab* ; pc<-db ; rp_dst=dx ; rp_src=dy
+381	srrw1	437	appH:sriw1:ok	ab<-(ryh) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; aob<-au ; au+=0 ; au<-dbe ; dbe<-ftu ; pc<-au ; rp_dst=dx ; rp_src=ry
+382	sriw1	438	appH:srrw1:ok	ab<-(ryh) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; aob<-au ; au+=0 ; au<-dbe ; dbe<-(rxdl) ; pc<-au ; rp_dst=rx ; rp_src=ry
+383	srrw2	439	appH:srrw2:ok	ab*<-(rydl) ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab* ; alu_cc=i ; alu_col=1 ; alue<-dbd ; au+=-1 ; au<-db ; db<-au ; dbd<-alu ; dbin<-edb ; irc<-edb
+384	sccr1	440	appH:sccr1:mismatch	ab*<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=0 ; alu_cc=n ; alu_col=1 ; aob<-db ; db<-au ; dcr<-ab* ; pc<-db ; rp_dst=dx ; rp_src=ry
+385	srrl1	441	appH:sril1:ok	ab<-(ryh) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; aob<-au ; au+=0 ; au<-dbe ; dbe<-ftu ; pc<-au ; rp_dst=dx ; rp_src=ry
+386	sril1	442	appH:srrl1:ok	ab<-(ryh) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; aob<-au ; au+=0 ; au<-dbe ; dbe<-(rxdl) ; pc<-au ; rp_dst=rx ; rp_src=ry
+387	srrl2	443	appH:srrl2:ok	ab*<-(rydl) ; acc_class=f ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab* ; alu_cc=i ; alu_col=1 ; alue<-dbd ; au+=-1 ; au<-db ; db<-au ; dbd<-alu ; dbin<-edb ; irc<-edb
+388	maww1	444	appH:maww1:ambiguous	ab*<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=in ; alu+=-1 ; alu<-ab* ; alu_cc=i ; alu_col=1 ; aob<-au ; au+=0 ; au<-dbe ; dbe<-alu ; irc<-edb ; pc<-au ; rp_dst=dx ; rp_src=uk
+389	maww2	445	appH:maww2:ok	acc_class=t ; acc_mode=w ; acc_type=op ; aob<-au ; au+=+2 ; au<-db ; db<-(pc) ; dob<-alu ; ird<-(ir)
+38a	mmdw1	446	appH:mmdw1:ambiguous+au:die	ab<-(rxa) ; abd<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=in ; alu+=-1 ; alu<-abd ; alu_cc=i ; alu_col=1 ; aob<-au ; au+=0 ; au<-ab ; au<-db ; dbe<-alu ; irc<-edb ; pc<-au ; rp_dst=rx ; rp_src=uk
+38b	mmmw1	447	appH:mmmw1:ambiguous	ab*<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab* ; alu_cc=i ; alu_col=1 ; aob<-au ; au+=-1,-2 ; au<-db ; db<-(rxa) ; dbin<-edb ; irc<-edb ; pc<-au ; rp_dst=rx ; rp_src=uk
+38c	mawl1	444	appH:mawl1:ambiguous	ab*<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=in ; alu+=-1 ; alu<-ab* ; alu_cc=i ; alu_col=1 ; aob<-au ; au+=0 ; au<-dbe ; dbe<-alu ; irc<-edb ; pc<-au ; rp_dst=dx ; rp_src=uk
+38d	morw2	445	appH:morw2:ok	acc_class=t ; acc_mode=w ; acc_type=op ; aob<-au ; au+=+2 ; au<-db ; db<-(pc) ; dob<-alu ; ird<-(ir)
+38e	mmdl1	446	appH:mmdl1:ambiguous+au:die	ab<-(rxa) ; abd<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=in ; alu+=-1 ; alu<-abd ; alu_cc=i ; alu_col=1 ; aob<-au ; au+=0 ; au<-ab ; au<-db ; dbe<-alu ; irc<-edb ; pc<-au ; rp_dst=rx ; rp_src=uk
+38f	mmml1	447	appH:mmml1:ambiguous	ab*<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab* ; alu_cc=i ; alu_col=1 ; aob<-au ; au+=-1,-2 ; au<-db ; db<-(rxa) ; dbin<-edb ; irc<-edb ; pc<-au ; rp_dst=rx ; rp_src=uk
+3a0	stmr1	448	appH:stmr1:ok	ab<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=in ; aob<-db ; au+=+2 ; au<-db ; db<-au ; ftu<-ab ; rp_dst=rp ; rp_src=ry
+3a1	stmw1	449	appH:stmw1:ok	acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-au ; ftu<-(psw) ; pc<-au ; rp_dst=dx ; rp_src=uk
+3a2	stop1	450	die:stop1:internal (die state_reset)	abd<-(dbin) ; acc_class=n ; acc_mode=p ; au+=+2 ; au<-db ; ftu<-ab ; ird<-(ir) ; pc<-au
+3a3	trac2	451	die:trac2:from the trace	ab<-au ; acc_class=n ; acc_mode=p ; au+=-2 ; au<-db ; pc<-ab
+3a4	push1	452	appH:push1:ok	ab<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=in ; aob<-db ; au+=+2 ; au<-db ; db<-au ; ftu<-ab ; rp_dst=rp ; rp_src=ry
+3a5	strw1	453	appH:strw1:mismatch	acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-au ; ftu<-(psw) ; pc<-au ; rp_dst=dx ; rp_src=ry
+3a6	rset1	454	appH:rset1:mismatch	*e<-ftu ; acc_class=n ; acc_mode=p ; alu+=0 ; alu_cc=n ; alu_col=1 ; at<-*e ; pc<-au ; rp_dst=dx ; rp_src=dy
+3a7	bser2	455	appH:bser2:mismatch	ab<-au ; acc_class=n ; acc_mode=p ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; au+=-2 ; au<-db ; db<-(sp) ; pc<-ab ; tpend+=0
+3a8	ldmr4	456	appH:ldmr4:ok	abe<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=uk ; aob<-db ; at<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; reset pren ; rx<-abe
+3a9	mmrl1	457	appH:mmrl1:ambiguous	ab*<-(dbin) ; acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-ab* ; alu_cc=i ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-(rxa) ; dbd<-(alue) ; dob<-dbd ; pc<-au ; rp_dst=rx ; rp_src=uk
+3aa	mmrl2	458	appH:mmrl2:ok	acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-(alub) ; alu_cc=f ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dob<-alu
+3ab	mmrw1	459	appH:mmrw1:ambiguous	ab*<-(dbin) ; acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-ab* ; alu_cc=i ; alu_col=1 ; aob<-db ; au+=+1,+2 ; au<-db ; db<-(rxa) ; dob<-ab* ; pc<-au ; rp_dst=rx ; rp_src=uk
+3ac	popm4	460	appH:popm4:ok	abe<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=op ; aob<-db ; at<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; reset pren ; rx<-abe
+3ad	mmil1	461	appH:mmil1:ambiguous	ab*<-(dbin) ; acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-ab* ; alu_cc=i ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-(rxa) ; dbd<-(alue) ; dob<-dbd ; pc<-au ; rp_dst=rx ; rp_src=uk
+3ae	mmil2	462	appH:mmil2:ok	acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-(alub) ; alu_cc=f ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dob<-alu
+3af	mmiw1	463	appH:mmiw1:ambiguous	ab*<-(dbin) ; acc_class=t ; acc_mode=w ; acc_type=op ; alu+=-1 ; alu<-ab* ; alu_cc=i ; alu_col=1 ; aob<-db ; au+=+1,+2 ; au<-db ; db<-(rxa) ; dob<-ab* ; pc<-au ; rp_dst=rx ; rp_src=uk
+3c0	rorl2	464	appH:rorl2:ok	ab*<-alu ; acc_class=f ; acc_mode=r ; acc_type=ix ; dbin<-edb ; irc<-edb ; rxl<-ab
+3c1	smaw2	465	die:smaw2:internal (die state_reset)	abe<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=in ; aob<-db ; at<-abe ; au+=+2 ; au<-db ; db<-au
+3c2	trap3	466	appH:trap3:ok:acc_type ix (frame a word)	ab<-ftu ; acc_class=t ; acc_mode=w ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; aob<-db ; au+=-4 ; au<-db ; db<-au ; dob<-alu
+3c3	tsmw1	467	appH:tsmw1:ok	ab*<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab* ; alu_cc=i ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; pc<-db ; rp_dst=dx ; rp_src=uk
+3c4	mulm2	468	appH:mulm2:ok	ab*<-alu ; acc_class=f ; acc_mode=r ; acc_type=ix ; dbin<-edb ; irc<-edb ; rxl<-ab
+3c5	rtr3	469	appH:rtr3:ok	abe<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=op ; aob<-db ; at<-abe ; au+=+2 ; au<-db ; db<-au
+3c6	bser5	470	appH:bser5:ok:acc_type ix (frame a word)	ab<-ftu ; acc_class=t ; acc_mode=w ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; aob<-db ; au+=-4 ; au<-db ; db<-au ; dob<-alu
+3c7	sftm1	471	appH:sftm1:ok	ab*<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab* ; alu_cc=i ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; pc<-db ; rp_dst=dx ; rp_src=uk
+3c8	rorm2	472	appH:rorm2:ok	ab*<-alu ; acc_class=f ; acc_mode=r ; acc_type=ix ; dbin<-edb ; irc<-edb ; rxl<-ab
+3c9	stmd2	473	appH:stmd2:ok	abe<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=in ; alu_cc=n ; alu_col=2 ; aob<-db ; at<-abe ; au+=+2 ; au<-db ; db<-au
+3ca	bser3	474	appH:bser3:ok:acc_type ix (frame a word)	ab<-ftu ; acc_class=t ; acc_mode=w ; acc_type=ix ; alu+=-1 ; alu<-ab ; alu_cc=n ; alu_col=1 ; aob<-db ; au+=-4 ; au<-db ; db<-au ; dob<-alu
+3cb	tsml1	475	appH:tsml1:ok	ab*<-(dbin) ; acc_class=i ; acc_mode=r ; acc_type=ix ; alu+=-1 ; alu<-ab* ; alu_cc=i ; alu_col=1 ; aob<-db ; au+=+2 ; au<-db ; db<-au ; pc<-db ; rp_dst=dx ; rp_src=uk
+3cc	zzz14	16	die:zzz14:empty	
+3cd	zzz15	17	die:zzz15:empty	
+3ce	zzz16	18	die:zzz16:empty	
+3cf	zzz17	19	die:zzz17:empty	
+3e0	o#l1	476	appH:o#l1:no_trace	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; rp_dst=dt ; rp_src=uk ; rxh<-ab
+3e1	zzz18	477	die:zzz18:empty	
+3e2	aixl1	478	appH:aixl1:mismatch+au:die	abe<-alu ; acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-au ; au+=0 ; au<-abe ; au<-db ; db<-(rya)
+3e3	exge1	479	appH:exge1:ok	ab<-(rx) ; acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-au ; at<-ab ; au+=0 ; au<-db ; db<-(ry) ; dcr<-ab ; pc<-au ; rp_dst=rx ; rp_src=ry
+3e4	laal1	480	appH:leal1:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=im ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; rp_dst=rx ; rp_src=dy ; rxh<-ab
+3e5	zzz19	481	die:zzz19:empty	
+3e6	aixw1	482	appH:aixw1:mismatch+au:die	abe<-alu ; acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-au ; au+=0 ; au<-abe ; au<-db ; db<-(rya)
+3e7	btsr1	483	appH:btsr1:ok	ab<-(rx) ; acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-au ; at<-ab ; au+=0 ; au<-db ; db<-(ry) ; dcr<-ab ; pc<-au ; rp_dst=uk ; rp_src=ry
+3e8	ldmr3	484	appH:ldmr3:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=uk ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; rxh<-ab
+3e9	dvumb	485	appH:dvumb:no_trace	acc_class=n ; acc_mode=p ; idle wait
+3ea	leax1	486	appH:leax1:mismatch+au:die	abe<-alu ; acc_class=i ; acc_mode=r ; acc_type=in ; aob<-au ; au+=0 ; au<-abe ; au<-db ; db<-(rya)
+3eb	bclr1	487	appH:bclr1:ok	ab<-(rx) ; acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-au ; at<-ab ; au+=0 ; au<-db ; db<-(ry) ; dcr<-ab ; pc<-au ; rp_dst=uk ; rp_src=ry
+3ec	popm3	488	appH:popm3:ok	ab<-(dbin) ; acc_class=t ; acc_mode=r ; acc_type=op ; aob<-db ; au+=+2 ; au<-db ; db<-au ; dbin<-edb ; rxh<-ab
+3ed	dvs0d	489	appH:dvs0d:no_trace	acc_class=n ; acc_mode=p ; idle wait
+3ee	peax1	490	appH:peax1:mismatch+au:die	abe<-alu ; acc_class=i ; acc_mode=r ; acc_type=in ; aob<-au ; au+=0 ; au<-abe ; au<-db ; db<-(rya)
+3ef	bcsr1	491	appH:bcsr1:ok	ab<-(rx) ; acc_class=i ; acc_mode=r ; acc_type=ix ; aob<-au ; at<-ab ; au+=0 ; au<-db ; db<-(ry) ; dcr<-ab ; pc<-au ; rp_dst=uk ; rp_src=ry
+3fc		492	die:?:internal (die state_reset)	acc_class=n ; acc_mode=p
+3fd		493	die:?:internal (die state_reset)	acc_class=n ; acc_mode=p
+3fe		494	die:?:internal (die state_reset)	acc_class=n ; acc_mode=p ; ftu<-(psw) ; pc<-au ; rp_dst=dx ; rp_src=dy
+3ff		495	die:?:internal (die state_reset)	acc_class=n ; acc_mode=p ; au+=-2 ; au<-db ; db<-(pc)

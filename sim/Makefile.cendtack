@@ -1,0 +1,48 @@
+# This file is part of rm68000, an MC68000 core in SystemVerilog.
+# Copyright (c) 2026 Umberto Parisi (rmonic79)
+#
+# rm68000 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+# later version. It is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+# more details: LICENSE in the root of the repository, or <https://www.gnu.org/licenses/>.
+#
+# A commercial license, for use without the obligations of the GPL (for example in closed-source products), is
+# available from the author, who can also be contacted for other licensing needs.
+
+# Makefile.cendtack — bench of rm68000's clock-enable and DTACK generator (rtl/integration/m68k_cen_dtack.sv) on its
+# own, with nothing outside this repository. Run from sim/:
+#   make -f Makefile.cendtack cendtack
+# The bench (top_cendtack.sv, tb_cendtack.cpp) drives the generator with a phase-accurate model of the processor's bus
+# cycle and a memory model that holds DTACK, and checks clock enables, DTACK, wait states and the pulses returned after
+# a stall against the rules of docs/clock-dtack.md (sections 3.2 and 4), computed by the bench at run time.
+# cendtack builds, then runs run_cendtack.sh: the standard conditions and the two conditions where the memory looks busy
+# while the processor is not waiting. Last line: VERDICT: PASS / FAIL. Document: docs/clock-dtack.md, section 6.1.
+# BUILDCD       build folder (default buildcd)
+# CENDTACK_SRC  the generator's source (default the one in rtl/); set it to run the bench on a modified copy, as in
+#               mutation testing
+
+VERILATOR    ?= verilator
+BUILDCD      ?= buildcd
+RTL          := ../rtl
+CENDTACK_SRC ?= $(RTL)/integration/m68k_cen_dtack.sv
+
+CD_VFLAGS := --cc --exe --build --x-assign 0 -Wall -Wno-fatal \
+             -CFLAGS "-std=c++17" \
+             -LDFLAGS "-static -static-libgcc -static-libstdc++"
+
+.PHONY: cendtack cendtack-build cendtack-lint
+
+cendtack-lint:
+	$(VERILATOR) --lint-only -Wall $(CENDTACK_SRC)
+
+cendtack-build:
+	$(VERILATOR) $(CD_VFLAGS) --Mdir $(BUILDCD) \
+	  -Wno-DECLFILENAME -Wno-UNUSED -Wno-WIDTH -Wno-PINMISSING -Wno-PINCONNECTEMPTY \
+	  --top-module top_cendtack \
+	  top_cendtack.sv $(CENDTACK_SRC) \
+	  tb_cendtack.cpp \
+	  -o Vtop_cendtack
+
+cendtack: cendtack-build
+	sh run_cendtack.sh $(BUILDCD)

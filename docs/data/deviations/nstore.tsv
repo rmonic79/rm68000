@@ -1,0 +1,116 @@
+# Deviations of the nano ROM from the literal App. H block. Form: addr<TAB>op<TAB>argument<TAB>source
+# op: add = extra atoms present | del = atoms of the block absent | deltr = '*' transfer of the block absent | set = whole word |
+#     copy = word equal to the App. H block with that label (+ atoms added after '+')
+# Sources independent of the RTL and of the generators: patent US 4,325,121 (App. H by label and page, transcription notes in docs/data/us4325121_appH.tsv), manual (M68000PRM par. 2 and 4,
+# MC68000UM par. 6), die trace (docs/data/us4325121_appH_die_map.tsv missing/extra columns, docs/data/mc68000_die_only_words.tsv), dump of the die micro ROM (docs/data/mc68000_micro_decoded.csv), core documents (docs/microcode-structure.md sections 3 and 10, docs/silicon-datapath.md §8.4, docs/mul-div.md section 6),
+# measurements against the reference core with comparison benches made during development, not part of this repository (available from the author on request: diff-fuzz-si per family, lockstep-si, reset) and per-instruction testbenches of sim/Makefile.si.
+# --- index register rz = IRC[15:12] in the indexed words (24)
+021	add	rxsrc=rz	CONFIRMED: die trace "reg[irc >> 12]" (transfer 'dbh = reg[irc>>12]h' in docs/microcode-structure.md section 10; docs/data/us4325121_appH_die_map.tsv note above the ldmx4 row: 0e1 carries "dbh = reg[irc >> 12]h", like aixl5 1e0; index register = IRC[15:12] in docs/silicon-datapath.md §8.4; rule on the words with origin aixw2/aixw4 in the origin column of docs/data/us4325121_appH.tsv, plus ldmx3/ldmx4, jsrx2/jsrx3, jmpx2/jmpx3, mmxw2/mmxw3); M68000PRM par. 2 (modes d8(An,Xn)/d8(PC,Xn): index register = bits 15-12 of the extension word); measurement: diff-fuzz-si families LEA, PEA, MOVEM, MOVEMR, MOVE (d8(An,Xn) modes); per-instruction testbenches idx (indexed LEA) and moveaidx (indexed MOVEA); indexed JMP/JSR: lockstep-si sweep, block 4000-4FFF
+028	add	rxsrc=rz	CONFIRMED: as 021 (mmxw2)
+029	add	rxsrc=rz	CONFIRMED: as 021 (jsrx2: App. H p145, same index '(rxl) -> *e -> au' as aixw2)
+02c	add	rxsrc=rz	CONFIRMED: as 021 (mmxl2)
+02d	add	rxsrc=rz	CONFIRMED: as 021 (jmpx2: App. H p146, origin jsrx2)
+0e1	add	rxsrc=rz	CONFIRMED: as 021 (ldmx3: docs/data/us4325121_appH_die_map.tsv note above the ldmx4 row, 0e1 carries "dbh = reg[irc >> 12]h"; measurement: diff-fuzz-si family MOVEMR)
+0e8	add	rxsrc=rz	CONFIRMED: as 021 (mmxw3)
+0e9	add	rxsrc=rz	CONFIRMED: as 021 (jsrx3: App. H p145, same index '(rx) -> * -> au' as aixw4)
+0ec	add	rxsrc=rz	CONFIRMED: as 021 (mmxl3)
+0ed	add	rxsrc=rz	CONFIRMED: as 021 (jmpx3: App. H p147, origin jsrx3)
+120	add	rxsrc=rz	CONFIRMED: as 021 (aixl2: origin of the rule, die trace)
+124	add	rxsrc=rz	CONFIRMED: as 021 (aixw2: origin of the rule, die trace)
+128	add	rxsrc=rz	CONFIRMED: as 021 (rmxw2)
+12c	add	rxsrc=rz	CONFIRMED: as 021 (rmxl2)
+130	add	rxsrc=rz	CONFIRMED: as 021 (leax2)
+134	add	rxsrc=rz	CONFIRMED: as 021 (peax2)
+138	add	rxsrc=rz	CONFIRMED: as 021 (stmx4)
+1e0	add	rxsrc=rz	CONFIRMED: as 021 (aixl5)
+1e4	add	rxsrc=rz	CONFIRMED: as 021 (aixw4: origin of the rule, die trace)
+1e8	add	rxsrc=rz	CONFIRMED: as 021 (rmxw3)
+1ec	add	rxsrc=rz	CONFIRMED: as 021 (rmxl3)
+1f0	add	rxsrc=rz	CONFIRMED: as 021 (leax3)
+1f4	add	rxsrc=rz	CONFIRMED: as 021 (peax3)
+1f8	add	rxsrc=rz	CONFIRMED: as 021 (stmx5)
+# --- exception frame: accesses of type ix (word) instead of op (8)
+088	del	acc_type=op	CONFIRMED: word-sized exception frame; MC68000UM par. 6 (SR and PC stacked as words); measurement: diff-fuzz-si families ILLEGAL, PRIV, TRAPV, LINEA, LINEF, AERR, IRQ
+088	add	acc_type=ix	CONFIRMED: as above (bser6)
+0a2	del	acc_type=op	CONFIRMED: as 088 (bser4)
+0a2	add	acc_type=ix	CONFIRMED: as above (bser4)
+0eb	del	acc_type=op	CONFIRMED: as 088 (itlx4)
+0eb	add	acc_type=ix	CONFIRMED: as above (itlx4)
+0ef	del	acc_type=op	CONFIRMED: as 088 (trap5)
+0ef	add	acc_type=ix	CONFIRMED: as above (trap5)
+360	del	acc_type=op	CONFIRMED: as 088 (trap4)
+360	add	acc_type=ix	CONFIRMED: as above (trap4)
+3c2	del	acc_type=op	CONFIRMED: as 088 (trap3)
+3c2	add	acc_type=ix	CONFIRMED: as above (trap3)
+3c6	del	acc_type=op	CONFIRMED: as 088 (bser5)
+3c6	add	acc_type=ix	CONFIRMED: as above (bser5)
+3ca	del	acc_type=op	CONFIRMED: as 088 (bser3)
+3ca	add	acc_type=ix	CONFIRMED: as above (bser3)
+# --- access class from the die trace (which words start the cycle)
+001	del	acc_class=i	CONFIRMED: die trace (docs/data/us4325121_appH_die_map.tsv, missing column of the rows halt1/chkm1/chkr1/pead1: read; nnml2: write; chkr2: edb->dbin|edb->irc: halt1/chkm1/chkr1/chkr2/nnml2/pead1 do NOT start the access); App. H note on halt1 "access read as 'irnp' (to be verified)"; measurement: per-instruction testbench halt
+001	add	acc_class=n	CONFIRMED: as above (halt1)
+151	del	acc_class=i	CONFIRMED: as 001 (chkm1); measurement: diff-fuzz-si family CHK
+151	add	acc_class=n	CONFIRMED: as 001 (chkm1)
+152	del	acc_class=i	CONFIRMED: as 001 (chkr1); measurement: diff-fuzz-si family CHK
+152	add	acc_class=n	CONFIRMED: as 001 (chkr1)
+150	del	acc_class=n	CONFIRMED: die trace (docs/data/us4325121_appH_die_map.tsv row chkr4: extra db->aob|read, chkr4 starts the access; row chkr2: missing edb->dbin|edb->irc: in the die the fetch of CHK <mem> is in chkr4, not in chkr2); measurement: diff-fuzz-si family CHK
+150	add	acc_class=i	CONFIRMED: as above (chkr4)
+153	del	acc_class=f;dbin<-edb;irc<-edb	CONFIRMED: as 150 (chkr2: App. H puts the fetch there, the die does not; with EDB = operand the IRC would lose the prefetched word)
+153	add	acc_class=n	CONFIRMED: as 150 (chkr2)
+# --- reset tail (the vector reads are in 2fb/2ff/300/11e, first fetch in 2b7)
+002	set	acc_class=n;acc_mode=p	CONFIRMED: reset tail reordered from the die trace (docs/data/mc68000_die_only_words.tsv rows rstp7/rstp8/rstp9/rstpa: vector reads in 2fb/2ff/300/11e, in the core the App. H blocks rstp3/rstp4/rstp5/jmal1; row trap8: first fetch in 2b7 = jmal2; 002/296/27e remain pass-through words); MC68000UM par. 6 (reset: SSP and PC from vector 0, then the fetch); measurement: reset testbench (comparison bench, case reset) and lockstep-si
+296	set	acc_class=n;acc_mode=p;ird<-(ir)	CONFIRMED: as 002 (rstp4; the word does the dispatch)
+27e	set	acc_class=n;acc_mode=p	CONFIRMED: as 002 (rstp5)
+27f	set	acc_class=n;acc_mode=p	CONFIRMED: as 002 (rstp6, die-only word: docs/data/mc68000_die_only_words.tsv row rstp6; in the core it is a pass-through word)
+2fb	copy	rstp3	CONFIRMED: as 002 (die-only word rstp7 = App. H rstp3: SSP high read)
+2ff	copy	rstp4	CONFIRMED: as 002 (rstp8 = App. H rstp4: SSP low read)
+300	copy	rstp5	CONFIRMED: as 002 (rstp9 = App. H rstp5: PC high read)
+11e	copy	jmal1	CONFIRMED: as 002 (rstpa = App. H jmal1: PC low read into AT)
+2b7	copy	jmal2	CONFIRMED: as 002; docs/data/mc68000_die_only_words.tsv row trap8: trap8 (2b7) has the same nanoword as jmal2 (first fetch at {AT high, DBIN})
+# --- DBcc from the die trace (App. H dcnt1-5 differ from the die: docs/data/us4325121_appH_die_map.tsv rows dcnt1-dcnt4, status mismatch)
+007	del	acc_class=i;db<-au;pc<-db	CONFIRMED: die trace (docs/data/us4325121_appH_die_map.tsv row dcnt5: extra edb->dbin|edb->irc|pc->db, missing au->db|db->pc: dbcc5 (007) reads at PC with its own strobe, class t, ird <- ir (die listing all.txt, not in this repository, see docs/microcode-sources.md section 2.3; block dbcc5); App. H dcnt5 (p150) reads at AU = target + 2, which would re-execute the DBcc); measurement: diff-fuzz-si family DBCC
+007	add	acc_class=t;db<-(pc);dbin<-edb;irc<-edb;ird<-(ir)	CONFIRMED: as above (dcnt5)
+046	del	aob<-db;db<-au	CONFIRMED: die trace (docs/data/us4325121_appH_die_map.tsv row dcnt2: extra ab->aob|ab->at|au->ab|pc->db, missing au->db|db->aob); measurement: diff-fuzz-si family DBCC
+046	add	ab<-au;aob<-ab;at<-ab;db<-(pc)	CONFIRMED: as above (dcnt2)
+0c7	del	acc_class=f;dbin<-edb;irc<-edb	CONFIRMED: die trace (us4325121_appH_die_map.tsv row dcnt4: missing edb->dbin|edb->irc, extra au->db|db->aob|db->pc|read); dbcc4 taken from the trace: App. H dcnt4 (p150, docs/data/us4325121_appH.tsv row dcnt4: "alu -> * -> rxl") writes a second register; measurement: diff-fuzz-si family DBCC
+0c7	add	acc_class=i;aob<-db;au+=+2;au<-db;db<-au;pc<-db	CONFIRMED: as above (dcnt4)
+0c7	deltr	alu->*->rxl	CONFIRMED: as above (dcnt4: the write of the second register is not in the die)
+175	del	db<-(pc)	CONFIRMED: die trace (us4325121_appH_die_map.tsv row dcnt3: extra at->db|au->pc, missing pc->db); measurement: diff-fuzz-si family DBCC
+175	add	db<-(at);pc<-au	CONFIRMED: as above (dcnt3)
+0c6	set	acc_class=n;acc_mode=p;au+=+2;au<-db;db<-(pc);ird<-(ir)	CONFIRMED: die-only word dbcc6 (docs/data/mc68000_micro_decoded.csv row 0c6: die word, NMA 0c5, no App. H block in the map docs/data/us4325121_appH_die_map.tsv; die listing all.txt, block dbcc6: "au = pc + 2; ird <- ir", docs/microcode-sources.md); measurement: diff-fuzz-si family DBCC (DBT never branches)
+# --- STOP and MOVE SR,Dn
+3a2	set	abd<-(dbin);acc_class=n;acc_mode=p;au+=+2;au<-db;ftu<-ab;ird<-(ir);pc<-au	CONFIRMED: STOP taken from the die words 3a2/327 (docs/data/us4325121_appH_die_map.tsv row stop1: extra au->db|db->pc|dbin->ab; docs/data/mc68000_die_only_words.tsv row aaa01; die listing all.txt, blocks stop1 and aaa01): PC +2/-2, immediate -> FTU -> PSW at the dispatch word; frame PC = instruction after the STOP (M68000PRM par. 4, STOP: the PC advances to the next instruction); the wait is entered only at the dispatch of 327 (measurement: diff-fuzz-si family PRIV, STOP in user mode); measurement: per-instruction testbench stop (make -f Makefile.si stop) and diff-fuzz-si family IRQ
+327	set	acc_class=n;acc_mode=p;au+=-2;au<-db;db<-(pc);ird<-(ir);pc<-au;psw<-ftu	CONFIRMED: die-only word aaa01 (docs/data/mc68000_die_only_words.tsv row aaa01: "au = dbh/l - 2 ; ir = irc ; ird = ir ; pch = dbh ; jump a1"; the trace reads the DB from the AU, the core reads it from the PC with pc<-au: same value in the STOP flow); the wait is entered only at the dispatch of 327, NMA of stop1 (docs/data/mc68000_micro_decoded.csv row 3a2; measurement: diff-fuzz-si family PRIV, STOP in user mode); measurement: per-instruction testbench stop and diff-fuzz-si family IRQ
+3fc	set	acc_class=n;acc_mode=p	CONFIRMED: OUR OWN STOP wait word, companion of 3fd (nanoword specified by this entry: empty nano; micro: docs/data/deviations/ustore.tsv row 3fc, format I, I=1, next 3fd); the loop 3fc, 3fd has the four-clock period of the die's loop 327, 3a2 (docs/microcode-structure.md section 3, STOP wait); measurement: per-instruction testbench stop, cpu_si, and comparison bench ssext7, case stop_ref against the reference core
+3fd	set	acc_class=n;acc_mode=p	CONFIRMED: OUR OWN STOP wait word (nanoword specified by this entry; function: docs/microcode-structure.md section 3, STOP wait; empty nano; micro: docs/data/deviations/ustore.tsv); measurement: per-instruction testbench stop and diff-fuzz-si family IRQ
+3a5	del	au+=-2;au<-db;db<-(pc)	CONFIRMED: die trace (us4325121_appH_die_map.tsv row strw1: extra au->aob|au->pc, missing au=-2|pc->db: in the die strw1 'bus read; aob = au; pc = au'; the App. H block strw1, p141, origin trac1, gives '(pc) -> db -> au; -2' without AOB); measurement: per-instruction testbenches movesr and mvtsr
+3a5	add	aob<-au;pc<-au	CONFIRMED: as above (strw1)
+# --- DIVS: die-only words (docs/data/mc68000_die_only_words.tsv rows dvs0e/dvs12/dvs1f/dvs20)
+32d	set	acc_class=n;acc_mode=p	CONFIRMED: die-only word dvs0e (die: 0 nano atoms, only the op "jumpcc c 254, 214"); measurement: diff-fuzz-si family DIVS
+049	set	ab<-alu;acc_class=i;acc_mode=r;acc_type=ix;alu+=-1;alu<-ab;alu_cc=i;alu_col=1;aob<-db;atl<-ab;au+=+2;au<-db;db<-(pc)	CONFIRMED: die-only word dvs20 (die: "aobh = dbh ; aobl = dbl ; au = dbh/l + 2 ; bus access mode instruction word read ; dbh = pch"; flags from the ALU and not from ALUB, as in docs/mul-div.md section 6: dvs20 copies ALU into ATL and tests nz2); measurement: diff-fuzz-si family DIVS
+08a	set	acc_class=n;acc_mode=p;alu+=0;alu<-(alub);alu_cc=i;alu_col=2	CONFIRMED only by measurement: die-only word dvs1f (die: no nano atom, only the op "jump 049"); the ALU operation (negation of the quotient, as dvs1a 0cd) is the one of docs/mul-div.md section 6, derived from the CPU testbench on DIVS; measurement: diff-fuzz-si family DIVS
+214	set	ab<-alu;acc_class=n;acc_mode=p;alu+=-1;alu<-ab;alu_cc=n;alu_col=4;au+=-1;au<-db;db<-au	CONFIRMED only by measurement: die-only word dvs12 (die: "au = dbh/l - 1 ; dbh = auh ; dbl = aul ; jump 210"; different nano map of the die); measurement: diff-fuzz-si families DIVS and DIVU
+# --- exceptions: die-only words and our own words
+11a	set	ab<-(dbin);acc_class=t;acc_mode=r;acc_type=ix;aob<-db;ath<-ab;au+=+2;au<-db;db<-au;dbin<-edb	CONFIRMED: die-only word trap7 (docs/data/mc68000_die_only_words.tsv row trap7: "abd = dbin ; aobh = dbh ; aobl = dbl ; ath = abh ; au = dbh/l + 2 ; bus access mode data word read ; dbh = auh ; dbin = ebd ; dbl = aul ; jump 2b7"); measurement: diff-fuzz-si families ILLEGAL, PRIV, TRAPV, LINEA, LINEF
+1c0	copy	itlx1	CONFIRMED by the die trace only: die-only word trac1 (docs/data/mc68000_die_only_words.tsv row trac1: same nanoword as itlx1|trap1|stiw1); measurement: none: the core enters the trace exception at 0e3 (rtl/cpu_si/m68k_exc_si.sv, A_TRACE), so no path reaches this word (docs/data/mc68000_nrom_reach.tsv: used but unreachable); the trace exception itself is exercised by the testbenches exc and irq
+3a3	set	ab<-au;acc_class=n;acc_mode=p;au+=-2;au<-db;pc<-ab	CONFIRMED (partially) by the die trace only: die-only word trac2 (docs/data/mc68000_die_only_words.tsv row trac2: "abh = auh ; abl = aul ; au = dbh/l - 2 ; dbh = dth ; pch = abh ; jump 3c2": the core does not have dbh = dth); measurement: none: the core enters the trace exception at 0e3 (rtl/cpu_si/m68k_exc_si.sv, A_TRACE), so no path reaches this word (docs/data/mc68000_nrom_reach.tsv: used but unreachable); the trace exception itself is exercised by the testbenches exc and irq
+3fe	set	acc_class=n;acc_mode=p;ftu<-(psw);pc<-au;rp_dst=dx;rp_src=dy	IMPLEMENTATION CHOICE (our own word, not reached): written to the nano ROM by gen_nrom.py with these atoms (tb_m68k_ndec checks the ROM against this entry), but no path of the core reaches it: its only predecessor is 3ff, itself unreachable, and the instruction exceptions enter at 0e3 (rtl/cpu_si/m68k_exc_si.sv, A_TRAP = 0e3: dvur2, the divide-by-zero path of the die); docs/data/mc68000_nrom_reach.tsv lists 3fe and 3ff as used but unreachable. Content: second word of our entry of the instruction exceptions (docs/microcode-structure.md section 3: "PC - 2 -> AU -> PC, (psw) -> ftu, then trap2 at 347"); the nanoword specification is this entry. Comparison with the die: the die has no word at 3fe (docs/data/mc68000_micro_decoded.csv: no address in 3f0-3ff; App. H has no block at 3fe) and no die word has these atoms (docs/data/mc68000_nano_encoding.tsv: 3fe is the only address with this atom set): the die makes the same entry in the single word trap1 (1d0, App. H p119, docs/data/us4325121_appH.tsv row trap1: "(psw) -> ftu ; (pc) -> db -> au ; -2 -> au", regptr dxdy), without pc<-au; the microword at 3fe has the bits of trap1 (docs/data/deviations/ustore.tsv row 3fe)
+3ff	set	acc_class=n;acc_mode=p;au+=-2;au<-db;db<-(pc)	IMPLEMENTATION CHOICE (our own word, not reached): written to the nano ROM by gen_nrom.py with these atoms (tb_m68k_ndec checks the ROM against this entry), but no path of the core reaches it: no word has 3ff as next address, and the A1 value 3ff of the illegal opcodes never dispatches because the exception block overrides it with a0 = A_TRAP = 0e3 (rtl/cpu_si/m68k_exc_si.sv; docs/data/scripts/nrom_reach.py); docs/data/mc68000_nrom_reach.tsv lists it as used but unreachable. Content: first word of our entry of the instruction exceptions (PC - 2 -> AU; docs/microcode-structure.md section 3); the nanoword specification is this entry. Comparison with the die: the die has no word at 3ff (docs/data/mc68000_micro_decoded.csv: no address in 3f0-3ff) and no die word has these atoms alone (docs/data/mc68000_nano_encoding.tsv: 3ff is the only address with this atom set): they are the PC - 2 -> AU part of the die word trap1 (1d0, App. H p119, docs/data/us4325121_appH.tsv row trap1: "(psw) -> ftu ; (pc) -> db -> au ; -2 -> au", regptr dxdy), which the core splits over 3ff and 3fe; the microword at 3ff is our own (docs/data/deviations/ustore.tsv row 3ff)
+# --- MOVEM: die words without an App. H block (empty in the nano) filled by analogy; measurement: diff-fuzz-si families MOVEM and MOVEMR
+1ed	copy	smal1	CONFIRMED: smaw1 (1ed, docs/data/mc68000_micro_decoded.csv row 1ed) has no App. H block: empty in the nano, filled by analogy with smal1 (docs/data/us4325121_appH_die_map.tsv row smal1: ambiguous, alternative smaw1=1ed); measurement: diff-fuzz-si family MOVEM (forms Rlist,abs.W)
+3c1	set	abe<-(dbin);acc_class=i;acc_mode=r;acc_type=in;aob<-db;at<-abe;au+=+2;au<-db;db<-au	CONFIRMED: smaw2 (3c1, docs/data/mc68000_micro_decoded.csv row 3c1) has no App. H block of its own: filled by analogy with stmd2 (die 3c9; App. H p169, docs/data/us4325121_appH.tsv row stmd2, origin smaw2: transfers "au -> db -> aob,au ; (dbin) -> abe -> at ; +2 -> au", access irin); measurement: diff-fuzz-si family MOVEM
+328	set	acc_class=i;acc_mode=r;acc_type=ix;aob<-db;au+=+2;au<-db;db<-(pc)	CONFIRMED: mmaw2 (328, docs/data/mc68000_micro_decoded.csv row 328: same microword as mmrw2, row 025), end of MOVEM memory->registers with the list exhausted, filled by analogy with mmrw2 (App. H p93, die 025; App. H note on mmrw1 "arrow towards block 328"); measurement: diff-fuzz-si family MOVEMR
+# --- per-word corrections
+005	add	alue<-dbd	CONFIRMED: App. H note on adrl2 "'alub,' with a trailing comma in the block" (destination missing in the print); App. H mrgl2 (p96, docs/data/us4325121_appH.tsv row mrgl2) reads "(alue) -> db -> rxh": the high word of the long read goes into ALUE; measurement: diff-fuzz-si families MOVE and ADD ((An) long forms)
+026	add	alue<-dbd	CONFIRMED: as 005 (adsl3: App. H note "'alub,' with a trailing comma")
+0ac	add	ath<-ab	CONFIRMED: App. H note on dvum1 "'ath' added by hand in the patent" (origin of dvs02); die trace (us4325121_appH_die_map.tsv row dvs02: extra ab->at); measurement: diff-fuzz-si families DIVS and DIVU
+0ae	add	ath<-ab	CONFIRMED: as 0ac (dvs01, origin dvur1 "'ath' added by hand")
+2be	add	dob<-ab	CONFIRMED: App. H note on rmdl2 "'alu,alub,' with a trailing comma (origin rall3 also has dob)": destination missing in the print; measurement: diff-fuzz-si families ROL, ROR, ROXL, ROXR, ASL, ASR, LSL, LSR (shift and rotate in memory)
+342	del	au+=0	CONFIRMED only by measurement: swap2 "au -> db -> au" without a constant in App. H; the core advances the prefetch by 2; measurement: diff-fuzz-si family SWAP
+342	add	au+=+2	CONFIRMED only by measurement: as above (swap2)
+343	add	pc<-au	CONFIRMED: die trace (us4325121_appH_die_map.tsv row tasm1: extra au->pc, i.e. "pc = au" in the die, absent from the App. H block tasm1, p162); measurement: diff-fuzz-si family TAS
+344	del	au+=+2	CONFIRMED: die trace (us4325121_appH_die_map.tsv row tasm2: missing au=+2); measurement: diff-fuzz-si family TAS
+344	add	au+=0	CONFIRMED: as above (tasm2)
+17d	del	acc_type=in	CONFIRMED: PEA: pead1 prefetch at PC+2 of class t (die trace, us4325121_appH_die_map.tsv row pead1, status mismatch: extra pc->db|reg->db); measurement: diff-fuzz-si family PEA
+17d	add	acc_type=ix	CONFIRMED: as above (pead1)
+17f	add	rp_dst=sp	CONFIRMED: pead3: AU <- SP - 4, the pointer is SP (App. H pead3, p157, docs/data/us4325121_appH.tsv row pead3: "(rxa) -> db -> au" and "-4 -> au" without a register pointer; M68000PRM par. 4, PEA: the address goes to SP - 4); measurement: diff-fuzz-si family PEA

@@ -1,0 +1,111 @@
+# nano map applied to the mismatched/ambiguous blocks (nano_map.py)
+mismatch	adrw2	024	no		ab<-(rx)|db*<-(dcr)|db<-(ryl)|dcr<-ab
+mismatch	abww1	00e	no		ab<-(rx)|au<-ab|dcr<-ab
+mismatch	ablw2	00d	no	au<-dbh|au<-dbl|dbh<-(ath)	ab<-(rx)|dcr<-ab
+mismatch	adsw1	1c6	resolved		
+ambiguous	aixw2	124,120	no	2 consistent candidates
+mismatch	pinw1	21c	no	alub<-dbd	ab<-(rx)|alub<-db*|db*<-(alue)|dcr<-ab|rxa<-*
+mismatch	pdcw1	103	no	alub<-dbd|au+=-1,-2	ab<-(rx)|alub<-db*|db*<-(alue)|dcr<-ab
+mismatch	aixw1	3e6	resolved		
+mismatch	abll2	009	no	au<-dbh|au<-dbl|dbh<-(ath)	ab<-(rx)|dcr<-ab
+mismatch	abwl1	00a	no		ab<-(rx)|au<-ab|dcr<-ab
+mismatch	adsl1	1c2	resolved		
+mismatch	aixl1	3e2	resolved		
+ambiguous	aixl2	120,124	no	2 consistent candidates
+ambiguous	malw1	32b,30f	no	0 consistent candidates
+ambiguous	maww1	388,38c	no	0 consistent candidates
+ambiguous	mmrw1	3ab,3a9	resolved->3ab	1 consistent candidates
+ambiguous	mmdw1	38a,38e	no	0 consistent candidates
+ambiguous	mmxw0	298,29c	no	2 consistent candidates
+ambiguous	mmxw1	101,10d	no	2 consistent candidates
+ambiguous	mmxw2	028,02c	no	0 consistent candidates
+ambiguous	mmxw3	0e8,0ec	no	0 consistent candidates
+ambiguous	mmiw1	3af,3ad	resolved->3af	1 consistent candidates
+ambiguous	mmmw1	38b,38f	no	2 consistent candidates
+mismatch	asxw1	10f	no	alub<-dbd|au+=-1,-2	ab<-(rx)|alub<-db*|db*<-(alue)|dcr<-ab
+ambiguous	mall1	30f,32b	no	0 consistent candidates
+ambiguous	mawl1	38c,388	no	0 consistent candidates
+ambiguous	mmrl1	3a9,3ab	no	0 consistent candidates
+ambiguous	mmdl1	38e,38a	no	0 consistent candidates
+ambiguous	mmxl0	29c,298	no	2 consistent candidates
+ambiguous	mmxl1	10d,101	no	2 consistent candidates
+ambiguous	mmxl2	02c,028	no	0 consistent candidates
+ambiguous	mmxl3	0ec,0e8	no	0 consistent candidates
+ambiguous	mmil1	3ad,3af	no	0 consistent candidates
+ambiguous	mmml1	38f,38b	no	2 consistent candidates
+mismatch	asxl1	10b	no	alub<-dbd|au+=-1,-2	ab<-(rx)|alub<-db*|db*<-(alue)|dcr<-ab
+ambiguous	rmxw2	128,12c	no	2 consistent candidates
+ambiguous	rmxw3	1e8,1ec	no	2 consistent candidates
+ambiguous	rmxl2	12c,128	no	2 consistent candidates
+ambiguous	rmxl3	1ec,1e8	no	2 consistent candidates
+ambiguous	morw1	299,29d	no	2 consistent candidates
+ambiguous	morl1	29d,299	no	2 consistent candidates
+mismatch	dvs01	0ac	no	ab<-(rydl)	
+mismatch	dvs02	0ae	no		ab<-(rydl)
+mismatch	bser2	3a7	no		*<-ftu|dbe<-(rxdl)|ftu<-ab
+mismatch	itlx3	235	no		dbe<-(rxdl)|ftu<-(psw)
+mismatch	dvur3	217	no		*<-ftu|dbe<-(rxdl)|ftu<-(psw)|ftu<-ab
+mismatch	trap4	360	no		*<-ftu|*e<-ftu|dbe<-(rxdl)|ftu<-(ird)|ftu<-(psw)|ftu<-ab|rx<-db
+mismatch	trap2	347	no		*<-ftu|dbe<-(rxdl)|ftu<-(psw)|ftu<-ab|pc<-ab
+mismatch	trap6	367	no	pc<-au|reset pren	pc<-db
+mismatch	asbb1	107	no	alub<-dbd|au+=-1,-2	ab<-(rx)|alub<-db*|db*<-(alue)|dcr<-ab
+ambiguous	maqw1	2f3,2f7	no	0 consistent candidates
+ambiguous	maql1	2f7,2f3	no	0 consistent candidates
+mismatch	cpdl2	171	no	db*<-(alue)	dbd<-(alue)
+ambiguous	rcaw1	108,104	no	2 consistent candidates
+mismatch	raqw1	2d8	no	db<-(ryl)	db<-(rxl)
+ambiguous	rcal1	104,108	no	2 consistent candidates
+mismatch	rcal2	239	resolved		
+ambiguous	raql1	2dc,2d8	no	0 consistent candidates
+mismatch	swap1	341	no	alub<-ab|db<-(ryh)	alub<-db|alub<-dbd|dbd<-(rydl)|rydl<-ab*|ryh<-db
+mismatch	rset1	3a6	no	*e<-ftu|pc<-au	db<-au|ftu<-ab|ird<-(ir)|pc<-db
+mismatch	rstw1	301	no		*<-ftu|dbe<-(rxdl)
+mismatch	nbcm1	15c	resolved		
+mismatch	nnml2	15d	no	db<-(at)	
+mismatch	exge2	231	no	*<-(at)|rx<-*	db<-(at)
+mismatch	stop1	3a2	no	*e<-ftu|pc<-au	db<-au|ftu<-ab|ird<-(ir)|pc<-db
+mismatch	strw1	3a5	no	au+=-2|db<-(pc)	aob<-au|pc<-au
+mismatch	halt1	001	resolved		
+mismatch	nnrl2	15e	no		rxl<-*|rydl<-dbd
+mismatch	rstp4	296	no	db<-au	ird<-(ir)
+mismatch	jsrd1	2b0	resolved		
+mismatch	jsrx1	2b2	no	*e<-alu	ab*<-(rydl)|dbe<-alu
+mismatch	jmpd1	2b4	resolved		
+mismatch	dcnt1	06c	no	abe<-ftu|au<-abe|db<-(pc)	
+mismatch	dcnt2	046	no	db<-au	ab*<-(ryl)|alub<-ab|alub<-abd|db<-(pc)
+mismatch	jmpx1	2b6	no	*e<-alu	ab*<-(rydl)|dbe<-alu
+mismatch	peax1	3ee	resolved		
+mismatch	dcnt3	175	no	db<-(pc)|ird<-(ir)	alu_col=3|pc<-au
+mismatch	dcnt5	007	no	db<-au|pc<-db	db<-(pc)|irc<-edb|ird<-(ir)
+mismatch	dcnt4	0c7	no	acc_class=f|irc<-edb|rxl<-*	db<-au|pc<-db
+mismatch	chkr1	152	no	ab*<-(rydl)|alub<-dbd|dbd<-(rxdl)	
+mismatch	peaa1	17c	resolved		
+mismatch	lead1	2f2	resolved		
+mismatch	pead1	17d	no	abd<-(dbin)	
+mismatch	leax1	3ea	resolved		
+mismatch	chkm1	151	no	alub<-dbd|dbd<-(rxdl)	dbd<-(dbin)
+mismatch	chkr2	153	no	acc_class=f|irc<-edb	
+mismatch	rtr2	12b	no	pc<-db	
+mismatch	paal2	15f	resolved		
+mismatch	pead2	17e	no	*<-(at)|*e<-alu	*<-(rxa)|ab<-(at)|ab<-(ath)|dbe<-alu
+mismatch	pead3	17f	resolved		
+mismatch	btsi1	0ab	no	ryh<-db	*<-(at)|au<-dbh|au<-dbl|db*<-(dcr)|db<-(ryl)|dbh<-(ath)
+mismatch	chkr4	150	no	ird<-(ir)	
+mismatch	tasm1	343	no	db<-(at)	pc<-au
+mismatch	tasm2	344	resolved		
+ambiguous	srrw3	2d3,2d7	no	2 consistent candidates
+ambiguous	smal1	1e5,1ed	no	2 consistent candidates
+mismatch	ldmx4	0e1	no	*e<-(rxl)	
+mismatch	ldmx2	02b	resolved		
+mismatch	ldmx3	021	no		*e<-(rxl)
+ambiguous	lmaw1	1f9,1e9	no	2 consistent candidates
+mismatch	lmaw2	30e	no		rx<-abe
+mismatch	ldmr1	127	no	pc<-db	
+mismatch	ldmd2	2f6	resolved		
+ambiguous	lmal1	1e9,1f9	no	2 consistent candidates
+ambiguous	srrl3	2d7,2d3	no	2 consistent candidates
+mismatch	lmal2	0af	resolved		
+mismatch	popm1	123	no	pc<-db	
+mismatch	sccr1	384	no	db<-au	
+mismatch	trpv3	022	no		*<-ftu|dbe<-(rxdl)|ftu<-(psw)|ftu<-ab|pc<-ab
+mismatch	sccb1	380	no	db<-au	
